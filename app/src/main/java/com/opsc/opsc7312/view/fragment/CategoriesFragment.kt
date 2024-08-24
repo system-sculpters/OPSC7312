@@ -24,7 +24,7 @@ class CategoriesFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentCategoriesBinding.inflate(inflater, container, false)
 
         categoryList = arrayListOf<Category>()

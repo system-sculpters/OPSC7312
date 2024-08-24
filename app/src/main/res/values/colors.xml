@@ -9,4 +9,5 @@
     <color name="yellow">#FFE263</color>
     <color name="green">#86f5a4</color>
     <color name="blue">#84bafa</color>
+    <color name="item_layout_bg">#f0f2f4</color>
 </resources>
