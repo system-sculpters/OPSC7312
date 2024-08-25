@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".view.fragment.HomeFragment"
+    android:orientation="vertical"
+    android:paddingHorizontal="20dp"
+    android:paddingVertical="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/item_layout_background"
+        >
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <LinearLayout
+                android:id="@+id/cat_img_container"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/arrow_circular_background"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_margin="7dp"
+                >
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/card_img"
+                    android:src="@drawable/outline_person_24"
+                    android:padding="2dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:orientation="vertical"
+
+                android:gravity="center_vertical"
+
+                android:layout_marginStart="20dp"
+                app:layout_constraintStart_toEndOf="@id/cat_img_container"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/username"
+                    android:text="username"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/dark_grey"
+                    android:fontFamily="@font/inter_medium"/>
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="bottom">
+
+                    <TextView
+                        android:id="@+id/email"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="email@gmail.com"
+                        android:textSize="14sp"
+                        android:textAlignment="textEnd"
+                        android:textColor="@color/light_grey"
+                        android:textStyle="bold"
+                        android:fontFamily="@font/inter_medium"
+                        android:padding="0dp"/>
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/item_layout_background"
+        android:padding="10dp"
+        android:orientation="vertical">
+
+
+
+        <TextView
+            android:id="@+id/transaction_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Net Balance"
+            android:textSize="17sp"
+            android:textAlignment="textEnd"
+            android:textColor="@color/light_grey"
+            android:textStyle="bold"
+            android:padding="0dp"
+            android:fontFamily="@font/inter_medium"
+            android:layout_marginEnd="10dp"/>
+
+        <TextView
+            android:id="@+id/amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4000 ZAR"
+            android:textSize="20sp"
+            android:textAlignment="textEnd"
+            android:textColor="@color/dark_grey"
+            android:fontFamily="@font/inter_bold"
+            android:textStyle="bold"
+            android:padding="0dp"
+            android:layout_marginTop="5dp"
+
+            />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="175dp"
+            android:layout_height="200dp"
+            android:padding="16dp"
+            android:background="@drawable/income_background_card"
+            android:elevation="2dp">
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:background="@drawable/arrow_circular_background"
+                    android:elevation="2dp">
+                    <ImageView
+                        android:id="@+id/iv_category_icon"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/baseline_arrow_outward_24" />
+                </LinearLayout>
+            </LinearLayout>
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Income"
+                android:textSize="20sp"
+                android:textAlignment="textEnd"
+                android:textColor="@color/light_grey"
+                android:fontFamily="@font/inter_medium"
+                android:textStyle="bold"
+                android:padding="0dp"
+                android:layout_marginTop="5dp"
+
+                />
+            <TextView
+                android:id="@+id/incomeAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="4000 ZAR"
+                android:textSize="20sp"
+                android:textAlignment="textEnd"
+                android:textColor="@color/dark_grey"
+                android:fontFamily="@font/inter_medium"
+                android:textStyle="bold"
+                android:padding="0dp"
+                android:layout_marginTop="5dp"
+
+                />
+        </LinearLayout>
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="175dp"
+            android:layout_height="200dp"
+            android:padding="16dp"
+            android:background="@drawable/expense_background_card"
+
+            android:elevation="2dp">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:background="@drawable/arrow_circular_background"
+                    android:elevation="2dp">
+                    <ImageView
+
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/baseline_arrow_downward_24" />
+                </LinearLayout>
+            </LinearLayout>
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Income"
+                android:textSize="20sp"
+                android:textAlignment="textEnd"
+                android:textColor="@color/light_grey"
+                android:fontFamily="@font/inter_medium"
+                android:textStyle="bold"
+                android:padding="0dp"
+                android:layout_marginTop="5dp"
+
+                />
+            <TextView
+                android:id="@+id/expenseAamount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="4000 ZAR"
+                android:textSize="20sp"
+                android:textAlignment="textEnd"
+                android:textColor="@color/dark_grey"
+                android:fontFamily="@font/inter_medium"
+                android:textStyle="bold"
+                android:padding="0dp"
+                android:layout_marginTop="5dp"
+
+                />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginVertical="20dp"
+        >
+
+        <TextView
+            android:id="@+id/Today_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/recent"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="@font/inter_bold"/>
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+
+        <LinearLayout
+            android:id="@+id/see_all"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:orientation="horizontal"
+            android:clickable="true"
+            android:focusable="true"
+            >
+
+            <TextView
+                android:id="@+id/see_all_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/more"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="@color/primary"
+                android:fontFamily="@font/inter_medium"
+                android:clickable="true"
+                android:focusable="true"
+                />
+
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycle_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        />
+</LinearLayout>

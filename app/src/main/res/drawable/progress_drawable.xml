@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Background layer -->
+    <item android:id="@android:id/background">
+        <shape>
+            <corners android:radius="5dp" />
+            <solid android:color="@color/item_layout_bg"/> <!-- Background color -->
+        </shape>
+    </item>
+
+    <!-- Secondary progress layer (optional) -->
+    <item android:id="@android:id/secondaryProgress">
+        <clip>
+            <shape>
+                <corners android:radius="5dp" />
+                <solid android:color="@color/light_grey"/> <!-- Secondary progress color -->
+            </shape>
+        </clip>
+    </item>
+
+    <!-- Progress layer -->
+    <item android:id="@android:id/progress">
+        <clip>
+            <shape>
+                <corners android:radius="10dp" />
+                <solid android:color="@color/primary"/> <!-- Progress color -->
+            </shape>
+        </clip>
+    </item>
+</layer-list>
