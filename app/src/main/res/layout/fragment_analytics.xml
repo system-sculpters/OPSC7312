@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.fragment.AnalyticsFragment"
+    android:paddingHorizontal="25dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="143dp"
+        android:layout_marginVertical="10dp"
+        android:background="@drawable/analytics_layout_background"
+        android:padding="10dp"
+        android:orientation="vertical"
+        android:layout_marginBottom="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_marginVertical="10dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Goals"
+                android:textSize="15sp"
+                android:textAlignment="textEnd"
+                android:textColor="@color/dark_grey"
+                android:fontFamily="@font/inter_medium"
+                android:textStyle="bold"
+
+                />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+            <TextView
+                android:id="@+id/amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="4000 ZAR"
+                android:textSize="15sp"
+                android:textAlignment="textEnd"
+                android:textColor="@color/dark_grey"
+                android:fontFamily="@font/inter_medium"
+                android:textStyle="bold"
+
+                />
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:max="100"
+                android:progress="50"
+                android:progressDrawable="@drawable/progress_drawable"
+                android:indeterminate="false"
+                />
+        </LinearLayout>
+        <TextView
+            android:id="@+id/remainingAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4000 ZAR"
+            android:textSize="11sp"
+            android:textAlignment="textEnd"
+            android:textColor="@color/light_grey"
+            android:fontFamily="@font/inter_medium"
+            android:textStyle="bold"
+            android:layout_marginTop="3dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/baseline_edit_24"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/edit_goals"
+                android:textSize="11sp"
+                android:textAlignment="textEnd"
+                android:textColor="@color/primary"
+                android:fontFamily="@font/inter_medium"
+                android:textStyle="bold"
+
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="234dp"
+        android:layout_marginVertical="10dp"
+        android:background="@drawable/analytics_layout_background"
+        android:padding="10dp"
+        android:orientation="vertical"
+        android:layout_marginBottom="10dp">
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="234dp"
+        android:layout_marginVertical="10dp"
+        android:background="@drawable/analytics_layout_background"
+        android:padding="10dp"
+        android:orientation="vertical"
+        android:layout_marginBottom="10dp">
+
+    </LinearLayout>
+</LinearLayout>

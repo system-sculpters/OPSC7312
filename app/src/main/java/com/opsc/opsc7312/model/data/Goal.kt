@@ -5,14 +5,16 @@ import android.os.Parcelable
 
 data class Goal(
     var id: String = "",
+    var userid: String = "",
     var name: String = "",
-    var totalamount: Double = 0.00,
+    var targetamount: Double = 0.00,
     var currentamount: Double = 0.00,
-    var date: Long = 0L,
+    var deadline: Long = 0L,
     var contrubitiontype: String = "",
     var contributionamount: Double = 0.00
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
+        parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readDouble(),
@@ -24,10 +26,11 @@ data class Goal(
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(id)
+        parcel.writeString(userid)
         parcel.writeString(name)
-        parcel.writeDouble(totalamount)
+        parcel.writeDouble(targetamount)
         parcel.writeDouble(currentamount)
-        parcel.writeLong(date)
+        parcel.writeLong(deadline)
         parcel.writeString(contrubitiontype)
         parcel.writeDouble(contributionamount)
     }

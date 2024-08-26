@@ -15,7 +15,7 @@ data class Category(
     var name: String = "",
     var color: String = "",
     var icon: String = "",
-    var transactiontype: AppConstants.TRANSACTION_TYPE = AppConstants.TRANSACTION_TYPE.INCOME,
+    var transactiontype: String = AppConstants.TRANSACTIONTYPE.INCOME.name,
     var userid: String = "",
     val isCreateButton: Boolean = false
 ): Parcelable {
@@ -32,7 +32,7 @@ data class Category(
         parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: "",
-        AppConstants.TRANSACTION_TYPE.valueOf(parcel.readString() ?: AppConstants.TRANSACTION_TYPE.INCOME.name),
+        parcel.readString() ?:AppConstants.TRANSACTIONTYPE.INCOME.name,
         parcel.readString() ?: "",
         parcel.readByte() != 0.toByte() // Reads the boolean value
     )
@@ -43,7 +43,7 @@ data class Category(
         parcel.writeString(name)
         parcel.writeString(color)
         parcel.writeString(icon)
-        parcel.writeString(transactiontype.name)
+        parcel.writeString(transactiontype)
         parcel.writeString(userid)
         parcel.writeByte(if (isCreateButton) 1 else 0) // Writes the boolean value
     }

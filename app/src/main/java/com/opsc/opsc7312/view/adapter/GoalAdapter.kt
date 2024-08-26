@@ -1,6 +1,7 @@
 package com.opsc.opsc7312.view.adapter
 
 import android.graphics.drawable.GradientDrawable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,12 +44,22 @@ class GoalAdapter (private val onItemClick: (Goal) -> Unit) :
 
         holder.goal_name.text = goal.name
 
-        holder.deadline.text = goal.date.toString()
+        //holder.deadline.text = goal.deadline.toString()
 
-        holder.progress_amount.text = "${goal.currentamount}/${goal.totalamount} ZAR"
+        if(goal.deadline == 0L){
+            holder.deadline.text = "No deadline"
+        }
+        else{
+            holder.deadline.text = AppConstants.convertLongToString(goal.deadline)
+        }
 
-        val progress = if (goal.totalamount > 0) {
-            (goal.currentamount / goal.totalamount * 100).toInt()
+        Log.d("deadline", "this is the deadline ${goal.deadline}")
+
+
+        holder.progress_amount.text = "${goal.currentamount}/${goal.targetamount} ZAR"
+
+        val progress = if (goal.targetamount > 0) {
+            (goal.currentamount / goal.targetamount * 100).toInt()
         } else {
             0
         }

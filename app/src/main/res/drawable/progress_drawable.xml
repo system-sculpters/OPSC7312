@@ -4,8 +4,8 @@
     <!-- Background layer -->
     <item android:id="@android:id/background">
         <shape>
-            <corners android:radius="5dp" />
-            <solid android:color="@color/item_layout_bg"/> <!-- Background color -->
+            <corners android:radius="10dp" />
+            <solid android:color="@color/lighter_grey"/> <!-- Background color -->
         </shape>
     </item>
 
@@ -13,7 +13,7 @@
     <item android:id="@android:id/secondaryProgress">
         <clip>
             <shape>
-                <corners android:radius="5dp" />
+                <corners android:radius="10dp" />
                 <solid android:color="@color/light_grey"/> <!-- Secondary progress color -->
             </shape>
         </clip>

@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import com.opsc.opsc7312.databinding.ActivityMainBinding
 import com.opsc.opsc7312.model.data.Category
 import com.opsc.opsc7312.view.fragment.CategoriesFragment
+import com.opsc.opsc7312.view.fragment.CreateGoalFragment
 import com.opsc.opsc7312.view.fragment.GoalsFragment
 import com.opsc.opsc7312.view.fragment.HomeFragment
 import com.opsc.opsc7312.view.fragment.TransactionsFragment
@@ -44,8 +45,8 @@ class MainActivity : AppCompatActivity() {
                 R.id.home -> changeCurrentFragment(HomeFragment())
                 R.id.transactions -> changeCurrentFragment(TransactionsFragment())
                 R.id.add -> changeCurrentFragment(GoalsFragment())
-                //R.id.analytics -> changeCurrentFragment(Home4Fragment())
-                //R.id.settings -> changeCurrentFragment(Home4Fragment())
+                R.id.analytics -> changeCurrentFragment(CreateGoalFragment())
+                R.id.settings -> changeCurrentFragment(CategoriesFragment())
             }
             true
         }
