@@ -1,13 +1,18 @@
 package com.opsc.opsc7312
 
+import java.text.SimpleDateFormat
+import java.util.Date
+
 object AppConstants {
 
-    enum class TRANSACTION_TYPE{
+    const val BASE_URL = "https://pennywise-1rw5.onrender.com/api/"
+
+    enum class TRANSACTIONTYPE{
         INCOME, EXPENSE
     }
 
-    enum class CONTRIBUTION_TYPE{
-        INCOME, EXPENSE
+    enum class CONTRIBUTIONTYPE{
+        WEEKLY, BIWEEKLY, MONTHLY
     }
 
     val COLOR_DICTIONARY = mapOf(
@@ -37,4 +42,14 @@ object AppConstants {
         "blue" to R.drawable.baseline_check_blue,
 
     )
+
+    fun convertLongToString(timestamp: Long): String {
+        val sdf: SimpleDateFormat = SimpleDateFormat("dd/MM/yyyy")
+        val date: Date = Date(timestamp)
+        val formattedDate: String = sdf.format(date)
+        return formattedDate
+
+    }
+
+
 }

@@ -1,6 +1,7 @@
 package com.opsc.opsc7312.view.fragment
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,8 +10,12 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.opsc.opsc7312.AppConstants
 import com.opsc.opsc7312.R
 import com.opsc.opsc7312.databinding.FragmentCategoriesBinding
+import com.opsc.opsc7312.model.api.retrofitclients.CategoryRetrofitClient
 import com.opsc.opsc7312.model.data.Category
 import com.opsc.opsc7312.view.adapter.CategoryAdapter
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class CategoriesFragment : Fragment() {
@@ -40,7 +45,7 @@ class CategoriesFragment : Fragment() {
             }
         }
 
-        categoryList()
+        categoryList("id1")
 
         setUpRecyclerView()
 
@@ -54,29 +59,54 @@ class CategoriesFragment : Fragment() {
         binding.categoryRecycleView.adapter = categoryAdapter
     }
 
-    private fun categoryList(){
+//    private fun categoryList(){
+//
+//        val cat0 = Category(isCreateButton = true)
+//
+//        val cat1 = Category(id = "id", name = "blue", color = "Blue", icon = "yellow", transactiontype = AppConstants.TRANSACTIONTYPE.INCOME.name,
+//        userid = "userid")
+//
+//        val cat2 = Category(id = "id", name = "red", color = "Red", icon = "green", transactiontype = AppConstants.TRANSACTIONTYPE.INCOME.name,
+//            userid = "userid")
+//
+//        val cat3 = Category(id = "id", name = "yellow", color = "Yellow", icon = "red", transactiontype = AppConstants.TRANSACTIONTYPE.INCOME.name,
+//            userid = "userid")
+//
+//        val cat4 = Category(id = "id", name = "green", color = "Green", icon = "blue", transactiontype = AppConstants.TRANSACTIONTYPE.INCOME.name,
+//            userid = "userid")
+//
+//        categoryList.add(cat0)
+//        categoryList.add(cat1)
+//        categoryList.add(cat2)
+//        categoryList.add(cat3)
+//        categoryList.add(cat4)
+//
+//        categoryAdapter.updateCategories(categoryList)
+//    }
 
-        val cat0 = Category(isCreateButton = true)
+    private fun categoryList(id: String){
+        val call = CategoryRetrofitClient.apiService.getCategories(id)
 
-        val cat1 = Category(id = "id", name = "blue", color = "Blue", icon = "yellow", transactiontype = AppConstants.TRANSACTION_TYPE.INCOME,
-        userid = "userid")
+        // Log the URL
+        val url = call.request().url.toString()
+        Log.d("MainActivity", "Request URL: $url")
+        CategoryRetrofitClient.apiService.getCategories(id).enqueue(object : Callback<List<Category>> {
+            override fun onResponse(call: Call<List<Category>>, response: Response<List<Category>>) {
+                if (response.isSuccessful) {
+                    val categories = response.body()
+                    categories?.let {
+                        categoryAdapter.updateCategories(it)
+                        Log.d("MainActivity", "Categories: $it")
+                    }
+                } else {
+                    Log.e("MainActivity", "Request failed with code: ${response.code()}")
+                }
+            }
 
-        val cat2 = Category(id = "id", name = "red", color = "Red", icon = "green", transactiontype = AppConstants.TRANSACTION_TYPE.INCOME,
-            userid = "userid")
-
-        val cat3 = Category(id = "id", name = "yellow", color = "Yellow", icon = "red", transactiontype = AppConstants.TRANSACTION_TYPE.INCOME,
-            userid = "userid")
-
-        val cat4 = Category(id = "id", name = "green", color = "Green", icon = "blue", transactiontype = AppConstants.TRANSACTION_TYPE.INCOME,
-            userid = "userid")
-
-        categoryList.add(cat0)
-        categoryList.add(cat1)
-        categoryList.add(cat2)
-        categoryList.add(cat3)
-        categoryList.add(cat4)
-
-        categoryAdapter.updateCategories(categoryList)
+            override fun onFailure(call: Call<List<Category>>, t: Throwable) {
+                Log.e("MainActivity", "Error: ${t.message}")
+            }
+        })
     }
 
     private fun redirectToCreate(){
