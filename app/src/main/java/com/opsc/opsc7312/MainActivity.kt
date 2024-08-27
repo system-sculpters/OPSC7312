@@ -13,6 +13,7 @@ import com.opsc.opsc7312.model.data.Category
 import com.opsc.opsc7312.view.fragment.CategoriesFragment
 import com.opsc.opsc7312.view.fragment.GoalsFragment
 import com.opsc.opsc7312.view.fragment.HomeFragment
+import com.opsc.opsc7312.view.fragment.SettingsFragment
 import com.opsc.opsc7312.view.fragment.TransactionsFragment
 
 class MainActivity : AppCompatActivity() {
@@ -45,7 +46,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.transactions -> changeCurrentFragment(TransactionsFragment())
                 R.id.add -> changeCurrentFragment(GoalsFragment())
                 //R.id.analytics -> changeCurrentFragment(Home4Fragment())
-                //R.id.settings -> changeCurrentFragment(Home4Fragment())
+                R.id.settings -> changeCurrentFragment(SettingsFragment())
             }
             true
         }

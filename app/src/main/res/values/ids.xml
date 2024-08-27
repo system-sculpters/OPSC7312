@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="selected_language_indicator" type="id" />
+    <item name="language_spinner" type="id" />
+    <item name="selected_language_label" type="id" />
+</resources>
