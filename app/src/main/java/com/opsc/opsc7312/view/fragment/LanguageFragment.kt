@@ -1,8 +1,8 @@
-package com.example.yourapp.fragments
+package com.yourpackage
 
-import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,62 +14,47 @@ import com.opsc.opsc7312.R
 
 class LanguageFragment : Fragment() {
 
-    private lateinit var sharedPreferences: SharedPreferences
     private lateinit var languageSpinner: Spinner
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.f, container, false)
-
-        // Initialize SharedPreferences
-        sharedPreferences = requireActivity().getSharedPreferences("UserPreferences", Context.MODE_PRIVATE)
-
-        // Initialize Spinner
-        languageSpinner = view.findViewById(R.id.spinner_languages)
-
-        setupSpinner()
-
-        return view
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragement_languages, container, false)
     }
 
-    private fun setupSpinner() {
-        // Get the saved language preference
-        val savedLanguage = sharedPreferences.getString("selected_language", "English")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        // Set the spinner adapter
-        ArrayAdapter.createFromResource(
+        languageSpinner = view.findViewById(R.id.language_spinner)
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
+
+        // Set up the spinner
+        val adapter = ArrayAdapter.createFromResource(
             requireContext(),
-            R.array.language_array,
+            R.array.languages_array,
             android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            languageSpinner.adapter = adapter
+        ).apply {
+            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         }
+        languageSpinner.adapter = adapter
 
-        // Set the saved language as selected
-        val languageIndex = resources.getStringArray(R.array.language_array).indexOf(savedLanguage)
-        languageSpinner.setSelection(languageIndex)
+        // Set the default selection
+        val currentLanguage = sharedPreferences.getString("language", "English")
+        val position = adapter.getPosition(currentLanguage)
+        languageSpinner.setSelection(position)
 
-        // Set listener for spinner selection
         languageSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedLanguage = parent?.getItemAtPosition(position).toString()
-                saveLanguagePreference(selectedLanguage)
+                val selectedLanguage = adapter.getItem(position).toString()
+                sharedPreferences.edit().putString("language", selectedLanguage).apply()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                // Do nothing
+                // Handle the case when no item is selected (optional)
             }
-        }
-    }
-
-    private fun saveLanguagePreference(language: String) {
-        // Save the selected language to SharedPreferences
-        with(sharedPreferences.edit()) {
-            putString("selected_language", language)
-            apply()
         }
     }
 }

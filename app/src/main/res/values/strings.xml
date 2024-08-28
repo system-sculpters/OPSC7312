@@ -14,7 +14,7 @@
     <string name="contribution_type">Contribution Type</string>
     <string name="deadline">Deadline (optional)</string>
     <string name="edit_goals">Edit Goals</string>
-    <string-array name="language_array">
+    <string-array name="languages_array">
         <item>English</item>
         <item>Zulu</item>
         <item>Afrikaans</item>

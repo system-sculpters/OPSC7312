@@ -9,21 +9,6 @@
     android:background="@android:color/white">
 
     <!-- Title Section -->
-    <ImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@drawable/baseline_arrow_back_ios_new_24"
-        android:contentDescription="Back" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="140dp"
-        android:layout_marginTop="-38dp"
-        android:paddingBottom="10dp"
-        android:text="Settings"
-        android:textSize="24sp"
-        android:textStyle="bold"/>
 
     <!-- Account Section -->
     <TextView
@@ -35,7 +20,7 @@
         android:paddingTop="20dp"
         android:paddingBottom="8dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="45dp"/>
+        android:layout_marginTop="10dp"/>
 
     <LinearLayout
         android:id="@+id/account_section"
@@ -263,5 +248,7 @@
             android:src="@drawable/baseline_chevron_right_24"
             android:contentDescription="Arrow"/>
     </LinearLayout>
+
+    <!-- Fragment Container -->
 
 </LinearLayout>
