@@ -15,11 +15,10 @@ import com.opsc.opsc7312.view.fragment.Category_mFragment
 import com.opsc.opsc7312.view.fragment.CreateGoalFragment
 import com.opsc.opsc7312.view.fragment.GoalsFragment
 import com.opsc.opsc7312.view.fragment.HomeFragment
-import com.opsc.opsc7312.view.fragment.LoginFragment
-import com.opsc.opsc7312.view.fragment.RegisterFragment
+
 import com.opsc.opsc7312.view.fragment.Transaction_mFragment
 import com.opsc.opsc7312.view.fragment.TransactionsFragment
-import com.opsc.opsc7312.view.fragment.WelcomeFragment
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -42,7 +41,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupBottomNavigation() {
 
-        changeCurrentFragment(WelcomeFragment())
+        changeCurrentFragment(HomeFragment())
 
         // Code for when a different button is pressed on the navigation menu
         binding.bottomNavigation.setOnItemSelectedListener { menuItem ->
