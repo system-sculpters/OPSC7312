@@ -58,31 +58,7 @@ class CategoriesFragment : Fragment() {
         binding.categoryRecycleView.setHasFixedSize(true)
         binding.categoryRecycleView.adapter = categoryAdapter
     }
-
-//    private fun categoryList(){
-//
-//        val cat0 = Category(isCreateButton = true)
-//
-//        val cat1 = Category(id = "id", name = "blue", color = "Blue", icon = "yellow", transactiontype = AppConstants.TRANSACTIONTYPE.INCOME.name,
-//        userid = "userid")
-//
-//        val cat2 = Category(id = "id", name = "red", color = "Red", icon = "green", transactiontype = AppConstants.TRANSACTIONTYPE.INCOME.name,
-//            userid = "userid")
-//
-//        val cat3 = Category(id = "id", name = "yellow", color = "Yellow", icon = "red", transactiontype = AppConstants.TRANSACTIONTYPE.INCOME.name,
-//            userid = "userid")
-//
-//        val cat4 = Category(id = "id", name = "green", color = "Green", icon = "blue", transactiontype = AppConstants.TRANSACTIONTYPE.INCOME.name,
-//            userid = "userid")
-//
-//        categoryList.add(cat0)
-//        categoryList.add(cat1)
-//        categoryList.add(cat2)
-//        categoryList.add(cat3)
-//        categoryList.add(cat4)
-//
-//        categoryAdapter.updateCategories(categoryList)
-//    }
+    
 
     private fun categoryList(id: String){
         val call = CategoryRetrofitClient.apiService.getCategories(id)
