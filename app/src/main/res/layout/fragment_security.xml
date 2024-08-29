@@ -35,11 +35,12 @@
 
         <Switch
             android:id="@+id/switch_biometrics"
-            android:layout_width="45dp"
+            android:layout_width="54dp"
             android:layout_height="54dp"
             android:layout_gravity="center_vertical"
             android:thumbTint="@color/white"
-            android:trackTint="@color/black" />
+            android:trackTint="@color/black"
+            />
 
 
     </LinearLayout>

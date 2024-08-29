@@ -16,4 +16,5 @@
     <string name="edit_goals">Edit Goals</string>
     <string name="log_out">Log out</string>
     <string name="category">Cattegories</string>
+    <string name="fingerprint_icon" />
 </resources>
