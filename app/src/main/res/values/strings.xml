@@ -14,4 +14,6 @@
     <string name="contribution_type">Contribution Type</string>
     <string name="deadline">Deadline (optional)</string>
     <string name="edit_goals">Edit Goals</string>
+    <string name="log_out">Log out</string>
+    <string name="category">Cattegories</string>
 </resources>

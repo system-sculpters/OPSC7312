@@ -24,4 +24,15 @@
     <color name="darkAccent">#6C757D</color>
     <color name="darkBackgroundColor">#343A40</color>
 
+    <!-- text color -->
+    <color name="textPrimary">#343A40</color> <!-- Black or dark color for light mode -->
+    <color name="textSecondary">#6C757D</color>
+
+    <!-- general item layout-->
+    <color name="itemPrimary">#FFFFFF</color> <!-- Black or dark color for light mode -->
+    <color name="itemOnPrimary">#6C757D</color>
+
+    <!--INPUT COLORS -->
+    <color name="inputBgStroke">#6C757D</color>
+
 </resources>

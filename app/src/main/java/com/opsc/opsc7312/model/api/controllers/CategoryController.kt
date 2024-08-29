@@ -2,6 +2,7 @@ package com.opsc.opsc7312.model.api.controllers
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.opsc.opsc7312.model.api.retrofitclients.CategoryRetrofitClient
 import com.opsc.opsc7312.model.api.retrofitclients.GoalRetrofitClient
 import com.opsc.opsc7312.model.data.Category
@@ -10,7 +11,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class CategoryController {
+class CategoryController: ViewModel() {
     private var api = CategoryRetrofitClient.apiService
 
     val status: MutableLiveData<Boolean> = MutableLiveData()
@@ -29,7 +30,12 @@ class CategoryController {
                 if (response.isSuccessful) {
                     val categories = response.body()
                     categories?.let {
-                        categoryList.postValue(it)
+                        val cat0 = Category(isCreateButton = true)
+
+                        // Create a new list with cat0 as the first element
+                        val updatedCategories = listOf(cat0) + it
+
+                        categoryList.postValue(updatedCategories)
                         status.postValue(true)
                         message.postValue("categories retrieved")
                         Log.d("MainActivity", "Categories: $it")

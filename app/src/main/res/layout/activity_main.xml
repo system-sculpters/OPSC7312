@@ -12,22 +12,53 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <!-- Toolbar -->
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/nav_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/primary"
+            android:background="?attr/colorItemLayoutBg"
             android:elevation="4dp"
-            android:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+            android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
 
-        <!-- The content area for fragments or other content -->
+            <ImageButton
+                android:id="@+id/back_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="start"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Back"
+                android:src="@drawable/baseline_arrow_back_ios_new_24" />
+
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/inter_medium"
+                android:text="Title"
+                android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+                android:textSize="32sp" />
+
+            <ImageButton
+                android:id="@+id/nav_drawer_opener"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="end"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Menu"
+                android:src="@drawable/baseline_menu_24" />
+
+        </androidx.appcompat.widget.Toolbar>
+
         <FrameLayout
             android:id="@+id/frame_layout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"/>
 
-        <!-- Bottom Navigation placed inside the LinearLayout at the bottom -->
+        <!-- Bottom Navigation -->
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -36,12 +67,32 @@
                 android:id="@+id/bottom_navigation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#000"
-                app:itemBackground="@color/design_default_color_on_primary"
-                app:itemIconTint="#000"
-                app:itemTextColor="#000"
-                app:menu="@menu/bottom_nav_menu"/>
+                android:background="@color/white"
+                app:itemIconTint="@color/black"
+                app:itemTextColor="@color/black"
+                app:menu="@menu/bottom_nav_menu"
+                android:layout_gravity="bottom"/>
+
+            <!-- FloatingActionButton for the black circle -->
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_gravity="center|bottom"
+                android:layout_marginBottom="20dp"
+                android:backgroundTint="@color/dark_grey"
+                app:tint="@null"
+                android:src="@drawable/baseline_add_light"
+                app:layout_anchor="@id/bottom_navigation"
+                app:layout_anchorGravity="center"/>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
     </LinearLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        app:menu="@menu/drawer_menu" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
