@@ -47,7 +47,6 @@
                 android:text="4000 ZAR"
                 android:textSize="20sp"
                 android:textAlignment="textEnd"
-                android:textColor="@color/dark_grey"
                 android:fontFamily="@font/inter_bold"
                 android:textStyle="bold"
                 android:padding="0dp"

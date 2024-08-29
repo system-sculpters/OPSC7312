@@ -6,13 +6,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.opsc.opsc7312.AppConstants
 import com.opsc.opsc7312.R
 import com.opsc.opsc7312.databinding.FragmentCategoriesBinding
+import com.opsc.opsc7312.model.api.controllers.CategoryController
 import com.opsc.opsc7312.model.api.retrofitclients.CategoryRetrofitClient
 import com.opsc.opsc7312.model.data.Category
 import com.opsc.opsc7312.view.adapter.CategoryAdapter
+import com.opsc.opsc7312.view.observers.CategoriesObserver
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,6 +31,8 @@ class CategoriesFragment : Fragment() {
     private lateinit var categoryList: ArrayList<Category>
     private lateinit var categoryAdapter: CategoryAdapter
 
+    private lateinit var categoryViewModel: CategoryController
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -33,6 +40,9 @@ class CategoriesFragment : Fragment() {
         _binding = FragmentCategoriesBinding.inflate(inflater, container, false)
 
         categoryList = arrayListOf<Category>()
+
+        categoryViewModel = ViewModelProvider(this).get(CategoryController::class.java)
+
 
         categoryAdapter = CategoryAdapter{
                 category ->
@@ -45,10 +55,9 @@ class CategoriesFragment : Fragment() {
             }
         }
 
-        categoryList("id1")
-
         setUpRecyclerView()
 
+        observeViewModel()
 
         return binding.root
     }
@@ -58,55 +67,29 @@ class CategoriesFragment : Fragment() {
         binding.categoryRecycleView.setHasFixedSize(true)
         binding.categoryRecycleView.adapter = categoryAdapter
     }
+    
 
-//    private fun categoryList(){
-//
-//        val cat0 = Category(isCreateButton = true)
-//
-//        val cat1 = Category(id = "id", name = "blue", color = "Blue", icon = "yellow", transactiontype = AppConstants.TRANSACTIONTYPE.INCOME.name,
-//        userid = "userid")
-//
-//        val cat2 = Category(id = "id", name = "red", color = "Red", icon = "green", transactiontype = AppConstants.TRANSACTIONTYPE.INCOME.name,
-//            userid = "userid")
-//
-//        val cat3 = Category(id = "id", name = "yellow", color = "Yellow", icon = "red", transactiontype = AppConstants.TRANSACTIONTYPE.INCOME.name,
-//            userid = "userid")
-//
-//        val cat4 = Category(id = "id", name = "green", color = "Green", icon = "blue", transactiontype = AppConstants.TRANSACTIONTYPE.INCOME.name,
-//            userid = "userid")
-//
-//        categoryList.add(cat0)
-//        categoryList.add(cat1)
-//        categoryList.add(cat2)
-//        categoryList.add(cat3)
-//        categoryList.add(cat4)
-//
-//        categoryAdapter.updateCategories(categoryList)
-//    }
-
-    private fun categoryList(id: String){
-        val call = CategoryRetrofitClient.apiService.getCategories(id)
-
-        // Log the URL
-        val url = call.request().url.toString()
-        Log.d("MainActivity", "Request URL: $url")
-        CategoryRetrofitClient.apiService.getCategories(id).enqueue(object : Callback<List<Category>> {
-            override fun onResponse(call: Call<List<Category>>, response: Response<List<Category>>) {
-                if (response.isSuccessful) {
-                    val categories = response.body()
-                    categories?.let {
-                        categoryAdapter.updateCategories(it)
-                        Log.d("MainActivity", "Categories: $it")
-                    }
-                } else {
-                    Log.e("MainActivity", "Request failed with code: ${response.code()}")
-                }
+    private fun observeViewModel(){
+        // Observe LiveData
+        categoryViewModel.status.observe(viewLifecycleOwner)  { status ->
+            // Handle status changes (success or failure)
+            if (status) {
+                // Success
+            } else {
+                // Failure
             }
+        }
 
-            override fun onFailure(call: Call<List<Category>>, t: Throwable) {
-                Log.e("MainActivity", "Error: ${t.message}")
-            }
-        })
+        categoryViewModel.message.observe(viewLifecycleOwner) { message ->
+            // Show message to the user, if needed
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        }
+
+        categoryViewModel.categoryList.observe(viewLifecycleOwner, CategoriesObserver(categoryAdapter))
+
+
+        // Example API calls
+        categoryViewModel.getAllCategories("id1")
     }
 
     private fun redirectToCreate(){
