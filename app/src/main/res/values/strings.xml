@@ -19,4 +19,7 @@
         <item>Zulu</item>
         <item>Afrikaans</item>
     </string-array>
+    <string name="fingerprint">Fingerprint</string>
+    <string name="fingerprint_icon">Fingerprint icon</string>
+
 </resources>

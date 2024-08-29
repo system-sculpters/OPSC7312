@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Notifications Toggle -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="8dp"
+            android:layout_marginTop="20dp">
+
+            <Switch
+                android:id="@+id/switch_notifications"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Notifications"
+                android:padding="20dp" />
+        </androidx.cardview.widget.CardView>
+
+        <!-- Transaction Section -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:text="Transaction"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="20dp"/>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="8dp"
+            android:layout_marginTop="20dp">
+
+            <Switch
+                android:id="@+id/switch_notify_purchase"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Notify after every purchase"
+                android:padding="20dp" />
+        </androidx.cardview.widget.CardView>
+
+        <!-- Goal Section -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:text="Goal"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="20dp"/>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="8dp">
+
+            <Switch
+                android:id="@+id/switch_notify_goal_progress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Notify at 25%, 50%, and 75% progress"
+                android:padding="20dp"
+                />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="8dp"
+            android:layout_marginTop="20dp">
+
+            <Switch
+                android:id="@+id/switch_alert_goal_reached"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Alert when goal is reached"
+                android:padding="20dp"
+                />
+        </androidx.cardview.widget.CardView>
+
+        <!-- General Section -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:text="General"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="20dp"/>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="8dp"
+            android:layout_marginTop="10dp">
+
+            <Switch
+                android:id="@+id/switch_notify_profile_updated"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Notify when profile is updated"
+                android:padding="20dp" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="8dp"
+            android:layout_marginTop="30dp">
+
+            <Switch
+                android:id="@+id/switch_alert_new_logins"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Alert for new logins or failed attempts"
+                android:padding="20dp" />
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+</ScrollView>

@@ -2,10 +2,10 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="oval">
     <!-- Define background color -->
-    <solid android:color="@color/white" /> <!-- Background color -->
+    <solid android:color="@color/primary" /> <!-- Background color, you can change it as needed -->
 
     <!-- Define stroke (border) properties -->
     <stroke
-        android:width="3dp"
-        android:color="@color/primary" /> <!-- Border color -->
+        android:width="5dp"
+        android:color="@color/primary" /> <!-- Change this to your blue color resource -->
 </shape>

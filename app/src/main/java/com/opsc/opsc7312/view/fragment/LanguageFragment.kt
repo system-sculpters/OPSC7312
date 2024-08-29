@@ -1,8 +1,8 @@
-package com.yourpackage
+package com.example.app
 
+import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,50 +11,84 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import com.opsc.opsc7312.R
+import android.content.res.Configuration
+import java.util.Locale
 
 class LanguageFragment : Fragment() {
 
-    private lateinit var languageSpinner: Spinner
     private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var languageSpinner: Spinner
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragement_languages, container, false)
-    }
+        val view = inflater.inflate(R.layout.fragement_languages, container, false)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        // Initialize SharedPreferences
+        sharedPreferences = requireActivity().getSharedPreferences("LanguagePreferences", Context.MODE_PRIVATE)
 
-        languageSpinner = view.findViewById(R.id.language_spinner)
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        // Initialize Spinner
+        languageSpinner = view.findViewById(R.id.languageSpinner)
 
-        // Set up the spinner
-        val adapter = ArrayAdapter.createFromResource(
-            requireContext(),
-            R.array.languages_array,
-            android.R.layout.simple_spinner_item
-        ).apply {
-            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        }
+        // Set up the Spinner with English, Afrikaans, and Zulu
+        val languages = arrayOf("English", "Afrikaans", "Zulu")
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, languages)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         languageSpinner.adapter = adapter
 
-        // Set the default selection
-        val currentLanguage = sharedPreferences.getString("language", "English")
-        val position = adapter.getPosition(currentLanguage)
-        languageSpinner.setSelection(position)
+        // Load saved language preference and set Spinner selection
+        val savedLanguage = sharedPreferences.getString("selectedLanguage", "English")
+        languageSpinner.setSelection(languages.indexOf(savedLanguage))
 
+        // Handle language selection
         languageSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedLanguage = adapter.getItem(position).toString()
-                sharedPreferences.edit().putString("language", selectedLanguage).apply()
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                val selectedLanguage = parent.getItemAtPosition(position).toString()
+                saveLanguagePreference(selectedLanguage)
+                setLocale(selectedLanguage)
             }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                // Handle the case when no item is selected (optional)
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // Do nothing
             }
         }
+
+        return view
+    }
+
+    private fun saveLanguagePreference(language: String) {
+        with(sharedPreferences.edit()) {
+            putString("selectedLanguage", language)
+            apply()
+        }
+    }
+
+    private fun setLocale(language: String) {
+        val localeCode = when (language) {
+            "Afrikaans" -> "af"
+            "Zulu" -> "zu"
+            else -> "en" // Default to English
+        }
+
+        val locale = Locale(localeCode)
+        Locale.setDefault(locale)
+        val config = Configuration()
+        config.setLocale(locale)
+        requireContext().createConfigurationContext(config)
+
+        // Refresh the UI to reflect the new language
+        refreshUI()
+    }
+
+    private fun refreshUI() {
+        // You need to manually update the text for each UI component here
+        // Example:
+        // languageSpinner.setSelection(languages.indexOf(getString(R.string.language)))
+        // Additional UI updates as needed
+
+        // Alternatively, navigate back to the previous fragment or refresh the fragment itself
+        parentFragmentManager.beginTransaction().detach(this).attach(this).commit()
     }
 }

@@ -3,4 +3,17 @@
     <item name="selected_language_indicator" type="id" />
     <item name="language_spinner" type="id" />
     <item name="selected_language_label" type="id" />
+    <item name="lightIcon" type="id" />
+    <item name="lightText" type="id" />
+    <item name="checkLight" type="id" />
+    <item name="darkIcon" type="id" />
+    <item name="darkText" type="id" />
+    <item name="checkDark" type="id" />
+    <item name="automaticIcon" type="id" />
+    <item name="automaticText" type="id" />
+    <item name="checkAutomatic" type="id" />
+    <item name="Email" type="id" />
+    <item name="btnEditProfileImage" type="id" />
+    <item name="Username" type="id" />
+    <item name="btnSave" type="id" />
 </resources>
