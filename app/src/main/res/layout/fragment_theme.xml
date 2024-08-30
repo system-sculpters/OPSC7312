@@ -1,101 +1,265 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:context=".view.fragment.ThemeFragment"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:paddingVertical="25dp"
+    android:paddingHorizontal="20dp">
 
-    <!-- Light Theme -->
-    <LinearLayout
+
+
+    <com.opsc.opsc7312.view.custom.CheckableLinearLayout
+        android:id="@+id/lightMode"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:orientation="horizontal"
-        android:paddingTop="12dp"
-        android:paddingBottom="12dp"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:paddingHorizontal="6dp"
+        android:background="@drawable/settings_background">
 
-        <ImageView
-            android:id="@+id/lightIcon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_light_mode"
-            android:contentDescription="Light mode icon"
-            android:layout_marginEnd="16dp" />
+        <FrameLayout
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="1dp"
+            android:background="@drawable/theme_icon_background">
 
-        <TextView
-            android:id="@+id/lightText"
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:background="@drawable/edittext_background">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/light_theme_right_background"
+                    android:layout_weight="1"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/light_theme_background"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:layout_gravity="bottom"
+                android:background="@drawable/rounded_corner_blue_bar"
+                android:layout_marginBottom="5dp"
+                android:layout_marginHorizontal="10dp"
+
+                />
+
+        </FrameLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/light"
+                android:textSize="20sp"
+                android:fontFamily="@font/inter"/>
+        </LinearLayout>
+        <View
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Light"
-            android:textSize="16sp"
-            android:layout_weight="1" />
+            android:layout_weight="1"
 
-        <CheckBox
-            android:id="@+id/checkLight"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
+            />
 
-    <!-- Dark Theme -->
-    <LinearLayout
+        <LinearLayout
+            android:layout_width="20dp"
+            android:layout_height="20dp">
+            <ImageView
+                android:id="@+id/isCheckedLight"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_automatic_mode" />
+        </LinearLayout>
+
+    </com.opsc.opsc7312.view.custom.CheckableLinearLayout>
+
+
+
+
+
+
+
+
+    <com.opsc.opsc7312.view.custom.CheckableLinearLayout
+        android:id="@+id/darkMode"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:orientation="horizontal"
-        android:paddingTop="12dp"
-        android:paddingBottom="12dp"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:paddingHorizontal="6dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/settings_background">
 
-        <ImageView
-            android:id="@+id/darkIcon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_dark_mode"
-            android:contentDescription="Dark mode icon"
-            android:layout_marginEnd="16dp" />
+        <FrameLayout
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding=".5dp"
+            android:background="@drawable/theme_icon_background"
+            >
 
-        <TextView
-            android:id="@+id/darkText"
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:background="@drawable/edittext_background">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:background="@drawable/theme_background"
+                    android:layout_weight="1"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:background="@drawable/dark_theme_right_background"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:layout_gravity="bottom"
+                android:background="@drawable/rounded_corner_blue_bar"
+                android:layout_marginBottom="5dp"
+                android:layout_marginHorizontal="10dp"
+
+                />
+
+        </FrameLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/dark"
+                android:textSize="20sp"
+                android:fontFamily="@font/inter"/>
+        </LinearLayout>
+        <View
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Dark"
-            android:textSize="16sp"
-            android:layout_weight="1" />
+            android:layout_weight="1"
 
-        <CheckBox
-            android:id="@+id/checkDark"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
+            />
 
-    <!-- Automatic Theme -->
-    <LinearLayout
+        <LinearLayout
+            android:layout_width="20dp"
+            android:layout_height="20dp">
+            <ImageView
+                android:id="@+id/isCheckedDark"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_automatic_mode" />
+        </LinearLayout>
+
+    </com.opsc.opsc7312.view.custom.CheckableLinearLayout>
+
+
+
+
+
+    <com.opsc.opsc7312.view.custom.CheckableLinearLayout
+        android:id="@+id/systemMode"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:orientation="horizontal"
-        android:paddingTop="12dp"
-        android:paddingBottom="12dp"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:paddingHorizontal="6dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/settings_background">
 
-        <ImageView
-            android:id="@+id/automaticIcon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:contentDescription="Automatic mode icon"
-            android:src="@drawable/ic_automatic_mode"
-            android:layout_marginEnd="16dp" />
+        <FrameLayout
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding=".5dp"
+            android:background="@drawable/theme_icon_background"
+            >
 
-        <TextView
-            android:id="@+id/automaticText"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:background="@drawable/edittext_background">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:background="@drawable/light_theme_right_background"
+                    android:layout_weight="1"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:background="@drawable/dark_theme_right_background"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:layout_gravity="bottom"
+                android:background="@drawable/rounded_corner_blue_bar"
+                android:layout_marginBottom="5dp"
+                android:layout_marginHorizontal="10dp"
+
+                />
+
+        </FrameLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/system"
+                android:textSize="20sp"
+                android:fontFamily="@font/inter"/>
+        </LinearLayout>
+        <View
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Automatic"
-            android:textSize="16sp"
-            android:layout_weight="1" />
+            android:layout_weight="1"
 
-        <CheckBox
-            android:id="@+id/checkAutomatic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
+            />
+
+        <LinearLayout
+            android:layout_width="20dp"
+            android:layout_height="20dp">
+            <ImageView
+                android:id="@+id/isCheckedSystem"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_automatic_mode" />
+        </LinearLayout>
+
+    </com.opsc.opsc7312.view.custom.CheckableLinearLayout>
 
 </LinearLayout>

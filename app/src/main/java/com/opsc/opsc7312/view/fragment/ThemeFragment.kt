@@ -1,4 +1,4 @@
-package com.example.yourapp
+package com.opsc.opsc7312.view.fragment
 
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -6,75 +6,80 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 import com.opsc.opsc7312.R
+import com.opsc.opsc7312.databinding.FragmentThemeBinding
 
 class ThemeFragment : Fragment() {
 
+    private var _binding: FragmentThemeBinding? = null
+    private val binding get() = _binding!!
+
     private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var checkLight: CheckBox
-    private lateinit var checkDark: CheckBox
-    private lateinit var checkAutomatic: CheckBox
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_theme, container, false)
+    ): View {
+        _binding = FragmentThemeBinding.inflate(inflater, container, false)
 
-        // Initialize CheckBox views
-        checkLight = view.findViewById(R.id.checkLight)
-        checkDark = view.findViewById(R.id.checkDark)
-        checkAutomatic = view.findViewById(R.id.checkAutomatic)
+        //toolbarTitle.text = "Theme/Appearance"
 
         // Initialize SharedPreferences
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        sharedPreferences = android.preference.PreferenceManager.getDefaultSharedPreferences(requireContext())
 
-        // Load saved theme preference
+        // Load saved theme preference and apply the theme
         loadSavedTheme()
 
-        // Set up listeners for CheckBox changes
-        setupCheckBoxListeners()
+        // Set up listeners for theme selection
+        setupThemeSelectionListeners()
 
-        return view
+        return binding.root
     }
 
-    private fun setupCheckBoxListeners() {
-        checkLight.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) setSingleCheck(checkLight)
+    private fun setupThemeSelectionListeners() {
+        binding.lightMode.setOnClickListener {
+            selectTheme("Light")
         }
-        checkDark.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) setSingleCheck(checkDark)
+
+        binding.darkMode.setOnClickListener {
+            selectTheme("Dark")
         }
-        checkAutomatic.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) setSingleCheck(checkAutomatic)
+
+        binding.systemMode.setOnClickListener {
+            selectTheme("Automatic")
         }
     }
 
-    private fun setSingleCheck(selected: CheckBox) {
-        // Uncheck other CheckBoxes
-        if (checkLight != selected) checkLight.isChecked = false
-        if (checkDark != selected) checkDark.isChecked = false
-        if (checkAutomatic != selected) checkAutomatic.isChecked = false
-
-        // Save the selected theme
-        val theme = when (selected.id) {
-            R.id.checkLight -> "Light"
-            R.id.checkDark -> "Dark"
-            R.id.checkAutomatic -> "Automatic"
-            else -> "Light" // Default theme
-        }
+    private fun selectTheme(theme: String) {
         saveThemePreference(theme)
+        applyTheme(theme)
+    }
+
+    private fun applyTheme(theme: String) {
+        when (theme) {
+            "Light" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            "Dark" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            "Automatic" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+        }
+        // Restart activity to apply the new theme
+        activity?.recreate()
     }
 
     private fun loadSavedTheme() {
-        val savedTheme = sharedPreferences.getString("theme_preference", "Light")
-        when (savedTheme) {
-            "Light" -> checkLight.isChecked = true
-            "Dark" -> checkDark.isChecked = true
-            "Automatic" -> checkAutomatic.isChecked = true
-        }
+        // Fetch the saved theme preference, default to "Light" if not found
+        val savedTheme = sharedPreferences.getString("theme_preference", "Light") ?: "Light"
+
+        // Update the UI to reflect the saved theme
+        updateCheckIcons(savedTheme)
+    }
+
+    private fun updateCheckIcons(theme: String) {
+        binding.isCheckedLight.visibility = if (theme == "Light") View.VISIBLE else View.INVISIBLE
+        binding.isCheckedDark.visibility = if (theme == "Dark") View.VISIBLE else View.INVISIBLE
+        binding.isCheckedSystem.visibility = if (theme == "Automatic") View.VISIBLE else View.INVISIBLE
     }
 
     private fun saveThemePreference(theme: String) {

@@ -1,4 +1,4 @@
-package com.example.app.ui.security
+package com.opsc.opsc7312.view.fragment
 
 import android.content.Context
 import android.content.SharedPreferences

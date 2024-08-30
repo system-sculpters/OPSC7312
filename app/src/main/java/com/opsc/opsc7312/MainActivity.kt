@@ -1,26 +1,21 @@
 package com.opsc.opsc7312
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.ImageButton
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import com.example.app.LanguageFragment
 import com.google.android.material.navigation.NavigationView
 import com.opsc.opsc7312.databinding.ActivityMainBinding
-import com.opsc.opsc7312.model.data.Category
 import com.opsc.opsc7312.view.fragment.AnalyticsFragment
 import com.opsc.opsc7312.view.fragment.CategoriesFragment
-import com.opsc.opsc7312.view.fragment.CreateGoalFragment
 import com.opsc.opsc7312.view.fragment.GoalsFragment
 import com.opsc.opsc7312.view.fragment.HomeFragment
 import com.opsc.opsc7312.view.fragment.SettingsFragment
@@ -35,48 +30,57 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private lateinit var  navigationView: NavigationView
 
+    private lateinit var sharedPreferences: SharedPreferences
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Load the selected theme before setting the content view
+        loadAndApplyTheme()
+
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-
         val isDarkMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
-
         tintIconForDarkMode(findViewById(R.id.back_button), isDarkMode)
         tintIconForDarkMode(findViewById(R.id.nav_drawer_opener), isDarkMode)
 
-
         drawerLayout = findViewById<DrawerLayout>(R.id.main)
-
         navigationView = findViewById<NavigationView>(R.id.nav_view)
 
-        //toolbar = findViewById<Toolbar>(R.id.nav_toolbar)
-        //setSupportActionBar(toolbar)
         setupBottomNavigation()
-
         setupNavigationView()
 
         findViewById<ImageButton>(R.id.back_button).setOnClickListener {
             onBackPressed()
         }
 
-        // Handle the navigation drawer opener click
         findViewById<ImageButton>(R.id.nav_drawer_opener).setOnClickListener {
             drawerLayout.openDrawer(GravityCompat.END)
         }
 
         binding.fab.setOnClickListener {
-            //changeCurrentFragment(GoalsFragment(), "Add Transaction")
+            // Handle FAB click, e.g., open GoalsFragment
+        }
+    }
+
+    private fun loadAndApplyTheme() {
+        // Initialize SharedPreferences
+        sharedPreferences = android.preference.PreferenceManager.getDefaultSharedPreferences(this)
+
+        // Fetch the saved theme preference, default to "Light" if not found
+        val savedTheme = sharedPreferences.getString("theme_preference", "Light") ?: "Light"
+
+        // Apply the saved theme
+        when (savedTheme) {
+            "Light" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            "Dark" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            "Automatic" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
         }
     }
 
     private fun setupBottomNavigation() {
-
         changeCurrentFragment(HomeFragment(), "Home")
 
-        // Code for when a different button is pressed on the navigation menu
         binding.bottomNavigation.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.home -> changeCurrentFragment(HomeFragment(), "Home")
@@ -88,32 +92,27 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             true
         }
     }
+
     private fun changeCurrentFragment(fragment: Fragment, title: String) {
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.frame_layout, fragment)
             commit()
         }
-        // Set the title of the toolbar
         binding.toolbarTitle.text = title
     }
 
-
     private fun setupNavigationView() {
-
         navigationView.setNavigationItemSelectedListener(this)
     }
 
-
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-
+        when (item.itemId) {
             R.id.nav_investment -> changeCurrentFragment(CategoriesFragment(), "Investments")
             R.id.nav_categories -> changeCurrentFragment(CategoriesFragment(), "Categories")
             R.id.nav_goal -> changeCurrentFragment(GoalsFragment(), "Goals")
             R.id.nav_logout -> {
                 Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show()
                 startActivity(Intent(this, MainActivity::class.java))
-
             }
         }
         drawerLayout.closeDrawer(GravityCompat.END)
@@ -128,5 +127,4 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         imageButton.setColorFilter(color)
     }
-
 }
