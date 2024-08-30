@@ -9,4 +9,7 @@
 
     <!--INPUT COLORS -->
     <color name="inputBgStroke">#FFFFFF</color>
+
+    <!-- THEME BACKGROUND -->
+    <color name="themeBg">#FFFFFF</color>
 </resources>

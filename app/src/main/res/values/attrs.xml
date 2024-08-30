@@ -4,5 +4,6 @@
         <attr name="colorItemLayoutBg" format="color"/>
         <attr name="colorItemBorder" format="color"/>
         <attr name="whiteItemBorder" format="color"/>
+        <attr name="themeBgBorder" format="color"/>
     </declare-styleable>
 </resources>

@@ -17,4 +17,8 @@
     <string name="log_out">Log out</string>
     <string name="category">Cattegories</string>
     <string name="fingerprint_icon" />
+    <string name="account">Account</string>
+    <string name="general">General</string>
+    <string name="language">Language</string>
+    <string name="goals">Goals</string>
 </resources>

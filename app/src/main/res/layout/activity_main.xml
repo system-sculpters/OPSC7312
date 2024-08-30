@@ -67,11 +67,12 @@
                 android:id="@+id/bottom_navigation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
-                app:itemIconTint="@color/black"
-                app:itemTextColor="@color/black"
+                android:background="?attr/colorSurface"
+                app:itemIconTint="@drawable/nav_item_color"
+                app:itemTextColor="@drawable/nav_item_color"
                 app:menu="@menu/bottom_nav_menu"
-                android:layout_gravity="bottom"/>
+                android:layout_gravity="bottom"
+                app:itemRippleColor="@color/primary"/>
 
             <!-- FloatingActionButton for the black circle -->
             <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -80,8 +81,8 @@
                 android:layout_height="56dp"
                 android:layout_gravity="center|bottom"
                 android:layout_marginBottom="20dp"
-                android:backgroundTint="@color/dark_grey"
-                app:tint="@null"
+                android:backgroundTint="@color/textPrimary"
+                app:tint="@color/itemPrimary"
                 android:src="@drawable/baseline_add_light"
                 app:layout_anchor="@id/bottom_navigation"
                 app:layout_anchorGravity="center"/>
@@ -93,6 +94,10 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="end"
-        app:menu="@menu/drawer_menu" />
-
+        app:menu="@menu/drawer_menu"
+        android:background="?attr/colorSurface"
+        app:itemIconTint="@drawable/nav_item_color"
+        app:itemTextColor="@drawable/nav_item_color"
+        app:headerLayout="@layout/nav_header"
+        />
 </androidx.drawerlayout.widget.DrawerLayout>

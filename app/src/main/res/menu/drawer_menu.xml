@@ -13,6 +13,11 @@
             android:id="@+id/nav_investment"
             android:icon="@drawable/baseline_show_chart_24"
             android:title="@string/category" />
+
+        <item
+            android:id="@+id/nav_goal"
+            android:icon="@drawable/baseline_flag_24"
+            android:title="@string/goals" />
     </group>
     <item
         android:title="">

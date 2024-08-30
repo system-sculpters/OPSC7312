@@ -20,7 +20,8 @@
 
         <!-- INPUT STROKE -->
         <item name="whiteItemBorder">@color/inputBgStroke</item>
+
+        <!-- THEME BACKGROUND -->
+        <item name="themeBgBorder">@color/themeBg</item>
     </style>
-
-
 </resources>

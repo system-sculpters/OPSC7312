@@ -20,6 +20,9 @@
 
         <!-- INPUT STROKE -->
         <item name="whiteItemBorder">@color/inputBgStroke</item>
+
+        <!-- THEME BACKGROUND -->
+        <item name="themeBgBorder">@color/themeBg</item>
     </style>
 
     <style name="Theme.OPSC7312" parent="Base.Theme.OPSC7312" />

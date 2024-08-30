@@ -36,4 +36,8 @@
     <!--INPUT COLORS -->
     <color name="inputBgStroke">#6C757D</color>
 
+
+    <!-- THEME BACKGROUND -->
+    <color name="themeBg">#343A40</color>
+
 </resources>
