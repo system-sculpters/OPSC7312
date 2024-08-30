@@ -40,4 +40,6 @@
     <!-- THEME BACKGROUND -->
     <color name="themeBg">#343A40</color>
 
+    <color name="darkerTitle">#1E1E1E</color>
+
 </resources>

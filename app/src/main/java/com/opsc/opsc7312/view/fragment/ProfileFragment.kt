@@ -23,17 +23,17 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.opsc.opsc7312.R
+import com.opsc.opsc7312.databinding.FragmentProfileBinding
+import com.opsc.opsc7312.databinding.FragmentSettingsBinding
 import java.io.ByteArrayOutputStream
 
 class ProfileFragment : Fragment() {
 
+    private var _binding: FragmentProfileBinding? = null
+    private val binding get() = _binding!!
+
     private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var usernameEditText: EditText
-    private lateinit var emailEditText: EditText
-    private lateinit var passwordEditText: EditText
-    private lateinit var profileImageView: ImageView
-    private lateinit var btnEditProfileImage: ImageButton
-    private lateinit var btnSave: Button
+
 
     private lateinit var takePictureLauncher: ActivityResultLauncher<Intent>
     private lateinit var pickPictureLauncher: ActivityResultLauncher<Intent>
@@ -41,31 +41,28 @@ class ProfileFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_profile, container, false)
+    ): View {
 
         // Initialize SharedPreferences
-        sharedPreferences = requireActivity().getSharedPreferences("YourPrefsName", Context.MODE_PRIVATE)
+        sharedPreferences = requireActivity().getSharedPreferences("User", Context.MODE_PRIVATE)
 
-        // Initialize views
-        usernameEditText = view.findViewById(R.id.Username)
-        emailEditText = view.findViewById(R.id.Email)
-        passwordEditText = view.findViewById(R.id.Password)
-        profileImageView = view.findViewById(R.id.iconImageView)
-        btnEditProfileImage = view.findViewById(R.id.btnEditProfileImage)
-        btnSave = view.findViewById(R.id.btnSave)
+        _binding = FragmentProfileBinding.inflate(inflater, container, false)
 
         // Load profile data
         loadProfileData()
 
         // Set up listeners
-        btnEditProfileImage.setOnClickListener { showImagePickerDialog() }
-        btnSave.setOnClickListener { saveProfileData() }
+        binding.btnEditProfileImage.setOnClickListener { showImagePickerDialog() }
+        binding.btnSave.setOnClickListener { saveProfileData() }
+
+        binding.ChangePassword.setOnClickListener{
+            showChangePasswordDialog()
+        }
 
         // Initialize activity result launchers
         initializeActivityResultLaunchers()
 
-        return view
+        return binding.root
     }
 
     private fun initializeActivityResultLaunchers() {
@@ -136,9 +133,9 @@ class ProfileFragment : Fragment() {
         val password = sharedPreferences.getString("password", "")
         val profileImageBase64 = sharedPreferences.getString("profileImage", "")
 
-        usernameEditText.setText(username)
-        emailEditText.setText(email)
-        passwordEditText.setText(password)
+        binding.username.setText(username)
+        binding.email.setText(email)
+        //passwordEditText.setText(password)
 
         // Load profile image if available
         if (!profileImageBase64.isNullOrEmpty()) {
@@ -149,14 +146,14 @@ class ProfileFragment : Fragment() {
     }
 
     private fun saveProfileData() {
-        val username = usernameEditText.text.toString()
-        val email = emailEditText.text.toString()
-        val password = passwordEditText.text.toString()
+        val username = binding.username.text.toString()
+        val email = binding.email.text.toString()
+        //val password = passwordEditText.text.toString()
 
         with(sharedPreferences.edit()) {
             putString("username", username)
             putString("email", email)
-            putString("password", password)
+            //putString("password", password)
             apply()
         }
 
@@ -176,6 +173,41 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setProfileImage(bitmap: Bitmap) {
-        profileImageView.setImageBitmap(bitmap)
+        //profileImageView.setImageBitmap(bitmap)
+    }
+
+    private fun showChangePasswordDialog(){
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.change_password_dialog, null)
+
+        val closeBtn: ImageView = dialogView.findViewById(R.id.closeView)
+
+        val newPassword: EditText = dialogView.findViewById(R.id.newPassword)
+
+        val confirmPassword: EditText = dialogView.findViewById(R.id.confirmPassword)
+
+        val saveBtn: Button = dialogView.findViewById(R.id.btnSave)
+
+        val dialog = android.app.AlertDialog.Builder(requireContext())
+            .setView(dialogView)
+            .setCancelable(false)
+            .create()
+
+        closeBtn.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        saveBtn.setOnClickListener{
+            saveNewPassword(newPassword.text.toString(), confirmPassword.text.toString())
+        }
+
+        dialog.show()
+    }
+
+    private fun saveNewPassword(newPassword: String, confirmPassword: String) {
+        if(newPassword != confirmPassword){
+            return
+        }
+
+
     }
 }

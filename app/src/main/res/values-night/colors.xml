@@ -12,4 +12,6 @@
 
     <!-- THEME BACKGROUND -->
     <color name="themeBg">#FFFFFF</color>
+
+    <color name="darkerTitle">#FFFFFF</color>
 </resources>

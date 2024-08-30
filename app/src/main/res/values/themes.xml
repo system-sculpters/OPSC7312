@@ -23,6 +23,8 @@
 
         <!-- THEME BACKGROUND -->
         <item name="themeBgBorder">@color/themeBg</item>
+
+        <item name="darkerTitle">@color/darkerTitle</item>
     </style>
 
     <style name="Theme.OPSC7312" parent="Base.Theme.OPSC7312" />

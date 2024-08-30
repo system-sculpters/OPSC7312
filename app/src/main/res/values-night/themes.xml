@@ -23,5 +23,7 @@
 
         <!-- THEME BACKGROUND -->
         <item name="themeBgBorder">@color/themeBg</item>
+
+        <item name="darkerTitle">@color/darkerTitle</item>
     </style>
 </resources>
