@@ -12,10 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.opsc.opsc7312.AppConstants
 import com.opsc.opsc7312.R
 import com.opsc.opsc7312.databinding.FragmentTransactionsBinding
-import com.opsc.opsc7312.model.data.Category
-import com.opsc.opsc7312.model.data.Transaction
+import com.opsc.opsc7312.model.data.model.Category
+import com.opsc.opsc7312.model.data.model.Transaction
 import com.opsc.opsc7312.view.adapter.TransactionAdapter
-import java.math.BigDecimal
 
 
 class TransactionsFragment : Fragment() {

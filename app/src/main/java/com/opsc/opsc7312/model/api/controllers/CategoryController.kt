@@ -4,9 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.opsc.opsc7312.model.api.retrofitclients.CategoryRetrofitClient
-import com.opsc.opsc7312.model.api.retrofitclients.GoalRetrofitClient
-import com.opsc.opsc7312.model.data.Category
-import com.opsc.opsc7312.model.data.Goal
+import com.opsc.opsc7312.model.data.model.Category
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

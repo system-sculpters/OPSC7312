@@ -1,6 +1,6 @@
 package com.opsc.opsc7312.model.api.services
 
-import com.opsc.opsc7312.model.data.Category
+import com.opsc.opsc7312.model.data.model.Category
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE

@@ -11,7 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.opsc.opsc7312.AppConstants
 import com.opsc.opsc7312.R
-import com.opsc.opsc7312.model.data.Category
+import com.opsc.opsc7312.model.data.model.Category
 
 class NotificationAdapter (private val onItemClick: (Category) -> Unit) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>(){

@@ -9,12 +9,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.opsc.opsc7312.R
 import com.opsc.opsc7312.databinding.FragmentGoalsBinding
-import com.opsc.opsc7312.databinding.FragmentTransactionsBinding
-import com.opsc.opsc7312.model.api.retrofitclients.CategoryRetrofitClient
 import com.opsc.opsc7312.model.api.retrofitclients.GoalRetrofitClient
-import com.opsc.opsc7312.model.data.Category
-import com.opsc.opsc7312.model.data.Goal
-import com.opsc.opsc7312.model.data.Transaction
+import com.opsc.opsc7312.model.data.model.Goal
 import com.opsc.opsc7312.view.adapter.GoalAdapter
 import retrofit2.Call
 import retrofit2.Callback

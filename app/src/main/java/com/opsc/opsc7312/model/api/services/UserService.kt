@@ -1,6 +1,6 @@
 package com.opsc.opsc7312.model.api.services
 
-import com.opsc.opsc7312.model.data.User
+import com.opsc.opsc7312.model.data.model.User
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET

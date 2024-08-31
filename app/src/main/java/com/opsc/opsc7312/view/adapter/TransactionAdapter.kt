@@ -1,7 +1,6 @@
 package com.opsc.opsc7312.view.adapter
 
 import android.graphics.drawable.GradientDrawable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.opsc.opsc7312.AppConstants
 import com.opsc.opsc7312.R
-import com.opsc.opsc7312.model.data.Transaction
+import com.opsc.opsc7312.model.data.model.Transaction
 
 class TransactionAdapter(private val onItemClick: (Transaction) -> Unit) : RecyclerView.Adapter<TransactionAdapter.ViewHolder>() {
     // This class adapted from geeksforgeeks

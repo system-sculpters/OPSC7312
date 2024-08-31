@@ -9,12 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.opsc.opsc7312.AppConstants
 import com.opsc.opsc7312.R
-import com.opsc.opsc7312.databinding.FragmentCategoriesBinding
 import com.opsc.opsc7312.databinding.FragmentCreateGoalBinding
 import com.opsc.opsc7312.model.api.retrofitclients.GoalRetrofitClient
-import com.opsc.opsc7312.model.data.Category
-import com.opsc.opsc7312.model.data.Goal
-import com.opsc.opsc7312.model.data.Transaction
+import com.opsc.opsc7312.model.data.model.Goal
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

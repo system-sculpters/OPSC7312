@@ -1,4 +1,4 @@
-package com.opsc.opsc7312.model.data
+package com.opsc.opsc7312.model.data.model
 
 // This is a data class named User, representing a user entity.
 
@@ -11,9 +11,10 @@ data class User(
     var username: String = "",
     var email: String = "",
     var balance: Double = 0.0,
-    var password: String = ""
+    var password: String = "",
+    var token: String = ""
 ){
     // This secondary constructor is provided to initialize all properties with empty strings.
-    constructor(): this("", "", "", 0.0, "")
+    constructor(): this("", "", "", 0.0, "", "")
 }
 

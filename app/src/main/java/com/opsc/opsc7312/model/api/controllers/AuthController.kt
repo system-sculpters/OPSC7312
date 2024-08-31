@@ -4,7 +4,8 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.opsc.opsc7312.model.api.retrofitclients.AuthRetrofitClient
-import com.opsc.opsc7312.model.data.User
+import com.opsc.opsc7312.model.data.model.User
+import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -15,6 +16,9 @@ class AuthController : ViewModel() {
 
     val status: MutableLiveData<Boolean> = MutableLiveData()
     val message: MutableLiveData<String> = MutableLiveData()
+    val token: MutableLiveData<String> = MutableLiveData()
+
+
 
     fun register(user: User){
         api.register(user).enqueue(object : Callback<User> {
@@ -45,10 +49,12 @@ class AuthController : ViewModel() {
         api.login(user).enqueue(object : Callback<User> {
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 if (response.isSuccessful) {
-                    val createdUser = response.body()
-                    createdUser?.let {
+                    val loggedInUser = response.body()
+                    //tokenManager.saveToken(token)
+                    loggedInUser?.let {
                         status.postValue(true)
                         message.postValue("Request failed with code: ${it}")
+                        token.postValue(it.token)
                         Log.d("MainActivity", "User created: $it")
                     }
                 } else {

@@ -6,12 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.opsc.opsc7312.AppConstants
-import com.opsc.opsc7312.R
 import com.opsc.opsc7312.databinding.FragmentAnalyticsBinding
-import com.opsc.opsc7312.databinding.FragmentCreateGoalBinding
-import com.opsc.opsc7312.model.data.Category
-import com.opsc.opsc7312.model.data.Goal
-import com.opsc.opsc7312.model.data.Transaction
+import com.opsc.opsc7312.model.data.model.Goal
+import com.opsc.opsc7312.model.data.model.Transaction
 
 
 class AnalyticsFragment : Fragment() {

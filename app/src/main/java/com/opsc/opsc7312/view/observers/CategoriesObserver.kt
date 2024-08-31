@@ -2,7 +2,7 @@ package com.opsc.opsc7312.view.observers
 
 import android.util.Log
 import androidx.lifecycle.Observer
-import com.opsc.opsc7312.model.data.Category
+import com.opsc.opsc7312.model.data.model.Category
 import com.opsc.opsc7312.view.adapter.CategoryAdapter
 
 class CategoriesObserver(private val adapter: CategoryAdapter?

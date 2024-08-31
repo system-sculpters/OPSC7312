@@ -7,12 +7,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.opsc.opsc7312.AppConstants
 import com.opsc.opsc7312.R
-import com.opsc.opsc7312.model.data.Category
+import com.opsc.opsc7312.model.data.model.Category
 
 class CategoryAdapter (private val onItemClick: (Category) -> Unit) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>(){

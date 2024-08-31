@@ -1,8 +1,7 @@
-package com.opsc.opsc7312.model.data
+package com.opsc.opsc7312.model.data.model
 
 import android.os.Parcel
 import android.os.Parcelable
-import java.math.BigDecimal
 
 data class Transaction(
     var id: String = "",
