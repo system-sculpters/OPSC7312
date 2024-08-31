@@ -12,6 +12,8 @@ import com.opsc.opsc7312.R
 import com.opsc.opsc7312.databinding.FragmentCategoriesBinding
 import com.opsc.opsc7312.model.api.controllers.CategoryController
 import com.opsc.opsc7312.model.data.model.Category
+import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
+import com.opsc.opsc7312.model.data.offline.preferences.UserManager
 import com.opsc.opsc7312.view.adapter.CategoryAdapter
 import com.opsc.opsc7312.view.observers.CategoriesObserver
 
@@ -26,6 +28,10 @@ class CategoriesFragment : Fragment() {
 
     private lateinit var categoryViewModel: CategoryController
 
+    private lateinit var userManager: UserManager
+
+    private lateinit var tokenManager: TokenManager
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -33,6 +39,10 @@ class CategoriesFragment : Fragment() {
         _binding = FragmentCategoriesBinding.inflate(inflater, container, false)
 
         categoryList = arrayListOf<Category>()
+
+        userManager = UserManager.getInstance(requireContext())
+
+        tokenManager = TokenManager.getInstance(requireContext())
 
         categoryViewModel = ViewModelProvider(this).get(CategoryController::class.java)
 
@@ -50,7 +60,7 @@ class CategoriesFragment : Fragment() {
 
         setUpRecyclerView()
 
-        observeViewModel()
+        setUpCategoriesDetails()
 
         return binding.root
     }
@@ -60,9 +70,22 @@ class CategoriesFragment : Fragment() {
         binding.categoryRecycleView.setHasFixedSize(true)
         binding.categoryRecycleView.adapter = categoryAdapter
     }
+
+    private fun setUpCategoriesDetails(){
+        val user = userManager.getUser()
+
+        val token = tokenManager.getToken()
+
+
+        if(token != null){
+            observeViewModel(token, user.id)
+        } else {
+
+        }
+    }
     
 
-    private fun observeViewModel(){
+    private fun observeViewModel(token: String, id: String) {
         // Observe LiveData
         categoryViewModel.status.observe(viewLifecycleOwner)  { status ->
             // Handle status changes (success or failure)
@@ -82,7 +105,7 @@ class CategoriesFragment : Fragment() {
 
 
         // Example API calls
-        categoryViewModel.getAllCategories("id1")
+        categoryViewModel.getAllCategories(token, id)
     }
 
     private fun redirectToCreate(){

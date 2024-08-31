@@ -17,8 +17,9 @@ class CategoryController: ViewModel() {
 
     val categoryList: MutableLiveData<List<Category>> = MutableLiveData()
 
-    fun getAllCategories(id: String){
-        val call = api.getCategories(id)
+    fun getAllCategories(userToken: String, id: String){
+        val token = "Bearer $userToken"
+        val call = api.getCategories(token, id)
 
         val url = call.request().url.toString()
         Log.d("MainActivity", "Request URL: $url")
@@ -53,8 +54,9 @@ class CategoryController: ViewModel() {
         })
     }
 
-    fun createCategory(category: Category){
-        api.createCategory(category).enqueue(object : Callback<Category> {
+    fun createCategory(userToken: String, category: Category){
+        val token = "Bearer $userToken"
+        api.createCategory(userToken ,category).enqueue(object : Callback<Category> {
             override fun onResponse(call: Call<Category>, response: Response<Category>) {
                 if (response.isSuccessful) {
                     val createdCategory = response.body()
@@ -78,8 +80,9 @@ class CategoryController: ViewModel() {
         })
     }
 
-    fun updateCategory(id: String, category: Category){
-        api.updateCategory(id, category).enqueue(object : Callback<Category> {
+    fun updateCategory(userToken: String, id: String, category: Category){
+        val token = "Bearer $userToken"
+        api.updateCategory(token, id, category).enqueue(object : Callback<Category> {
             override fun onResponse(call: Call<Category>, response: Response<Category>) {
                 if (response.isSuccessful) {
                     val createdCategory = response.body()
@@ -103,8 +106,9 @@ class CategoryController: ViewModel() {
         })
     }
 
-    fun deleteCategory(id: String) {
-        api.deleteCategory(id).enqueue(object : Callback<Void> {
+    fun deleteCategory(userToken: String, id: String) {
+        val token = "Bearer $userToken"
+        api.deleteCategory(token, id).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
                     // The category was successfully deleted

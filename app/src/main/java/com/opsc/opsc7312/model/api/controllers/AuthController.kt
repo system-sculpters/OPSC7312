@@ -16,7 +16,7 @@ class AuthController : ViewModel() {
 
     val status: MutableLiveData<Boolean> = MutableLiveData()
     val message: MutableLiveData<String> = MutableLiveData()
-    val token: MutableLiveData<String> = MutableLiveData()
+    val userData: MutableLiveData<User> = MutableLiveData()
 
 
 
@@ -32,8 +32,8 @@ class AuthController : ViewModel() {
                     }
                 } else {
                     status.postValue(false)
-                    message.postValue("Request failed with code: ${response.code()}")
-                    Log.e("MainActivity", "Request failed with code: ${response.code()}")
+                    message.postValue("Request failed with code: ${response.code()}: ${response.body()?.error}")
+                    Log.e("MainActivity", "Request failed with code: ${response.code()}: ${response.body()?.error}")
                 }
             }
 
@@ -54,13 +54,13 @@ class AuthController : ViewModel() {
                     loggedInUser?.let {
                         status.postValue(true)
                         message.postValue("Request failed with code: ${it}")
-                        token.postValue(it.token)
+                        userData.postValue(it)
                         Log.d("MainActivity", "User created: $it")
                     }
                 } else {
                     status.postValue(false)
                     message.postValue("Request failed with code: ${response.code()}")
-                    Log.e("MainActivity", "Request failed with code: ${response.code()}")
+                    Log.e("MainActivity", "Request failed with code: ${response.code()}:  ${response.body()?.error}")
                 }
             }
 
@@ -73,7 +73,7 @@ class AuthController : ViewModel() {
     }
 
     fun logout(userToken: String){
-        val token = "Bearer ${userToken}"
+        val token = "Bearer $userToken"
         api.logout(token).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
@@ -86,7 +86,7 @@ class AuthController : ViewModel() {
                 } else {
                     status.postValue(false)
                     message.postValue("Request failed with code: ${response.code()}")
-                    Log.e("MainActivity", "Request failed with code: ${response.code()}")
+                    Log.e("MainActivity", "Request failed with code: ${response.code()} ${response.body()}")
                 }
             }
 

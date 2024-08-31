@@ -1,20 +1,21 @@
 package com.opsc.opsc7312.view.fragment
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.opsc.opsc7312.R
 import com.opsc.opsc7312.databinding.FragmentGoalsBinding
-import com.opsc.opsc7312.model.api.retrofitclients.GoalRetrofitClient
+import com.opsc.opsc7312.model.api.controllers.GoalController
 import com.opsc.opsc7312.model.data.model.Goal
+import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
+import com.opsc.opsc7312.model.data.offline.preferences.UserManager
 import com.opsc.opsc7312.view.adapter.GoalAdapter
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.opsc.opsc7312.view.observers.GoalObserver
 
 
 class GoalsFragment : Fragment() {
@@ -24,6 +25,12 @@ class GoalsFragment : Fragment() {
     private lateinit var goalAdapter: GoalAdapter
 
     private lateinit var goals: ArrayList<Goal>
+
+    private lateinit var goalViewModel: GoalController
+
+    private lateinit var userManager: UserManager
+
+    private lateinit var tokenManager: TokenManager
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,9 +46,15 @@ class GoalsFragment : Fragment() {
             redirectToCreate()
         }
 
+        userManager = UserManager.getInstance(requireContext())
+
+        tokenManager = TokenManager.getInstance(requireContext())
+
+        goalViewModel = ViewModelProvider(this).get(GoalController::class.java)
+
         setUpRecyclerView()
 
-        goalList("pmp6jWuGYfPGS4FdlgQtWzKHHug1")
+        setUpGoals()
 
         return binding.root
     }
@@ -54,7 +67,7 @@ class GoalsFragment : Fragment() {
 
     private fun redirectToCreate(){
         // Create a new instance of CategoryDetailsFragment and pass category data
-        val createGoal = PlaceholderFragment()
+        val createGoal = CreateGoalFragment()
 
         changeCurrentFragment(createGoal)
     }
@@ -77,46 +90,40 @@ class GoalsFragment : Fragment() {
             .commit()
     }
 
-    private fun goalList(Id: String) {
-        GoalRetrofitClient.apiService.getGoals(Id).enqueue(object :
-            Callback<List<Goal>> {
-            override fun onResponse(call: Call<List<Goal>>, response: Response<List<Goal>>) {
-                if (response.isSuccessful) {
-                    val goals = response.body()
-                    goals?.let {
-                        goalAdapter.updateGoals(goals)
-                        Log.d("MainActivity", "Categories: $it")
-                    }
-                } else {
-                    Log.e("MainActivity", "Request failed with code: ${response.code()}")
-                }
-            }
 
-            override fun onFailure(call: Call<List<Goal>>, t: Throwable) {
-                Log.e("MainActivity", "Error: ${t.message}")
-            }
-        })
+
+    private fun setUpGoals(){
+        val user = userManager.getUser()
+
+        val token = tokenManager.getToken()
+
+
+        if(token != null){
+            observeViewModel(token, user.id)
+        } else {
+
+        }
     }
 
-//    private fun goalList() {
-//        val g1 = Goal(targetamount = 5000.00, currentamount = 3290.21, name = "Goal 1")
-//        val g2 = Goal(targetamount = 8000.00, currentamount = 999.51, name = "Goal 2")
-//        val g3 = Goal(targetamount = 3400.00, currentamount = 2168.43, name = "Goal 3")
-//        val g4 = Goal(targetamount = 770.00, currentamount = 329.95, name = "Goal 4")
-//        val g5 = Goal(targetamount = 6320.00, currentamount = 3122.55, name = "Goal 5")
-//
-//        goals.add(g1)
-//        goals.add(g2)
-//        goals.add(g3)
-//        goals.add(g4)
-//        goals.add(g5)
-//        goals.add(g1)
-//        goals.add(g2)
-//        goals.add(g3)
-//        goals.add(g4)
-//        goals.add(g5)
-//
-//        goalAdapter.updateGoals(goals)
-//
-//    }
+    private fun observeViewModel(token: String, id: String) {
+        // Observe LiveData
+        goalViewModel.status.observe(viewLifecycleOwner)  { status ->
+            // Handle status changes (success or failure)
+            if (status) {
+                // Success
+            } else {
+                // Failure
+            }
+        }
+
+        goalViewModel.message.observe(viewLifecycleOwner) { message ->
+            // Show message to the user, if needed
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        }
+
+        goalViewModel.goalList.observe(viewLifecycleOwner, GoalObserver(goalAdapter, binding.amount))
+
+        // Example API calls
+        goalViewModel.getAllGoals(token, id)
+    }
 }

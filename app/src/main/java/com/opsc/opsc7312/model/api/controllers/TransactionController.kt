@@ -17,8 +17,9 @@ class TransactionController : ViewModel() {
 
     val transactionList: MutableLiveData<List<Transaction>> = MutableLiveData()
 
-    fun getAllTransactions(id: String){
-        val call = api.getTransactions(id)
+    fun getAllTransactions(userToken: String, id: String){
+        val token = "Bearer $userToken"
+        val call = api.getTransactions(token, id)
 
         val url = call.request().url.toString()
         Log.d("MainActivity", "Request URL: $url")
@@ -51,8 +52,9 @@ class TransactionController : ViewModel() {
         })
     }
 
-    fun createTransaction(Transaction: Transaction){
-        api.createTransaction(Transaction).enqueue(object : Callback<Transaction> {
+    fun createTransaction(userToken: String, Transaction: Transaction){
+        val token = "Bearer $userToken"
+        api.createTransaction(token, Transaction).enqueue(object : Callback<Transaction> {
             override fun onResponse(call: Call<Transaction>, response: Response<Transaction>) {
                 if (response.isSuccessful) {
                     val createdTransaction = response.body()
@@ -76,8 +78,9 @@ class TransactionController : ViewModel() {
         })
     }
 
-    fun updateTransaction(id: String, Transaction: Transaction){
-        api.updateTransaction(id, Transaction).enqueue(object : Callback<Transaction> {
+    fun updateTransaction(userToken: String, id: String, Transaction: Transaction){
+        val token = "Bearer $userToken"
+        api.updateTransaction(token, id, Transaction).enqueue(object : Callback<Transaction> {
             override fun onResponse(call: Call<Transaction>, response: Response<Transaction>) {
                 if (response.isSuccessful) {
                     val createdTransaction = response.body()
@@ -101,8 +104,9 @@ class TransactionController : ViewModel() {
         })
     }
 
-    fun deleteTransaction(id: String) {
-        api.deleteTransaction(id).enqueue(object : Callback<Void> {
+    fun deleteTransaction(userToken: String, id: String) {
+        val token = "Bearer $userToken"
+        api.deleteTransaction(token, id).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
                     // The Transaction was successfully deleted

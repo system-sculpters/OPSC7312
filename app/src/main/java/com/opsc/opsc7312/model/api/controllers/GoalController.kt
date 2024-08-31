@@ -17,8 +17,9 @@ class GoalController : ViewModel() {
 
     val goalList: MutableLiveData<List<Goal>> = MutableLiveData()
 
-    fun getAllGoals(id: String){
-        val call = api.getGoals(id)
+    fun getAllGoals(userToken: String, id: String){
+        val token = "Bearer $userToken"
+        val call = api.getGoals(token, id)
 
         val url = call.request().url.toString()
         Log.d("MainActivity", "Request URL: $url")
@@ -50,8 +51,9 @@ class GoalController : ViewModel() {
         })
     }
 
-    fun createGoal(Goal: Goal){
-        api.createGoal(Goal).enqueue(object : Callback<Goal> {
+    fun createGoal(userToken: String, Goal: Goal){
+        val token = "Bearer $userToken"
+        api.createGoal(token, Goal).enqueue(object : Callback<Goal> {
             override fun onResponse(call: Call<Goal>, response: Response<Goal>) {
                 if (response.isSuccessful) {
                     val createdGoal = response.body()
@@ -75,8 +77,9 @@ class GoalController : ViewModel() {
         })
     }
 
-    fun updateGoal(id: String, Goal: Goal){
-        api.updateGoal(id, Goal).enqueue(object : Callback<Goal> {
+    fun updateGoal(userToken: String,id: String, Goal: Goal){
+        val token = "Bearer $userToken"
+        api.updateGoal(token, id, Goal).enqueue(object : Callback<Goal> {
             override fun onResponse(call: Call<Goal>, response: Response<Goal>) {
                 if (response.isSuccessful) {
                     val createdGoal = response.body()
@@ -100,8 +103,9 @@ class GoalController : ViewModel() {
         })
     }
 
-    fun deleteGoal(id: String) {
-        api.deleteGoal(id).enqueue(object : Callback<Void> {
+    fun deleteGoal(userToken: String, id: String) {
+        val token = "Bearer $userToken"
+        api.deleteGoal(token, id).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
                     // The Goal was successfully deleted

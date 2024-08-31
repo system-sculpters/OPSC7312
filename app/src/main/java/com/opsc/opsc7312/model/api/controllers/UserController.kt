@@ -18,8 +18,9 @@ class UserController : ViewModel() {
     val user: MutableLiveData<User> = MutableLiveData()
 
 
-    fun getUser(id: String){
-        api.getUser(id).enqueue(object : Callback<User> {
+    fun getUser(userToken: String, id: String){
+        val token = "Bearer $userToken"
+        api.getUser(token, id).enqueue(object : Callback<User> {
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 if (response.isSuccessful) {
                     val createdTransaction = response.body()
@@ -43,8 +44,9 @@ class UserController : ViewModel() {
         })
     }
 
-    fun updateEmailAndUsername(id: String, user: User){
-        api.updateEmailAndUsername(id, user).enqueue(object : Callback<User> {
+    fun updateEmailAndUsername(userToken: String, id: String, user: User){
+        val token = "Bearer $userToken"
+        api.updateEmailAndUsername(token, id, user).enqueue(object : Callback<User> {
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 if (response.isSuccessful) {
                     val updatedUser = response.body()
@@ -68,8 +70,9 @@ class UserController : ViewModel() {
         })
     }
 
-    fun updatePassword(id: String, password: String){
-        api.updatePassword(id, password).enqueue(object : Callback<User> {
+    fun updatePassword(userToken: String, id: String, password: String){
+        val token = "Bearer $userToken"
+        api.updatePassword(token, id, password).enqueue(object : Callback<User> {
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 if (response.isSuccessful) {
                     val updatedPassword = response.body()

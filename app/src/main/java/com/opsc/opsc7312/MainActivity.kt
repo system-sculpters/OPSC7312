@@ -12,8 +12,13 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.navigation.NavigationView
 import com.opsc.opsc7312.databinding.ActivityMainBinding
+import com.opsc.opsc7312.model.api.controllers.AuthController
+import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
+import com.opsc.opsc7312.model.data.offline.preferences.UserManager
+import com.opsc.opsc7312.view.activity.WelcomeActivity
 import com.opsc.opsc7312.view.fragment.AnalyticsFragment
 import com.opsc.opsc7312.view.fragment.CategoriesFragment
 import com.opsc.opsc7312.view.fragment.GoalsFragment
@@ -32,6 +37,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private lateinit var sharedPreferences: SharedPreferences
 
+    private lateinit var  tokenManager: TokenManager
+
+    private lateinit var userManager: UserManager
+
+    private lateinit var auth: AuthController
+
     override fun onCreate(savedInstanceState: Bundle?) {
         // Load the selected theme before setting the content view
         loadAndApplyTheme()
@@ -47,8 +58,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawerLayout = findViewById<DrawerLayout>(R.id.main)
         navigationView = findViewById<NavigationView>(R.id.nav_view)
 
-        setupBottomNavigation()
-        setupNavigationView()
+        tokenManager = TokenManager.getInstance(this)
+        userManager = UserManager.getInstance(this)
+        auth = ViewModelProvider(this).get(AuthController::class.java)
+
+        if(isLoggedIn()){
+            setupBottomNavigation()
+            setupNavigationView()
+        } else {
+            navigateToWelcome()
+        }
+
 
         findViewById<ImageButton>(R.id.back_button).setOnClickListener {
             onBackPressed()
@@ -111,8 +131,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_categories -> changeCurrentFragment(CategoriesFragment(), "Categories")
             R.id.nav_goal -> changeCurrentFragment(GoalsFragment(), "Goals")
             R.id.nav_logout -> {
-                Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this, MainActivity::class.java))
+                logOut()
             }
         }
         drawerLayout.closeDrawer(GravityCompat.END)
@@ -126,5 +145,40 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             getColor(R.color.dark_grey)  // Use black for light mode
         }
         imageButton.setColorFilter(color)
+    }
+
+    // Navigate to the authentication screens
+    private fun navigateToWelcome() {
+        startActivity(Intent(this, WelcomeActivity::class.java))
+        finish() // Optional: Finish MainActivity to prevent going back
+    }
+
+    private fun isLoggedIn(): Boolean{
+        val token = tokenManager.getToken()
+        return token != null
+    }
+
+    private fun logOut(){
+        val token = tokenManager.getToken()
+
+//        auth.status.observe(this) {
+//            status ->
+//            if(status){
+//                tokenManager.clearToken()
+//                userManager.clearUser()
+//                Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show()
+//                startActivity(Intent(this, MainActivity::class.java))
+//            } else {
+//
+//            }
+//        }
+//        if (token != null) {
+//            auth.logout(token)
+//        }
+
+        tokenManager.clearToken()
+        userManager.clearUser()
+        Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show()
+        startActivity(Intent(this, MainActivity::class.java))
     }
 }

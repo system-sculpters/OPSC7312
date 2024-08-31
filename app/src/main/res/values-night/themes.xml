@@ -8,7 +8,7 @@
         <item name="android:statusBarColor">@color/white</item>
 
         <!-- PRIMARY-->
-        <item name="android:windowBackground">@color/itemPrimary</item>
+        <item name="android:windowBackground">?attr/colorSurface</item>
 
         <!-- TEXT-->
         <item name="colorOnPrimary">@color/textPrimary</item> <!-- Text color on primary background -->

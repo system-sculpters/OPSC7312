@@ -201,7 +201,7 @@
             android:textSize="24sp"
             android:fontFamily="@font/inter_medium"
             android:background="@drawable/button_background"
-
+            android:textColor="@color/white"
             android:elevation="100dp"/>
     </LinearLayout>
 </LinearLayout>

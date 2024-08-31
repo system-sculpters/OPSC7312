@@ -7,11 +7,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import com.opsc.opsc7312.AppConstants
 import com.opsc.opsc7312.R
 import com.opsc.opsc7312.databinding.FragmentCreateGoalBinding
+import com.opsc.opsc7312.model.api.controllers.CategoryController
+import com.opsc.opsc7312.model.api.controllers.GoalController
 import com.opsc.opsc7312.model.api.retrofitclients.GoalRetrofitClient
 import com.opsc.opsc7312.model.data.model.Goal
+import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
+import com.opsc.opsc7312.model.data.offline.preferences.UserManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,13 +32,26 @@ class CreateGoalFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var contributionTypes: List<String>
 
+    private lateinit var goalViewModel: GoalController
+
+    private lateinit var userManager: UserManager
+
+    private lateinit var tokenManager: TokenManager
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCreateGoalBinding.inflate(inflater, container, false)
 
-        contributionTypes = AppConstants.CONTRIBUTIONTYPE.values().map { it.name }
+
+        userManager = UserManager.getInstance(requireContext())
+
+        tokenManager = TokenManager.getInstance(requireContext())
+
+        contributionTypes = AppConstants.CONTRIBUTIONTYPE.entries.map { it.name }
+
+        goalViewModel = ViewModelProvider(this).get(GoalController::class.java)
 
         setUpInputs()
 
@@ -50,7 +69,7 @@ class CreateGoalFragment : Fragment() {
         }
 
         binding.submitButton.setOnClickListener {
-            addGoal()
+            setUpCategoriesDetails()
         }
     }
 
@@ -87,7 +106,20 @@ class CreateGoalFragment : Fragment() {
         return dateFormat.format(calendar.time)
     }
 
-    private fun addGoal(){
+    private fun setUpCategoriesDetails(){
+        val user = userManager.getUser()
+
+        val token = tokenManager.getToken()
+
+
+        if(token != null){
+            addGoal(token, user.id)
+        } else {
+
+        }
+    }
+
+    private fun addGoal(token: String, id: String) {
         val name = binding.goalName.text.toString()
         val targetAmount = binding.targetAmount.text.toString()
         val currentAmount = binding.currentAmount.text.toString()
@@ -101,7 +133,7 @@ class CreateGoalFragment : Fragment() {
         }
 
         val newGoal = Goal(
-            userid = "pmp6jWuGYfPGS4FdlgQtWzKHHug1",
+            userid = id,
             name = name,
             targetamount = targetAmount.toDouble(),
             currentamount = currentAmount.toDouble(),
@@ -110,24 +142,17 @@ class CreateGoalFragment : Fragment() {
             contrubitiontype = contributionTypes[contrubitiontype.selectedIndex]
         )
 
-        GoalRetrofitClient.apiService.createGoal(newGoal).enqueue(object : Callback<Goal> {
-            override fun onResponse(call: Call<Goal>, response: Response<Goal>) {
-                if (response.isSuccessful) {
-                    val createdCategory = response.body()
-                    createdCategory?.let {
-                        Log.d("MainActivity", "Category created: $it")
-                    }
-                } else {
-                    Log.e("MainActivity", "Request failed with code: ${response.code()}")
-                }
+        goalViewModel.status.observe(viewLifecycleOwner){
+            status ->
+            if(status){
+                redirectToGoals()
+                Toast.makeText(requireContext(), "Goal creation successful", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(requireContext(), "Goal creation failed", Toast.LENGTH_LONG).show()
             }
+        }
 
-            override fun onFailure(call: Call<Goal>, t: Throwable) {
-                Log.e("MainActivity", "Error: ${t.message}")
-            }
-        })
-
-        redirectToGoals()
+        goalViewModel.createGoal(token, newGoal)
     }
 
     private fun redirectToGoals(){

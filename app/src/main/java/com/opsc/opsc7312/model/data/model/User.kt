@@ -12,9 +12,10 @@ data class User(
     var email: String = "",
     var balance: Double = 0.0,
     var password: String = "",
-    var token: String = ""
+    var token: String = "",
+    var error: String = ""
 ){
     // This secondary constructor is provided to initialize all properties with empty strings.
-    constructor(): this("", "", "", 0.0, "", "")
+    constructor(): this("", "", "", 0.0, "", "", "")
 }
 

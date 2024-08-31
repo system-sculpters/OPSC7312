@@ -1,63 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.activity.LoginActivity"
-    android:paddingVertical="10dp"
-    android:paddingHorizontal="25dp">
+    android:paddingHorizontal="25dp"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:layout_marginVertical="20dp">
 
     <!-- Top Image -->
     <ImageView
         android:id="@+id/imageViewTop"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="32dp"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
         android:contentDescription="Top Image"
         android:src="@drawable/login"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_default="percent"
-        app:layout_constraintHeight_percent="0.2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_default="percent"
-        app:layout_constraintWidth_percent="0.5" />
+        android:layout_gravity="center_horizontal"/>
 
     <!-- Welcome Back Text -->
     <TextView
         android:id="@+id/tvWelcomeBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="30dp"
         android:text="Welcome Back"
         android:textSize="24sp"
-        android:textColor="@android:color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageViewTop" />
+        android:fontFamily="@font/inter_black"
+        android:layout_marginBottom="30dp"/>
 
     <!-- Username EditText -->
-
-
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/etUsername"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:inputType="text"
         android:layout_marginTop="8dp"
-        android:hint="Enter username"
+        android:hint="Username"
         android:paddingHorizontal="12dp"
-        android:paddingVertical="4dp"
         android:background="@drawable/edittext_background"
         android:fontFamily="@font/inter_medium"
-        android:layout_marginBottom="20dp"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvWelcomeBack"
-        app:layout_constraintWidth_percent="0.8" />
+        android:layout_marginBottom="20dp" />
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/etPassword"
@@ -65,78 +51,76 @@
         android:layout_height="60dp"
         android:inputType="textPassword"
         android:layout_marginTop="8dp"
-        android:hint="Enter password"
+        android:hint="Password"
         android:paddingHorizontal="12dp"
         android:paddingVertical="4dp"
         android:background="@drawable/edittext_background"
         android:fontFamily="@font/inter_medium"
-        android:layout_marginBottom="20dp"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etUsername"
-        app:layout_constraintWidth_percent="0.8" />
+        android:layout_marginBottom="20dp"/>
     <!-- Password EditText -->
 
 
     <!-- Sign In Button -->
-    <Button
-        android:id="@+id/btnSignIn"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Sign In"
-        android:backgroundTint="@android:color/holo_blue_dark"
-        android:textColor="@android:color/white"
-        android:textSize="18sp"
-        android:layout_marginTop="24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etPassword"
-        app:layout_constraintWidth_percent="0.8" />
-
-
-    <!-- Sign Up Prompt TextView -->
-    <TextView
-        android:id="@+id/tvSignUpPrompt"
+    <View
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Don't have an account yet? "
-        android:textSize="16sp"
-        android:textColor="@android:color/black"
-        app:layout_constraintEnd_toStartOf="@id/tvSignUpLink"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnSignIn" />
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 
-    <!-- Sign Up Link TextView -->
-    <TextView
-        android:id="@+id/tvSignUpLink"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Sign Up"
-        android:textSize="16sp"
-        android:textColor="@android:color/holo_blue_dark"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintStart_toEndOf="@id/tvSignUpPrompt"
-        app:layout_constraintTop_toBottomOf="@id/btnSignIn" />
 
-    <!-- Sign In with Fingerprint Button -->
-    <Button
-        android:id="@+id/btnSignInWithFingerprint"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
-        android:backgroundTint="@android:color/holo_blue_dark"
-        android:drawableLeft="@drawable/baseline_fingerprint_24"
-        android:drawablePadding="9dp"
-        android:text="Sign In with Fingerprint"
-        android:textColor="@android:color/white"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvSignUpPrompt"
-        app:layout_constraintWidth_percent="0.8" />
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+        <Button
+            android:id="@+id/btnSignIn"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="Sign In"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:layout_marginTop="24dp"
+            android:fontFamily="@font/inter_bold"
+            android:background="@drawable/button_background" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- Sign Up Prompt TextView -->
+        <TextView
+            android:id="@+id/tvSignUpPrompt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/signup_redirect"
+            android:textSize="14sp"/>
+
+        <LinearLayout
+            android:id="@+id/biometric_login"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="20dp"
+            android:background="@drawable/primary_highlight_bg"
+            android:layout_marginTop="40dp"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:contentDescription="Top Image"
+                android:src="@drawable/baseline_fingerprint_24"
+                app:tint="@color/primary"
+                android:layout_marginEnd="20dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/primary"
+                android:text="@string/biometric"
+                android:fontFamily="@font/inter_medium"
+                android:textSize="20sp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

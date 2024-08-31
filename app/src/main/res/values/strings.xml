@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">OPSC7312</string>
+    <string name="app_name">PennyWise</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="expense">Expense</string>
@@ -24,4 +24,23 @@
     <string name="system">System</string>
     <string name="dark">Dark</string>
     <string name="light">Light</string>
+    <string name="tagline">Smart Budgeting Made Easy</string>
+
+    <string name="signup_redirect">
+        <font >Don’t have an account? </font>
+        <font color="#007BFF">sign up</font>
+    </string>
+
+    <string name="signin_redirect">
+        <font >Already have an account? </font>
+        <font color="#007BFF">sign in</font>
+    </string>
+
+    <string name="biometric">Sign in with fingerprint</string>
+
+    <string name="welcome">
+        <font >Welcome to </font>
+        <font color="#007BFF">PennyWise</font>
+    </string>
+
 </resources>

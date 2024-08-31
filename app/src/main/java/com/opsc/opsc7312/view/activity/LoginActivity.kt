@@ -1,12 +1,15 @@
 package com.opsc.opsc7312.view.activity
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
+import com.opsc.opsc7312.MainActivity
 import com.opsc.opsc7312.R
 import com.opsc.opsc7312.databinding.ActivityLoginBinding
 import com.opsc.opsc7312.databinding.ActivityMainBinding
@@ -14,12 +17,14 @@ import com.opsc.opsc7312.model.api.controllers.AuthController
 import com.opsc.opsc7312.model.api.controllers.CategoryController
 import com.opsc.opsc7312.model.data.model.User
 import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
+import com.opsc.opsc7312.model.data.offline.preferences.UserManager
 import com.opsc.opsc7312.view.observers.CategoriesObserver
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private lateinit var auth: AuthController
     private lateinit var tokenManager: TokenManager
+    private lateinit var userManager: UserManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,9 +36,18 @@ class LoginActivity : AppCompatActivity() {
         auth = ViewModelProvider(this).get(AuthController::class.java)
 
         tokenManager = TokenManager.getInstance(this)
+        userManager = UserManager.getInstance(this)
 
         binding.btnSignIn.setOnClickListener { loginUser() }
+
+        binding.biometricLogin.setOnClickListener{ biometricLogin() }
+
+        binding.tvSignUpPrompt.setOnClickListener{
+            startActivity(Intent(this, RegisterActivity::class.java))
+            finish()
+        }
     }
+
 
     private fun loginUser(){
         val username = binding.etUsername.text.toString()
@@ -42,23 +56,33 @@ class LoginActivity : AppCompatActivity() {
         auth.status.observe(this)  { status ->
             // Handle status changes (success or failure)
             if (status) {
-                // Success
+                Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, MainActivity::class.java))
+                finish()
             } else {
-                // Failure
+                Toast.makeText(this, "Login unsuccessful", Toast.LENGTH_SHORT).show()
             }
         }
 
         auth.message.observe(this) { message ->
             // Show message to the user, if needed
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+            Log.d("login message", message)
         }
 
-        auth.token.observe(this){ token ->
-            tokenManager.saveToken(token)
+        auth.userData.observe(this){ user ->
+            tokenManager.saveToken(user.token)
+
+            userManager.saveUser(user)
+
+            Log.d("trans user", user.id)
         }
 
         val user = User(username = username, password = password)
         // Example API calls
         auth.login(user)
+    }
+
+    private fun biometricLogin() {
+        TODO("Not yet implemented")
     }
 }
