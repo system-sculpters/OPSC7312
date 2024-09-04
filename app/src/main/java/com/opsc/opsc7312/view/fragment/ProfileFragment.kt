@@ -22,9 +22,15 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.opsc.opsc7312.R
 import com.opsc.opsc7312.databinding.FragmentProfileBinding
 import com.opsc.opsc7312.databinding.FragmentSettingsBinding
+import com.opsc.opsc7312.model.api.controllers.TransactionController
+import com.opsc.opsc7312.model.api.controllers.UserController
+import com.opsc.opsc7312.model.data.model.User
+import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
+import com.opsc.opsc7312.model.data.offline.preferences.UserManager
 import java.io.ByteArrayOutputStream
 
 class ProfileFragment : Fragment() {
@@ -34,6 +40,11 @@ class ProfileFragment : Fragment() {
 
     private lateinit var sharedPreferences: SharedPreferences
 
+    private lateinit var userManager: UserManager
+
+    private lateinit var tokenManager: TokenManager
+
+    private lateinit var userViewModel: UserController
 
     private lateinit var takePictureLauncher: ActivityResultLauncher<Intent>
     private lateinit var pickPictureLauncher: ActivityResultLauncher<Intent>
@@ -45,6 +56,13 @@ class ProfileFragment : Fragment() {
 
         // Initialize SharedPreferences
         sharedPreferences = requireActivity().getSharedPreferences("User", Context.MODE_PRIVATE)
+
+
+        userManager = UserManager.getInstance(requireContext())
+
+        tokenManager = TokenManager.getInstance(requireContext())
+
+        userViewModel = ViewModelProvider(this).get(UserController::class.java)
 
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
 
@@ -128,9 +146,10 @@ class ProfileFragment : Fragment() {
     }
 
     private fun loadProfileData() {
-        val username = sharedPreferences.getString("username", "")
-        val email = sharedPreferences.getString("email", "")
-        val password = sharedPreferences.getString("password", "")
+        val user = userManager.getUser()
+
+        val username = user.username
+        val email = user.email
         val profileImageBase64 = sharedPreferences.getString("profileImage", "")
 
         binding.username.setText(username)
@@ -146,18 +165,28 @@ class ProfileFragment : Fragment() {
     }
 
     private fun saveProfileData() {
+        val user = userManager.getUser()
+        val token = tokenManager.getToken()
         val username = binding.username.text.toString()
         val email = binding.email.text.toString()
         //val password = passwordEditText.text.toString()
 
-        with(sharedPreferences.edit()) {
-            putString("username", username)
-            putString("email", email)
-            //putString("password", password)
-            apply()
+        val updatedUser = User(id = user.id, username = username, email = email)
+
+        userViewModel.status.observe(viewLifecycleOwner){
+            status ->
+            if(status){
+                userManager.saveUser(updatedUser)
+                Toast.makeText(requireContext(), "Profile data updated successfully!", Toast.LENGTH_SHORT).show()
+
+            } else {
+                Toast.makeText(requireContext(), "Profile update unsuccessful", Toast.LENGTH_SHORT).show()
+            }
         }
 
-        Toast.makeText(requireContext(), "Profile saved", Toast.LENGTH_SHORT).show()
+        if (token != null) {
+            userViewModel.updateEmailAndUsername(token, user.id, updatedUser)
+        }
     }
 
     private fun saveProfileImageToPreferences(bitmap: Bitmap) {
@@ -204,10 +233,28 @@ class ProfileFragment : Fragment() {
     }
 
     private fun saveNewPassword(newPassword: String, confirmPassword: String) {
+        val user = userManager.getUser()
+        val token = tokenManager.getToken()
+
         if(newPassword != confirmPassword){
             return
         }
 
+        //val updatedUser = User(id = user.id, username = username, email = email)
 
+        userViewModel.status.observe(viewLifecycleOwner){
+                status ->
+            if(status){
+
+                Toast.makeText(requireContext(), "Password updated successfully!", Toast.LENGTH_SHORT).show()
+
+            } else {
+                Toast.makeText(requireContext(), "Password update unsuccessful", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        if (token != null) {
+            userViewModel.updatePassword(token, user.id, newPassword)
+        }
     }
 }

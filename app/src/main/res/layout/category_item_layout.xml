@@ -1,30 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/category_linear_layout"
-    android:layout_width="170dp"
-    android:layout_height="200dp"
+    android:id="@+id/category_list_card_view"
+    android:layout_width="match_parent"
+    android:layout_height="250dp"
     android:padding="20dp"
-    android:background="@drawable/category_background"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:layout_margin="8dp"
-    >
+    android:layout_margin="10dp"
+    app:cardUseCompatPadding="true"
+    app:cardCornerRadius="10dp"
+    android:background="@drawable/category_background">
 
-    <ImageView
-        android:id="@+id/iconImageView"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@drawable/baseline_check_blue"
-        android:scaleType="fitCenter"
-        android:layout_gravity="center"/>
-    <TextView
-        android:id="@+id/cat_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="1"
-        android:gravity="center"
-        android:fontFamily="@font/inter_medium"
-        android:textSize="25sp"
-        android:textColor="@color/dark_grey"/>
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/parentLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/iconImageView"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/baseline_check_blue"
+            android:scaleType="fitCenter"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:id="@+id/cat_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1"
+            android:gravity="center"
+            android:fontFamily="@font/inter_medium"
+            android:textSize="25sp"
+            android:textColor="@color/dark_grey"/>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

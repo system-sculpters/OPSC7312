@@ -30,6 +30,7 @@ import java.util.Locale
 class CreateGoalFragment : Fragment() {
     private var _binding: FragmentCreateGoalBinding? = null
     private val binding get() = _binding!!
+
     private lateinit var contributionTypes: List<String>
 
     private lateinit var goalViewModel: GoalController

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.opsc.opsc7312.AppConstants
@@ -77,6 +78,10 @@ class CategoryAdapter (private val onItemClick: (Category) -> Unit) :
                 )
                 categoryHolder.catItem.setBackgroundColor(originalColor)
 
+//                categoryHolder.cardView.setCardBackgroundColor(
+//                    ContextCompat.getColor(holder.itemView.context,
+//                        colorResId
+//                    ))
                 val cornerRadius = holder.itemView.context.resources.getDimensionPixelSize(R.dimen.corner_radius)
                 val shapeDrawable = GradientDrawable()
                 shapeDrawable.setColor(originalColor)
@@ -99,7 +104,8 @@ class CategoryAdapter (private val onItemClick: (Category) -> Unit) :
 
     inner class CategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val iconImage: ImageView = itemView.findViewById(R.id.iconImageView)
-        val catItem: LinearLayout = itemView.findViewById(R.id.category_linear_layout)
+        //val cardView: CardView = itemView.findViewById(R.id.category_list_card_view)
+        val catItem: LinearLayout = itemView.findViewById(R.id.parentLayout)
         val catName: TextView = itemView.findViewById(R.id.cat_label)
     }
 

@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.opsc.opsc7312.model.api.retrofitclients.AuthRetrofitClient
+import com.opsc.opsc7312.model.data.model.TokenResponse
 import com.opsc.opsc7312.model.data.model.User
 import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
 import retrofit2.Call
@@ -16,7 +17,9 @@ class AuthController : ViewModel() {
 
     val status: MutableLiveData<Boolean> = MutableLiveData()
     val message: MutableLiveData<String> = MutableLiveData()
+    val code: MutableLiveData<Int> = MutableLiveData()
     val userData: MutableLiveData<User> = MutableLiveData()
+    val newToken: MutableLiveData<TokenResponse> = MutableLiveData()
 
 
 
@@ -91,6 +94,37 @@ class AuthController : ViewModel() {
             }
 
             override fun onFailure(call: Call<Void>, t: Throwable) {
+                Log.e("MainActivity", "Error: ${t.message}")
+                status.postValue(false)
+                message.postValue("Request failed with code: ${t.message }")
+            }
+        })
+    }
+
+    fun reauthenticate(user: User){
+        api.reauthenticate(user).enqueue(object : Callback<TokenResponse> {
+            override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
+                if (response.isSuccessful) {
+                    val res = response.body()
+                    res?.let {
+                        status.postValue(true)
+                        message.postValue("Response: ${it}")
+                        newToken.postValue(it)
+                        Log.d("MainActivity", "User created: $it")
+                    }
+
+                    val responseCode = response.code()
+                    code.postValue(responseCode)
+                } else {
+                    val responseCode = response.code()
+                    code.postValue(responseCode)
+                    status.postValue(false)
+                    message.postValue("Request failed with code: ${response.code()}")
+                    Log.e("MainActivity", "Request failed with code: ${response.code()} ${response.body()}")
+                }
+            }
+
+            override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
                 Log.e("MainActivity", "Error: ${t.message}")
                 status.postValue(false)
                 message.postValue("Request failed with code: ${t.message }")

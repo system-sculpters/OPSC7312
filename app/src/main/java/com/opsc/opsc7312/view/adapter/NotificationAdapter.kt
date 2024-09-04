@@ -99,7 +99,7 @@ class NotificationAdapter (private val onItemClick: (Category) -> Unit) :
 
     inner class CategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val iconImage: ImageView = itemView.findViewById(R.id.iconImageView)
-        val catItem: LinearLayout = itemView.findViewById(R.id.category_linear_layout)
+        val catItem: LinearLayout = itemView.findViewById(R.id.category_list_card_view)
         val catName: TextView = itemView.findViewById(R.id.cat_label)
     }
 

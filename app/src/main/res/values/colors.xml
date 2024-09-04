@@ -42,4 +42,9 @@
 
     <color name="darkerTitle">#1E1E1E</color>
 
+    <color name="userHomeImg">#007BFF</color>
+
+
+
+    <color name="temp">#141424</color>
 </resources>

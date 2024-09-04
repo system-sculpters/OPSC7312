@@ -21,6 +21,7 @@ import com.opsc.opsc7312.model.data.offline.preferences.UserManager
 import com.opsc.opsc7312.view.activity.WelcomeActivity
 import com.opsc.opsc7312.view.fragment.AnalyticsFragment
 import com.opsc.opsc7312.view.fragment.CategoriesFragment
+import com.opsc.opsc7312.view.fragment.CreateTransactionFragment
 import com.opsc.opsc7312.view.fragment.GoalsFragment
 import com.opsc.opsc7312.view.fragment.HomeFragment
 import com.opsc.opsc7312.view.fragment.SettingsFragment
@@ -80,6 +81,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         binding.fab.setOnClickListener {
             // Handle FAB click, e.g., open GoalsFragment
+            changeCurrentFragment(CreateTransactionFragment(), "Create Transaction")
         }
     }
 
@@ -105,7 +107,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             when (menuItem.itemId) {
                 R.id.home -> changeCurrentFragment(HomeFragment(), "Home")
                 R.id.transactions -> changeCurrentFragment(TransactionsFragment(), "Transactions")
-                R.id.add -> changeCurrentFragment(GoalsFragment(), "Add Transaction")
+                R.id.add -> changeCurrentFragment(CreateTransactionFragment(), "Add Transaction")
                 R.id.analytics -> changeCurrentFragment(AnalyticsFragment(), "Analytics")
                 R.id.settings -> changeCurrentFragment(SettingsFragment(), "Settings")
             }
@@ -150,7 +152,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     // Navigate to the authentication screens
     private fun navigateToWelcome() {
         startActivity(Intent(this, WelcomeActivity::class.java))
-        finish() // Optional: Finish MainActivity to prevent going back
+        finish()
     }
 
     private fun isLoggedIn(): Boolean{
@@ -169,16 +171,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 //                Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show()
 //                startActivity(Intent(this, MainActivity::class.java))
 //            } else {
-//
+//                Toast.makeText(this, "Logged out failed", Toast.LENGTH_SHORT).show()
 //            }
 //        }
 //        if (token != null) {
 //            auth.logout(token)
 //        }
-
         tokenManager.clearToken()
         userManager.clearUser()
-        Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show()
         startActivity(Intent(this, MainActivity::class.java))
     }
 }

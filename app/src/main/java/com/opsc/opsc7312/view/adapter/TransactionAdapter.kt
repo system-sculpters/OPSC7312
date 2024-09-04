@@ -62,7 +62,7 @@ class TransactionAdapter(private val onItemClick: (Transaction) -> Unit) : Recyc
 
         holder.transactionName.text = transaction.name
 
-        val isRecurring = if(transaction.isRecurring){
+        val isRecurring = if(transaction.isrecurring){
             "Recurring payment"
         } else {
             "One-time payment"

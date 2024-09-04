@@ -1,21 +1,23 @@
 package com.opsc.opsc7312.view.fragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.opsc.opsc7312.R
 import com.opsc.opsc7312.databinding.FragmentHomeBinding
+import com.opsc.opsc7312.model.api.controllers.AuthController
 import com.opsc.opsc7312.model.api.controllers.TransactionController
 import com.opsc.opsc7312.model.data.model.Transaction
+import com.opsc.opsc7312.model.data.model.User
 import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
 import com.opsc.opsc7312.model.data.offline.preferences.UserManager
 import com.opsc.opsc7312.view.adapter.TransactionAdapter
-import com.opsc.opsc7312.view.observers.TransactionsObserver
+import com.opsc.opsc7312.view.observers.HomeTransactionsObserver
 
 
 class HomeFragment : Fragment() {
@@ -30,11 +32,13 @@ class HomeFragment : Fragment() {
 
     private lateinit var transactionViewModel: TransactionController
 
+    private lateinit var authController: AuthController
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
 
@@ -44,6 +48,7 @@ class HomeFragment : Fragment() {
 
         transactionViewModel = ViewModelProvider(this).get(TransactionController::class.java)
 
+        authController = ViewModelProvider(this).get(AuthController::class.java)
 
         transactionAdapter = TransactionAdapter{
                 transaction ->
@@ -67,34 +72,51 @@ class HomeFragment : Fragment() {
 
         if(token != null){
             observeViewModel(token, user.id)
-        } else {
-
+        }else{
+            reAuthenticateUser(user.email, user.id)
         }
     }
 
 
 
     private fun observeViewModel(token: String, userId: String){
+
+        Log.d("token", token)
+
+        Log.d("userId", userId)
         // Observe LiveData
-        transactionViewModel.status.observe(viewLifecycleOwner)  { status ->
+        transactionViewModel.status.observe(viewLifecycleOwner)  {
             // Handle status changes (success or failure)
-            if (status) {
-                // Success
-            } else {
-                // Failure
-            }
+
         }
 
         transactionViewModel.message.observe(viewLifecycleOwner) { message ->
             // Show message to the user, if needed
-            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+            // Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
         }
 
-        transactionViewModel.transactionList.observe(viewLifecycleOwner, TransactionsObserver(transactionAdapter, binding.amount, binding.incomeAmount, binding.expenseAmount))
+        transactionViewModel.transactionList.observe(viewLifecycleOwner, HomeTransactionsObserver(transactionAdapter, binding.amount, binding.incomeAmount, binding.expenseAmount))
 
 
         // Example API calls
         transactionViewModel.getAllTransactions(token, userId)
+    }
+
+    private fun reAuthenticateUser(email: String, userId: String){
+        authController.newToken.observe(viewLifecycleOwner){
+            response ->
+            if(response != null){
+                observeViewModel(response.token, userId)
+            }
+        }
+
+        authController.message.observe(viewLifecycleOwner){
+            message -> Log.d("authController", message)
+        }
+
+        val user = User(email = email)
+
+        authController.reauthenticate(user)
     }
 
 

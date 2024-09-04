@@ -25,5 +25,7 @@
         <item name="themeBgBorder">@color/themeBg</item>
 
         <item name="darkerTitle">@color/darkerTitle</item>
+
+        <item name="userHomeImg">@color/userHomeImg</item>
     </style>
 </resources>

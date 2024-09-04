@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">PennyWise</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="expense">Expense</string>
     <string name="income">Income</string>
@@ -15,7 +14,8 @@
     <string name="deadline">Deadline (optional)</string>
     <string name="edit_goals">Edit Goals</string>
     <string name="log_out">Log out</string>
-    <string name="category">Cattegories</string>
+    <string name="category">Categories</string>
+    <string name="investment">Investments</string>
     <string name="fingerprint_icon" />
     <string name="account">Account</string>
     <string name="general">General</string>
@@ -27,20 +27,29 @@
     <string name="tagline">Smart Budgeting Made Easy</string>
 
     <string name="signup_redirect">
-        <font >Don’t have an account? </font>
+        <font>Don’t have an account? </font>
         <font color="#007BFF">sign up</font>
     </string>
 
     <string name="signin_redirect">
-        <font >Already have an account? </font>
+        <font>Already have an account? </font>
         <font color="#007BFF">sign in</font>
     </string>
 
     <string name="biometric">Sign in with fingerprint</string>
 
     <string name="welcome">
-        <font >Welcome to </font>
+        <font>Welcome to </font>
         <font color="#007BFF">PennyWise</font>
     </string>
+    <string name="color_label">Color</string>
+    <string name="icon_label">Icon</string>
+    <string name="icon_selection">Select an icon</string>
+    <string name="type">Transaction Type</string>
+    <string name="recurring">Recurring?</string>
+    <string name="amount">Amount</string>
+    <string name="category_label">Category</string>
+    <string name="category_selection">Select a category</string>
+    <string name="error_icon">message image</string>
 
 </resources>

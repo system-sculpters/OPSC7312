@@ -51,8 +51,8 @@ class LoginActivity : AppCompatActivity() {
 
     private fun loginUser(){
         val username = binding.etUsername.text.toString()
-        val password = binding.etUsername.text.toString()
-
+        val password = binding.etPassword.text.toString()
+        Log.d("login", "$username $password")
         auth.status.observe(this)  { status ->
             // Handle status changes (success or failure)
             if (status) {
@@ -70,7 +70,9 @@ class LoginActivity : AppCompatActivity() {
         }
 
         auth.userData.observe(this){ user ->
-            tokenManager.saveToken(user.token)
+            val tokenExpirationTime = System.currentTimeMillis() + (60 * 60 * 1000) // Token expires in 1 hour
+
+            tokenManager.saveToken(user.token, tokenExpirationTime)
 
             userManager.saveUser(user)
 

@@ -6,15 +6,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioGroup
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatRadioButton
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.opsc.opsc7312.AppConstants
 import com.opsc.opsc7312.R
 import com.opsc.opsc7312.databinding.FragmentTransactionsBinding
+import com.opsc.opsc7312.model.api.controllers.TransactionController
 import com.opsc.opsc7312.model.data.model.Category
 import com.opsc.opsc7312.model.data.model.Transaction
+import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
+import com.opsc.opsc7312.model.data.offline.preferences.UserManager
 import com.opsc.opsc7312.view.adapter.TransactionAdapter
+import com.opsc.opsc7312.view.observers.HomeTransactionsObserver
+import com.opsc.opsc7312.view.observers.TransactionsObserver
 
 
 class TransactionsFragment : Fragment() {
@@ -33,6 +40,13 @@ class TransactionsFragment : Fragment() {
     private lateinit var radioButtonIncome: AppCompatRadioButton
     private lateinit var radioButtonExpense: AppCompatRadioButton
 
+    private lateinit var userManager: UserManager
+
+    private lateinit var tokenManager: TokenManager
+
+    private lateinit var transactionViewModel: TransactionController
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -48,6 +62,11 @@ class TransactionsFragment : Fragment() {
         radioButtonIncome = binding.income
         radioButtonExpense = binding.expense
 
+        userManager = UserManager.getInstance(requireContext())
+
+        tokenManager = TokenManager.getInstance(requireContext())
+
+        transactionViewModel = ViewModelProvider(this).get(TransactionController::class.java)
 
         transactionAdapter = TransactionAdapter{
             transaction ->
@@ -59,7 +78,7 @@ class TransactionsFragment : Fragment() {
         radioButtonExpense.setOnClickListener { onRadioButtonClicked(it) }
 
 
-        categoryList()
+        setUpUserDetails()
 
         return binding.root
     }
@@ -90,7 +109,7 @@ class TransactionsFragment : Fragment() {
         categoryList.add(cat4)
 
         val Transact1 = Transaction(
-            name = "transaction 1", isRecurring = true, type = "Income",
+            name = "transaction 1", isrecurring = true, type = "Income",
             amount =  3200.00, category = cat1)
 
         val Transact2 = Transaction(
@@ -98,7 +117,7 @@ class TransactionsFragment : Fragment() {
             amount =  1500.00, category = cat2)
 
         val Transact3 = Transaction(
-            name = "transaction 3", isRecurring = true, type = "Income",
+            name = "transaction 3", isrecurring = true, type = "Income",
             amount =  4035.66, category = cat3)
 
         val Transact4 = Transaction(
@@ -133,6 +152,45 @@ class TransactionsFragment : Fragment() {
         // Navigate to CategoryDetailsFragment
         changeCurrentFragment(categoryDetailsFragment)
     }
+
+    private fun setUpUserDetails(){
+        val user = userManager.getUser()
+
+        val token = tokenManager.getToken()
+
+
+        if(token != null){
+            observeViewModel(token, user.id)
+        } else {
+
+        }
+    }
+
+
+
+    private fun observeViewModel(token: String, userId: String){
+        // Observe LiveData
+        transactionViewModel.status.observe(viewLifecycleOwner)  { status ->
+            // Handle status changes (success or failure)
+            if (status) {
+                // Success
+            } else {
+                // Failure
+            }
+        }
+
+        transactionViewModel.message.observe(viewLifecycleOwner) { message ->
+            // Show message to the user, if needed
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        }
+
+        transactionViewModel.transactionList.observe(viewLifecycleOwner,
+            TransactionsObserver(transactionAdapter)
+        )
+
+        transactionViewModel.getAllTransactions(token, userId)
+    }
+
 
     private fun changeCurrentFragment(fragment: Fragment) {
         requireActivity().supportFragmentManager.beginTransaction()

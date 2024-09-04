@@ -41,7 +41,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-
+                    app:tint="?attr/userHomeImg"
                     />
 
             </LinearLayout>
@@ -147,11 +147,12 @@
         android:gravity="center">
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="175dp"
+            android:layout_width="0dp"
             android:layout_height="200dp"
             android:padding="16dp"
             android:background="@drawable/income_background_card"
-            android:elevation="2dp">
+            android:elevation="2dp"
+            android:layout_weight="1">
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
@@ -207,16 +208,15 @@
                 />
         </LinearLayout>
         <Space
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_width="20dp"
+            android:layout_height="wrap_content" />
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="175dp"
+            android:layout_width="0dp"
             android:layout_height="200dp"
             android:padding="16dp"
             android:background="@drawable/expense_background_card"
-
+            android:layout_weight="1"
             android:elevation="2dp">
 
             <LinearLayout

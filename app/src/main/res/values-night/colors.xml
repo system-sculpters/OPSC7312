@@ -14,4 +14,7 @@
     <color name="themeBg">#FFFFFF</color>
 
     <color name="darkerTitle">#FFFFFF</color>
+
+    <color name="userHomeImg">#FFFFFF</color>
+
 </resources>

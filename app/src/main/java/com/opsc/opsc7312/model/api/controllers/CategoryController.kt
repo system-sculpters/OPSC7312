@@ -29,17 +29,14 @@ class CategoryController: ViewModel() {
                 if (response.isSuccessful) {
                     val categories = response.body()
                     categories?.let {
-                        val cat0 = Category(isCreateButton = true)
 
-                        // Create a new list with cat0 as the first element
-                        val updatedCategories = listOf(cat0) + it
-
-                        categoryList.postValue(updatedCategories)
+                        categoryList.postValue(it)
                         status.postValue(true)
                         message.postValue("categories retrieved")
                         Log.d("MainActivity", "Categories: $it")
                     }
                 } else {
+                    categoryList.postValue(listOf())
                     Log.e("MainActivity", "Request failed with code: ${response.code()}")
                     status.postValue(true)
                     message.postValue("Request failed with code: ${response.code()}")
@@ -47,6 +44,7 @@ class CategoryController: ViewModel() {
             }
 
             override fun onFailure(call: Call<List<Category>>, t: Throwable) {
+                categoryList.postValue(listOf())
                 Log.e("MainActivity", "Error: ${t.message}")
                 status.postValue(false)
                 message.postValue("Request failed with code: ${t.message }")
@@ -56,7 +54,7 @@ class CategoryController: ViewModel() {
 
     fun createCategory(userToken: String, category: Category){
         val token = "Bearer $userToken"
-        api.createCategory(userToken ,category).enqueue(object : Callback<Category> {
+        api.createCategory(token, category).enqueue(object : Callback<Category> {
             override fun onResponse(call: Call<Category>, response: Response<Category>) {
                 if (response.isSuccessful) {
                     val createdCategory = response.body()

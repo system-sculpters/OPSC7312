@@ -6,5 +6,6 @@
         <attr name="whiteItemBorder" format="color"/>
         <attr name="themeBgBorder" format="color"/>
         <attr name="darkerTitle" format="color"/>
+        <attr name="userHomeImg" format="color"/>
     </declare-styleable>
 </resources>

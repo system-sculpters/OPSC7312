@@ -9,7 +9,7 @@ data class Transaction(
     var amount: Double = 0.00, // Use BigDecimal for precise monetary values
     var date: Long = 0L, // Use Long to store the timestamp
     var userid: String = "",
-    var isRecurring: Boolean = false,
+    var isrecurring: Boolean = false,
     var type: String = "", // Use String to match the provided data
     var categoryId: String = "",
     val category: Category = Category()
@@ -33,7 +33,7 @@ data class Transaction(
         parcel.writeString(amount.toString()) // Serialize BigDecimal to String
         parcel.writeLong(date) // Serialize timestamp
         parcel.writeString(userid)
-        parcel.writeByte(if (isRecurring) 1 else 0) // Serialize Boolean
+        parcel.writeByte(if (isrecurring) 1 else 0) // Serialize Boolean
         parcel.writeString(type)
         parcel.writeString(categoryId) // Corrected: categoryId should be written here
         parcel.writeParcelable(category, flags) // Serialize Category object

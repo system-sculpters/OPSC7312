@@ -1,5 +1,6 @@
 package com.opsc.opsc7312.model.api.services
 
+import com.opsc.opsc7312.model.data.model.TokenResponse
 import com.opsc.opsc7312.model.data.model.User
 import retrofit2.Call
 import retrofit2.http.Body
@@ -15,4 +16,7 @@ interface AuthService {
 
     @POST("auth/logout")
     fun logout(@Header("Authorization") token: String): Call<Void>
+
+    @POST("auth/reauthenticate")
+    fun reauthenticate(@Body user: User): Call<TokenResponse>
 }

@@ -101,7 +101,7 @@ class CategoriesFragment : Fragment() {
             Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
         }
 
-        categoryViewModel.categoryList.observe(viewLifecycleOwner, CategoriesObserver(categoryAdapter))
+        categoryViewModel.categoryList.observe(viewLifecycleOwner, CategoriesObserver(categoryAdapter, null))
 
 
         // Example API calls
@@ -110,11 +110,11 @@ class CategoriesFragment : Fragment() {
 
     private fun redirectToCreate(){
         // Create a new instance of CategoryDetailsFragment and pass category data
-        val createCategoryFragment = PlaceholderFragment()
-        val bundle = Bundle()
-        bundle.putString("screen", "redirectToCreate")
-        createCategoryFragment.arguments = bundle
-        // Navigate to CategoryDetailsFragment
+        val createCategoryFragment = CreateCategoryFragment()
+//        val bundle = Bundle()
+//        bundle.putString("screen", "redirectToCreate")
+//        createCategoryFragment.arguments = bundle
+//        // Navigate to CategoryDetailsFragment
         changeCurrentFragment(createCategoryFragment)
     }
 
