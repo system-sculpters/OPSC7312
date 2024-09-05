@@ -3,6 +3,7 @@ package com.opsc.opsc7312.view.fragment
 import android.app.AlertDialog
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -15,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.opsc.opsc7312.AppConstants
+import com.opsc.opsc7312.MainActivity
 import com.opsc.opsc7312.R
 import com.opsc.opsc7312.databinding.FragmentCreateTransactionBinding
 import com.opsc.opsc7312.databinding.FragmentTransactionsBinding
@@ -57,6 +59,7 @@ class CreateTransactionFragment : Fragment() {
     private var isRecurring = true
 
     private var selectedIconName: String = "Select an category"
+    private var selectedCategoryId: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -78,12 +81,13 @@ class CreateTransactionFragment : Fragment() {
         adapter = SelectCategoryAdapter { selectedCategory ->
             // Set the selected icon to the ImageView
             selectedIconName = selectedCategory.name
-            binding.categoryNameText.text = selectedIconName
+            selectedCategoryId = selectedCategory.id
+            binding.categoryName.text = selectedIconName
 
             val typedValue = TypedValue()
             requireContext().theme.resolveAttribute(R.attr.themeBgBorder, typedValue, true)
             val color = typedValue.data
-            binding.categoryNameText.setTextColor(color)
+            binding.categoryName.setTextColor(color)
             //binding.iconName.setTextColor(ContextCompat.getColor(requireContext(), R.color.dark_grey))
             AppConstants.ICONS[selectedCategory.icon]?.let {
                 binding.categoryImageView.setImageResource(
@@ -113,6 +117,13 @@ class CreateTransactionFragment : Fragment() {
         setUpInputs()
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Access the MainActivity and set the toolbar title
+        (activity as? MainActivity)?.setToolbarTitle("Create Transaction")
     }
 
     private fun setUpInputs(){
@@ -192,10 +203,13 @@ class CreateTransactionFragment : Fragment() {
     private fun addTransaction(token: String, id: String){
         val transactionName = binding.transactionNameEdittext.text.toString()
         val amount = binding.amount.text.toString()
-        val selectedCategory = adapter.getSelectedItem()
+
+
+
+        if(!verifyData(transactionName, amount, selectedCategoryId, binding.transactionType.selectedIndex)){
+            return
+        }
         val transactionType = transactionTypes[binding.transactionType.selectedIndex]
-
-
 
 
         val newTransaction = Transaction(
@@ -204,8 +218,10 @@ class CreateTransactionFragment : Fragment() {
             userid = id,
             isrecurring = isRecurring,
             type = transactionType,
-            categoryId = selectedCategory!!.id
+            categoryId = selectedCategoryId
         )
+
+        Log.d("newTransaction", "this is the transaction: $newTransaction")
 
         transactionViewModel.status.observe(viewLifecycleOwner) { status ->
             binding.progressBar.visibility = View.GONE
@@ -218,6 +234,33 @@ class CreateTransactionFragment : Fragment() {
         }
 
         transactionViewModel.createTransaction(token, newTransaction)
+    }
+
+    private fun verifyData(transactionName: String, amount: String, selectedCategory: String, transactionType: Int): Boolean {
+        var errors = 0
+
+        if (transactionName.isBlank()) {
+            AppConstants.showFloatingToast(requireContext(), "Enter a transaction name")
+            errors += 1
+        }
+
+        if (amount.isBlank()) {
+            AppConstants.showFloatingToast(requireContext(), "Enter a transaction amount")
+            errors += 1
+        }
+
+        if (selectedCategory.isBlank()) {
+            AppConstants.showFloatingToast(requireContext(), "Select a category")
+            errors += 1
+        }
+
+        if (transactionType == -1) {
+            //binding.contributionType.error = "Enter a transaction type"
+            AppConstants.showFloatingToast(requireContext(), "Select a transaction type")
+            errors += 1
+        }
+
+        return errors == 0
     }
 
     private fun observeViewModel(token: String, id: String) {

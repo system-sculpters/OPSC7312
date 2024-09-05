@@ -61,8 +61,7 @@ class AnalyticsFragment : Fragment() {
                 expenses.add(transaction)
             }
         }
-
-
     }
+
 
 }

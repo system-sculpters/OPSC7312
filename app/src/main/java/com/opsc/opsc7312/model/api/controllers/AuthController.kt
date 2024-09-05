@@ -80,23 +80,21 @@ class AuthController : ViewModel() {
         api.logout(token).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
-                    val createdUser = response.body()
-                    createdUser?.let {
-                        status.postValue(true)
-                        message.postValue("Request failed with code: ${it}")
-                        Log.d("MainActivity", "User created: $it")
-                    }
+                    Log.d("Logout", "Logout successful")
+                    status.postValue(true)
+                    message.postValue("User logged out successfully")
                 } else {
+                    val errorBody = response.errorBody()?.string()
+                    Log.e("Logout", "Logout failed with code: ${response.code()} - $errorBody")
                     status.postValue(false)
-                    message.postValue("Request failed with code: ${response.code()}")
-                    Log.e("MainActivity", "Request failed with code: ${response.code()} ${response.body()}")
+                    message.postValue("Logout failed with code: ${response.code()} - $errorBody")
                 }
             }
 
             override fun onFailure(call: Call<Void>, t: Throwable) {
-                Log.e("MainActivity", "Error: ${t.message}")
+                Log.e("Logout", "Network error: ${t.message}")
                 status.postValue(false)
-                message.postValue("Request failed with code: ${t.message }")
+                message.postValue("Network error: ${t.message}")
             }
         })
     }

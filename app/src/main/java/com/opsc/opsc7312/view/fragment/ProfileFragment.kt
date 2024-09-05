@@ -23,6 +23,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.opsc.opsc7312.MainActivity
 import com.opsc.opsc7312.R
 import com.opsc.opsc7312.databinding.FragmentProfileBinding
 import com.opsc.opsc7312.databinding.FragmentSettingsBinding
@@ -81,6 +82,13 @@ class ProfileFragment : Fragment() {
         initializeActivityResultLaunchers()
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Access the MainActivity and set the toolbar title
+        (activity as? MainActivity)?.setToolbarTitle("Profile")
     }
 
     private fun initializeActivityResultLaunchers() {

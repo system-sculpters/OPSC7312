@@ -38,7 +38,7 @@ class TransactionController : ViewModel() {
                 } else {
                     Log.e("MainActivity", "Request failed with code: ${response.code()}")
                     transactionList.postValue(listOf())
-                    status.postValue(true)
+                    status.postValue(false)
                     message.postValue("Request failed with code: ${response.code()}")
                 }
             }
@@ -64,7 +64,7 @@ class TransactionController : ViewModel() {
                         Log.d("MainActivity", "Transaction created: $it")
                     }
                 } else {
-                    status.postValue(true)
+                    status.postValue(false)
                     message.postValue("Request failed with code: ${response.code()}")
                     Log.e("MainActivity", "Request failed with code: ${response.code()}")
                 }
@@ -90,7 +90,7 @@ class TransactionController : ViewModel() {
                         Log.d("MainActivity", "Transaction updated: $it")
                     }
                 } else {
-                    status.postValue(true)
+                    status.postValue(false)
                     message.postValue("Request failed with code: ${response.code()}")
                     Log.e("MainActivity", "Request failed with code: ${response.code()}")
                 }

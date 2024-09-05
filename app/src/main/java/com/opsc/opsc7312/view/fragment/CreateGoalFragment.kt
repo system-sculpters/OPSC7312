@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.opsc.opsc7312.AppConstants
+import com.opsc.opsc7312.MainActivity
 import com.opsc.opsc7312.R
 import com.opsc.opsc7312.databinding.FragmentCreateGoalBinding
 import com.opsc.opsc7312.model.api.controllers.CategoryController
@@ -59,6 +60,12 @@ class CreateGoalFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Access the MainActivity and set the toolbar title
+        (activity as? MainActivity)?.setToolbarTitle("Create Goal")
+    }
 
     private fun setUpInputs(){
         //binding.selectedDateText.text = getCurrentDate()
@@ -123,14 +130,22 @@ class CreateGoalFragment : Fragment() {
     private fun addGoal(token: String, id: String) {
         val name = binding.goalName.text.toString()
         val targetAmount = binding.targetAmount.text.toString()
-        val currentAmount = binding.currentAmount.text.toString()
+        var currentAmount = binding.currentAmount.text.toString()
         val deadlineText = binding.selectedDateText.text.toString()
-        val contrubitiontype = binding.contributionType
-        val contributionamount = binding.contributionAmount.text.toString()
+        val contributionType = binding.contributionType
+        val contributionAmount = binding.contributionAmount.text.toString()
 
         var deadline = 0L
         if(deadlineText.isNotBlank()){
             deadline = convertStringToLong(deadlineText)
+        }
+
+        if(currentAmount.isBlank()){
+            currentAmount = "0"
+        }
+
+        if(!validateData(name, targetAmount, contributionType.selectedIndex, contributionAmount)){
+            return
         }
 
         val newGoal = Goal(
@@ -139,8 +154,8 @@ class CreateGoalFragment : Fragment() {
             targetamount = targetAmount.toDouble(),
             currentamount = currentAmount.toDouble(),
             deadline = deadline,
-            contributionamount = contributionamount.toDouble(),
-            contrubitiontype = contributionTypes[contrubitiontype.selectedIndex]
+            contributionamount = contributionAmount.toDouble(),
+            contrubitiontype = contributionTypes[contributionType.selectedIndex]
         )
 
         goalViewModel.status.observe(viewLifecycleOwner){
@@ -156,8 +171,36 @@ class CreateGoalFragment : Fragment() {
         goalViewModel.createGoal(token, newGoal)
     }
 
+    private fun validateData(name: String, targetAmount: String, selectedIndex: Int, contributionAmount: String): Boolean {
+        var errors = 0
+
+        if (name.isBlank()) {
+            AppConstants.showFloatingToast(requireContext(), "Enter a goal name")
+            errors += 1
+        }
+
+        if (targetAmount.isBlank()) {
+            AppConstants.showFloatingToast(requireContext(), "Enter a target amount")
+            errors += 1
+        }
+
+        if (selectedIndex == -1) {
+            //binding.contributionType.error = "Enter a transaction type"
+            AppConstants.showFloatingToast(requireContext(), "Select a contribution type")
+            errors += 1
+        }
+
+        if (contributionAmount.isBlank()) {
+            AppConstants.showFloatingToast(requireContext(), "Select contribution amount")
+            errors += 1
+        }
+
+        return errors == 0
+    }
+
+
     private fun redirectToGoals(){
-        // Create a new instance of CategoryDetailsFragment and pass category data
+        // Create a new instance of GoalsFragment
         val goalsFragment = GoalsFragment()
 
         // Navigate to CategoryDetailsFragment

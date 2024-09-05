@@ -1,6 +1,7 @@
 package com.opsc.opsc7312.view.fragment
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,9 +15,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.opsc.opsc7312.AppConstants
 import com.opsc.opsc7312.R
 import com.opsc.opsc7312.databinding.FragmentTransactionsBinding
+import com.opsc.opsc7312.model.api.controllers.AuthController
 import com.opsc.opsc7312.model.api.controllers.TransactionController
 import com.opsc.opsc7312.model.data.model.Category
 import com.opsc.opsc7312.model.data.model.Transaction
+import com.opsc.opsc7312.model.data.model.User
 import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
 import com.opsc.opsc7312.model.data.offline.preferences.UserManager
 import com.opsc.opsc7312.view.adapter.TransactionAdapter
@@ -46,6 +49,9 @@ class TransactionsFragment : Fragment() {
 
     private lateinit var transactionViewModel: TransactionController
 
+    private lateinit var authController: AuthController
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,6 +74,8 @@ class TransactionsFragment : Fragment() {
 
         transactionViewModel = ViewModelProvider(this).get(TransactionController::class.java)
 
+        authController = ViewModelProvider(this).get(AuthController::class.java)
+
         transactionAdapter = TransactionAdapter{
             transaction ->
             redirectToDetails(transaction)
@@ -89,56 +97,6 @@ class TransactionsFragment : Fragment() {
         binding.recycleView.adapter = transactionAdapter
     }
 
-    private fun categoryList(){
-
-        val cat1 = Category(id = "id", name = "blue", color = "Blue", icon = "yellow", transactiontype = AppConstants.TRANSACTIONTYPE.INCOME.name,
-            userid = "userid")
-
-        val cat2 = Category(id = "id", name = "red", color = "Red", icon = "green", transactiontype = AppConstants.TRANSACTIONTYPE.INCOME.name,
-            userid = "userid")
-
-        val cat3 = Category(id = "id", name = "yellow", color = "Yellow", icon = "red", transactiontype = AppConstants.TRANSACTIONTYPE.INCOME.name,
-            userid = "userid")
-
-        val cat4 = Category(id = "id", name = "green", color = "Green", icon = "blue", transactiontype = AppConstants.TRANSACTIONTYPE.INCOME.name,
-            userid = "userid")
-
-        categoryList.add(cat1)
-        categoryList.add(cat2)
-        categoryList.add(cat3)
-        categoryList.add(cat4)
-
-        val Transact1 = Transaction(
-            name = "transaction 1", isrecurring = true, type = "Income",
-            amount =  3200.00, category = cat1)
-
-        val Transact2 = Transaction(
-            name = "transaction 2", type = "Expense",
-            amount =  1500.00, category = cat2)
-
-        val Transact3 = Transaction(
-            name = "transaction 3", isrecurring = true, type = "Income",
-            amount =  4035.66, category = cat3)
-
-        val Transact4 = Transaction(
-            name = "transaction 4", type = "Expense",
-            amount =  2060.91, category = cat4)
-
-        transactionList.add(Transact1)
-        transactionList.add(Transact2)
-        transactionList.add(Transact3)
-        transactionList.add(Transact4)
-
-        transactionAdapter.updateTransactions(transactionList)
-
-        for (transaction in transactionList) {
-            if(transaction.type == "Income"){
-                income.add(transaction)
-            } else{
-                expenses.add(transaction)
-            }
-        }
-    }
 
 
     private fun redirectToDetails(transaction: Transaction){
@@ -160,9 +118,11 @@ class TransactionsFragment : Fragment() {
 
 
         if(token != null){
+            Log.d("re auth", "this is token: $token")
             observeViewModel(token, user.id)
-        } else {
-
+        }else{
+            Log.d("re auth", "hola me amo dora")
+            reAuthenticateUser(user.email, user.id)
         }
     }
 
@@ -190,6 +150,25 @@ class TransactionsFragment : Fragment() {
 
         transactionViewModel.getAllTransactions(token, userId)
     }
+
+    private fun reAuthenticateUser(email: String, userId: String){
+        authController.newToken.observe(viewLifecycleOwner){
+                response ->
+            if(response != null){
+                tokenManager.saveToken(response.token, AppConstants.tokenExpirationTime())
+                observeViewModel(response.token, userId)
+            }
+        }
+
+        authController.message.observe(viewLifecycleOwner){
+                message -> Log.d("authController", message)
+        }
+
+        val user = User(email = email)
+
+        authController.reauthenticate(user)
+    }
+
 
 
     private fun changeCurrentFragment(fragment: Fragment) {

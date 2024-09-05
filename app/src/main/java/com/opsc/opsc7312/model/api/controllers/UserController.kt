@@ -56,7 +56,7 @@ class UserController : ViewModel() {
                         Log.d("MainActivity", "User email and password updated: $it")
                     }
                 } else {
-                    status.postValue(true)
+                    status.postValue(false)
                     message.postValue("Request failed with code: ${response.code()}")
                     Log.e("MainActivity", "Request failed with code: ${response.code()}")
                 }
@@ -82,7 +82,7 @@ class UserController : ViewModel() {
                         Log.d("MainActivity", "User email and password updated: $it")
                     }
                 } else {
-                    status.postValue(true)
+                    status.postValue(false)
                     message.postValue("Request failed with code: ${response.code()}")
                     Log.e("MainActivity", "Request failed with code: ${response.code()}")
                 }

@@ -130,4 +130,8 @@ object AppConstants {
         return System.currentTimeMillis() > expirationTime
     }
 
+    fun tokenExpirationTime(): Long{
+        return System.currentTimeMillis() + (60 * 60 * 1000)
+    }
+
 }

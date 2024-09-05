@@ -38,7 +38,7 @@ class CategoryController: ViewModel() {
                 } else {
                     categoryList.postValue(listOf())
                     Log.e("MainActivity", "Request failed with code: ${response.code()}")
-                    status.postValue(true)
+                    status.postValue(false)
                     message.postValue("Request failed with code: ${response.code()}")
                 }
             }
@@ -64,7 +64,7 @@ class CategoryController: ViewModel() {
                         Log.d("MainActivity", "Category created: $it")
                     }
                 } else {
-                    status.postValue(true)
+                    status.postValue(false)
                     message.postValue("Request failed with code: ${response.code()}")
                     Log.e("MainActivity", "Request failed with code: ${response.code()}")
                 }
@@ -90,7 +90,7 @@ class CategoryController: ViewModel() {
                         Log.d("MainActivity", "Category updated: $it")
                     }
                 } else {
-                    status.postValue(true)
+                    status.postValue(false)
                     message.postValue("Request failed with code: ${response.code()}")
                     Log.e("MainActivity", "Request failed with code: ${response.code()}")
                 }

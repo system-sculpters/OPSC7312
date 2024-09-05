@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.opsc.opsc7312.AppConstants
 import com.opsc.opsc7312.R
 import com.opsc.opsc7312.databinding.FragmentHomeBinding
 import com.opsc.opsc7312.model.api.controllers.AuthController
@@ -71,8 +72,10 @@ class HomeFragment : Fragment() {
         binding.email.text = user.email
 
         if(token != null){
+            Log.d("re auth", "this is token: $token")
             observeViewModel(token, user.id)
         }else{
+            Log.d("re auth", "hola me amo dora")
             reAuthenticateUser(user.email, user.id)
         }
     }
@@ -106,6 +109,7 @@ class HomeFragment : Fragment() {
         authController.newToken.observe(viewLifecycleOwner){
             response ->
             if(response != null){
+                tokenManager.saveToken(response.token, AppConstants.tokenExpirationTime())
                 observeViewModel(response.token, userId)
             }
         }

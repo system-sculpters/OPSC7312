@@ -37,7 +37,7 @@ class GoalController : ViewModel() {
                 } else {
                     Log.e("MainActivity", "Request failed with code: ${response.code()}")
                     goalList.postValue(listOf())
-                    status.postValue(true)
+                    status.postValue(false)
                     message.postValue("Request failed with code: ${response.code()}")
                 }
             }
@@ -63,7 +63,7 @@ class GoalController : ViewModel() {
                         Log.d("MainActivity", "Goal created: $it")
                     }
                 } else {
-                    status.postValue(true)
+                    status.postValue(false)
                     message.postValue("Request failed with code: ${response.code()}")
                     Log.e("MainActivity", "Request failed with code: ${response.code()}")
                 }
@@ -89,7 +89,7 @@ class GoalController : ViewModel() {
                         Log.d("MainActivity", "Goal updated: $it")
                     }
                 } else {
-                    status.postValue(true)
+                    status.postValue(false)
                     message.postValue("Request failed with code: ${response.code()}")
                     Log.e("MainActivity", "Request failed with code: ${response.code()}")
                 }
