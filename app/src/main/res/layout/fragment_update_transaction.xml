@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".view.fragment.UpdateTransactionFragment"
+    android:paddingHorizontal="25dp"
+    android:paddingVertical="20dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/category_name_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/name"
+        android:textSize="20sp"
+        android:fontFamily="@font/inter_medium"
+        android:layout_marginTop="10dp"/>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/transaction_name_edittext"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:inputType="text"
+        android:layout_marginTop="8dp"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="4dp"
+        android:background="@drawable/edittext_background"
+        android:fontFamily="@font/inter_medium"
+        android:hint="Enter tranaction name"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/type"
+        android:textSize="20sp"
+        android:fontFamily="@font/inter_medium"
+        android:layout_marginTop="20dp"/>
+
+    <com.skydoves.powerspinner.PowerSpinnerView
+        android:id="@+id/transactionType"
+        android:layout_width="250dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/edittext_background"
+        android:foreground="?attr/selectableItemBackground"
+        android:hint="Select a type"
+        android:padding="10dp"
+        android:textColor="?attr/themeBgBorder"
+        android:textColorHint="@color/light_grey"
+        android:textSize="16sp"
+        android:gravity="center_vertical"
+        app:spinner_arrow_gravity="end"
+        app:spinner_arrow_padding="8dp"
+        app:spinner_divider_color="?attr/themeBgBorder"
+        app:spinner_divider_show="true"
+        app:spinner_divider_size="0.4dp"
+        app:spinner_item_array="@array/questions1"
+        app:spinner_popup_animation="normal"
+        app:spinner_popup_background="?attr/colorItemLayoutBg"
+        app:spinner_popup_elevation="14dp"
+        app:spinner_arrow_tint="?attr/themeBgBorder"
+        android:fontFamily="@font/inter_medium"
+        android:layout_marginBottom="20dp"/>
+
+
+    <TextView
+        android:id="@+id/icon_label"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="@string/category_label"
+        android:textSize="20sp"
+        android:fontFamily="@font/inter_medium"/>
+
+
+
+    <LinearLayout
+        android:layout_width="250dp"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:background="@drawable/edittext_background"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:id="@+id/icon_container"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="showIconPickerDialog"
+        android:gravity="center_vertical"
+        >
+        <LinearLayout
+
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:orientation="vertical"
+            android:background="@drawable/edittext_background"
+
+            android:layout_marginStart="8dp"
+            android:id="@+id/category_image_container"
+
+            android:gravity="center"
+            >
+            <ImageView
+                android:id="@+id/category_image_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/transparent"
+                app:tint="?attr/themeBgBorder"
+                />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/category_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/category_selection"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginStart="20dp"
+            android:textColor="?attr/themeBgBorder"/>
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/amount_name_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/amount"
+        android:textSize="20sp"
+        android:fontFamily="@font/inter_medium"
+        android:layout_marginTop="20dp"/>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/amount"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:inputType="numberDecimal"
+        android:layout_marginTop="8dp"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="4dp"
+        android:background="@drawable/edittext_background"
+        android:fontFamily="@font/inter_medium"
+        android:hint="Enter amount"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/recurring"
+            android:textSize="20sp"
+            android:fontFamily="@font/inter_medium"/>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/isRecurring"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/toggleYes"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Yes"
+                android:checked="true"
+                app:cornerRadius="16dp"
+                android:textColor="?attr/colorItemLayoutBg"
+                app:backgroundTint="@color/primary" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/toggleNo"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No"
+                app:cornerRadius="16dp"
+                android:textColor="@color/primary"
+                app:backgroundTint="?attr/colorItemLayoutBg"
+                app:strokeColor="@color/primary"/>
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+    </LinearLayout>
+
+
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        style="?android:attr/progressBarStyle"
+        />
+
+
+
+    <Button
+        android:id="@+id/submit_button"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="@string/update_text"
+        android:textSize="30sp"
+        android:textColor="@color/white"
+        android:fontFamily="@font/inter_medium"
+        android:background="@drawable/button_background"
+        android:layout_marginTop="80dp"
+        android:elevation="100dp"/>
+
+</LinearLayout>

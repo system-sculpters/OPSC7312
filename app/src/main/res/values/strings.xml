@@ -51,5 +51,9 @@
     <string name="category_label">Category</string>
     <string name="category_selection">Select a category</string>
     <string name="error_icon">message image</string>
+    <string name="week">week</string>
+    <string name="monthly">month</string>
+    <string name="google">Sign in with google</string>
+    <string name="update_text">Update</string>
 
 </resources>

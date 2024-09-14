@@ -134,4 +134,8 @@ object AppConstants {
         return System.currentTimeMillis() + (60 * 60 * 1000)
     }
 
+    fun formatAmount(amount: Double): String {
+        return String.format("%.2f", amount)
+    }
+
 }

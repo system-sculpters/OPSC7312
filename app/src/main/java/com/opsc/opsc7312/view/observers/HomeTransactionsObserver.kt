@@ -3,6 +3,7 @@ package com.opsc.opsc7312.view.observers
 import android.util.Log
 import android.widget.TextView
 import androidx.lifecycle.Observer
+import com.opsc.opsc7312.AppConstants
 import com.opsc.opsc7312.model.data.model.Transaction
 import com.opsc.opsc7312.view.adapter.TransactionAdapter
 
@@ -35,7 +36,7 @@ class HomeTransactionsObserver(
         val expenses: ArrayList<Transaction> = arrayListOf()
 
         for (transaction in transactionList) {
-            if(transaction.type == "Income"){
+            if(transaction.type == "INCOME"){
                 income.add(transaction)
                 totalIncome += transaction.amount
             } else{
@@ -46,8 +47,8 @@ class HomeTransactionsObserver(
 
         val totalBalance: Double = totalIncome - totalExpense
 
-        "$totalBalance ZAR".also { amount.text = it }
-        "$totalIncome ZAR".also { incomeAmount.text = it }
-        "$totalExpense ZAR".also { expenseAmount.text = it }
+        "${AppConstants.formatAmount(totalBalance)} ZAR".also { amount.text = it  }
+        "${AppConstants.formatAmount(totalIncome)} ZAR".also { incomeAmount.text = it }
+        "${AppConstants.formatAmount(totalExpense)} ZAR".also { expenseAmount.text = it }
     }
 }

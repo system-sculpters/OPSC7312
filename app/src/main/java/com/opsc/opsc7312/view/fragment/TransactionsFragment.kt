@@ -1,5 +1,6 @@
 package com.opsc.opsc7312.view.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -13,6 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.opsc.opsc7312.AppConstants
+import com.opsc.opsc7312.MainActivity
 import com.opsc.opsc7312.R
 import com.opsc.opsc7312.databinding.FragmentTransactionsBinding
 import com.opsc.opsc7312.model.api.controllers.AuthController
@@ -23,6 +25,7 @@ import com.opsc.opsc7312.model.data.model.User
 import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
 import com.opsc.opsc7312.model.data.offline.preferences.UserManager
 import com.opsc.opsc7312.view.adapter.TransactionAdapter
+import com.opsc.opsc7312.view.custom.TimeOutDialog
 import com.opsc.opsc7312.view.observers.HomeTransactionsObserver
 import com.opsc.opsc7312.view.observers.TransactionsObserver
 
@@ -50,6 +53,7 @@ class TransactionsFragment : Fragment() {
     private lateinit var transactionViewModel: TransactionController
 
     private lateinit var authController: AuthController
+    private lateinit var timeOutDialog: TimeOutDialog
 
 
 
@@ -80,6 +84,8 @@ class TransactionsFragment : Fragment() {
             transaction ->
             redirectToDetails(transaction)
         }
+        timeOutDialog = TimeOutDialog()
+
         setUpRecyclerView()
 
         radioButtonIncome.setOnClickListener { onRadioButtonClicked(it) }
@@ -101,14 +107,13 @@ class TransactionsFragment : Fragment() {
 
     private fun redirectToDetails(transaction: Transaction){
         // Create a new instance of CategoryDetailsFragment and pass category data
-        val categoryDetailsFragment = PlaceholderFragment()
+        val transactionDetailsFragment = UpdateTransactionFragment()
         val bundle = Bundle()
         bundle.putParcelable("transaction", transaction)
-        bundle.putString("screen", "redirectToDetails transaction")
-        categoryDetailsFragment.arguments = bundle
+        transactionDetailsFragment.arguments = bundle
 
         // Navigate to CategoryDetailsFragment
-        changeCurrentFragment(categoryDetailsFragment)
+        changeCurrentFragment(transactionDetailsFragment)
     }
 
     private fun setUpUserDetails(){
@@ -122,26 +127,38 @@ class TransactionsFragment : Fragment() {
             observeViewModel(token, user.id)
         }else{
             Log.d("re auth", "hola me amo dora")
-            reAuthenticateUser(user.email, user.id)
+            startActivity(Intent(requireContext(), MainActivity::class.java))
+
         }
     }
 
 
 
     private fun observeViewModel(token: String, userId: String){
+        val progressDialog = timeOutDialog.showProgressDialog(requireContext())
+
         // Observe LiveData
         transactionViewModel.status.observe(viewLifecycleOwner)  { status ->
             // Handle status changes (success or failure)
             if (status) {
                 // Success
+                progressDialog.dismiss()
             } else {
                 // Failure
+                progressDialog.dismiss()
             }
         }
 
         transactionViewModel.message.observe(viewLifecycleOwner) { message ->
             // Show message to the user, if needed
-            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+            Log.d("Transactions message", message)
+
+            if(message == "timeout"){
+                timeOutDialog.showTimeoutDialog(requireContext() ){
+                    //progressDialog.show()
+                    transactionViewModel.getAllTransactions(token, userId)
+                }
+            }
         }
 
         transactionViewModel.transactionList.observe(viewLifecycleOwner,
@@ -149,24 +166,6 @@ class TransactionsFragment : Fragment() {
         )
 
         transactionViewModel.getAllTransactions(token, userId)
-    }
-
-    private fun reAuthenticateUser(email: String, userId: String){
-        authController.newToken.observe(viewLifecycleOwner){
-                response ->
-            if(response != null){
-                tokenManager.saveToken(response.token, AppConstants.tokenExpirationTime())
-                observeViewModel(response.token, userId)
-            }
-        }
-
-        authController.message.observe(viewLifecycleOwner){
-                message -> Log.d("authController", message)
-        }
-
-        val user = User(email = email)
-
-        authController.reauthenticate(user)
     }
 
 
@@ -189,7 +188,7 @@ class TransactionsFragment : Fragment() {
                     transactionAdapter.updateTransactions(income)
 
                     binding.transactionTitle.text = "Total Income"
-                    binding.amount.text = "${totalTransactionAmount(income)} ZAR"
+                    binding.amount.text = "${AppConstants.formatAmount(totalTransactionAmount(income))} ZAR"
                 }
             }
             R.id.expense -> {
@@ -201,13 +200,13 @@ class TransactionsFragment : Fragment() {
                     transactionAdapter.updateTransactions(expenses)
 
                     binding.transactionTitle.text = "Total Expenses"
-                    binding.amount.text = "${totalTransactionAmount(expenses)} ZAR"
+                    binding.amount.text = "${AppConstants.formatAmount(totalTransactionAmount(expenses))} ZAR"
                 }
             }
         }
     }
 
-    fun totalTransactionAmount(transactions: ArrayList<Transaction>): Double{
+    private fun totalTransactionAmount(transactions: ArrayList<Transaction>): Double{
         var total = 0.00
 
         for (transaction in transactions) {

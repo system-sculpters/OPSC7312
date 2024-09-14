@@ -1,6 +1,8 @@
 package com.opsc.opsc7312.view.fragment
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +20,7 @@ import com.opsc.opsc7312.model.data.model.User
 import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
 import com.opsc.opsc7312.model.data.offline.preferences.UserManager
 import com.opsc.opsc7312.view.adapter.TransactionAdapter
+import com.opsc.opsc7312.view.custom.TimeOutDialog
 import com.opsc.opsc7312.view.observers.HomeTransactionsObserver
 
 
@@ -35,6 +38,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var authController: AuthController
 
+    private lateinit var timeOutDialog: TimeOutDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,6 +55,8 @@ class HomeFragment : Fragment() {
 
         authController = ViewModelProvider(this).get(AuthController::class.java)
 
+        timeOutDialog = TimeOutDialog()
+
         transactionAdapter = TransactionAdapter{
                 transaction ->
             redirectToDetails(transaction)
@@ -59,6 +65,7 @@ class HomeFragment : Fragment() {
         setUpUserDetails()
 
         setUpRecyclerView()
+
 
         return binding.root
     }
@@ -75,14 +82,14 @@ class HomeFragment : Fragment() {
             Log.d("re auth", "this is token: $token")
             observeViewModel(token, user.id)
         }else{
-            Log.d("re auth", "hola me amo dora")
-            reAuthenticateUser(user.email, user.id)
+
         }
     }
 
 
 
     private fun observeViewModel(token: String, userId: String){
+        val progressDialog = timeOutDialog.showProgressDialog(requireContext())
 
         Log.d("token", token)
 
@@ -90,39 +97,46 @@ class HomeFragment : Fragment() {
         // Observe LiveData
         transactionViewModel.status.observe(viewLifecycleOwner)  {
             // Handle status changes (success or failure)
+            status ->
+            if (status) {
+                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Transaction retrieval successful!", hideProgressBar = true)
+
+                // Dismiss the dialog after 2 seconds
+                Handler(Looper.getMainLooper()).postDelayed({
+                    // Dismiss the dialog after the delay
+                    progressDialog.dismiss()
+
+                }, 1000)
+
+            } else {
+                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Transaction retrieval failed!", hideProgressBar = true)
+
+                // Dismiss the dialog after 2 seconds
+                Handler(Looper.getMainLooper()).postDelayed({
+                    // Dismiss the dialog after the delay
+                    progressDialog.dismiss()
+
+                }, 2000)
+            }
 
         }
 
         transactionViewModel.message.observe(viewLifecycleOwner) { message ->
-            // Show message to the user, if needed
-            // Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+            if(message == "timeout"){
+                timeOutDialog.showTimeoutDialog(requireContext() ){
+                    //progressDialog.show()
+                    timeOutDialog.showProgressDialog(requireContext())
+                    timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Connecting...", hideProgressBar = false)
+                    transactionViewModel.getAllTransactions(token, userId)
+                }
+            }
         }
 
         transactionViewModel.transactionList.observe(viewLifecycleOwner, HomeTransactionsObserver(transactionAdapter, binding.amount, binding.incomeAmount, binding.expenseAmount))
 
-
         // Example API calls
         transactionViewModel.getAllTransactions(token, userId)
     }
-
-    private fun reAuthenticateUser(email: String, userId: String){
-        authController.newToken.observe(viewLifecycleOwner){
-            response ->
-            if(response != null){
-                tokenManager.saveToken(response.token, AppConstants.tokenExpirationTime())
-                observeViewModel(response.token, userId)
-            }
-        }
-
-        authController.message.observe(viewLifecycleOwner){
-            message -> Log.d("authController", message)
-        }
-
-        val user = User(email = email)
-
-        authController.reauthenticate(user)
-    }
-
 
     private fun setUpRecyclerView(){
         binding.recycleView.layoutManager = LinearLayoutManager(requireContext())
@@ -132,14 +146,13 @@ class HomeFragment : Fragment() {
 
     private fun redirectToDetails(transaction: Transaction){
         // Create a new instance of CategoryDetailsFragment and pass category data
-        val categoryDetailsFragment = PlaceholderFragment()
+        val transactionDetailsFragment = UpdateTransactionFragment()
         val bundle = Bundle()
         bundle.putParcelable("transaction", transaction)
-        bundle.putString("screen", "redirectToDetails transaction")
-        categoryDetailsFragment.arguments = bundle
+        transactionDetailsFragment.arguments = bundle
 
         // Navigate to CategoryDetailsFragment
-        changeCurrentFragment(categoryDetailsFragment)
+        changeCurrentFragment(transactionDetailsFragment)
     }
 
     private fun changeCurrentFragment(fragment: Fragment) {

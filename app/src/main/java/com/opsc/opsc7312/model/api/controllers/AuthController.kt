@@ -43,7 +43,7 @@ class AuthController : ViewModel() {
             override fun onFailure(call: Call<User>, t: Throwable) {
                 Log.e("MainActivity", "Error: ${t.message}")
                 status.postValue(false)
-                message.postValue("Request failed with code: ${t.message }")
+                message.postValue(t.message)
             }
         })
     }
@@ -70,7 +70,7 @@ class AuthController : ViewModel() {
             override fun onFailure(call: Call<User>, t: Throwable) {
                 Log.e("MainActivity", "Error: ${t.message}")
                 status.postValue(false)
-                message.postValue("Request failed with code: ${t.message }")
+                message.postValue(t.message)
             }
         })
     }

@@ -44,7 +44,7 @@
                 android:id="@+id/amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="4000 ZAR"
+                android:text="0.00 ZAR"
                 android:textSize="20sp"
                 android:textAlignment="textEnd"
                 android:fontFamily="@font/inter_bold"

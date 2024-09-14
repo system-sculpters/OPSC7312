@@ -72,7 +72,9 @@ class ProfileFragment : Fragment() {
 
         // Set up listeners
         binding.btnEditProfileImage.setOnClickListener { showImagePickerDialog() }
-        binding.btnSave.setOnClickListener { saveProfileData() }
+        binding.btnSave.setOnClickListener {
+            saveProfileData()
+        }
 
         binding.ChangePassword.setOnClickListener{
             showChangePasswordDialog()

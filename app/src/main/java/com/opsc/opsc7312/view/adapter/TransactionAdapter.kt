@@ -70,9 +70,9 @@ class TransactionAdapter(private val onItemClick: (Transaction) -> Unit) : Recyc
 
         holder.isRecurring.text = isRecurring
 
-        holder.amount.text = "${transaction.amount} ZAR"
+        holder.amount.text = "${AppConstants.formatAmount(transaction.amount)} ZAR"
 
-        val amountColor = if (transaction.type == "Income") {
+        val amountColor = if (transaction.type == "INCOME") {
             ContextCompat.getColor(holder.itemView.context, R.color.green)
         } else {
             ContextCompat.getColor(holder.itemView.context, R.color.red) // Set a default color

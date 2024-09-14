@@ -50,7 +50,8 @@ class GoalAdapter (private val onItemClick: (Goal) -> Unit) :
         Log.d("deadline", "this is the deadline ${goal.deadline}")
 
 
-        holder.progress_amount.text = "${goal.currentamount}/${goal.targetamount} ZAR"
+        holder.progress_amount.text = "${AppConstants.formatAmount(goal.currentamount)}/" +
+                "${AppConstants.formatAmount(goal.targetamount)} ZAR"
 
         val progress = if (goal.targetamount > 0) {
             (goal.currentamount / goal.targetamount * 100).toInt()

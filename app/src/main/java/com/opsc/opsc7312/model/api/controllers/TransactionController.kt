@@ -47,7 +47,7 @@ class TransactionController : ViewModel() {
                 Log.e("MainActivity", "Error: ${t.message}")
                 transactionList.postValue(listOf())
                 status.postValue(false)
-                message.postValue("Request failed with code: ${t.message }")
+                message.postValue(t.message )
             }
         })
     }
@@ -73,7 +73,7 @@ class TransactionController : ViewModel() {
             override fun onFailure(call: Call<Transaction>, t: Throwable) {
                 Log.e("MainActivity", "Error: ${t.message}")
                 status.postValue(false)
-                message.postValue("Request failed with code: ${t.message }")
+                message.postValue(t.message )
             }
         })
     }
@@ -99,7 +99,7 @@ class TransactionController : ViewModel() {
             override fun onFailure(call: Call<Transaction>, t: Throwable) {
                 Log.e("MainActivity", "Error: ${t.message}")
                 status.postValue(false)
-                message.postValue("Request failed with code: ${t.message }")
+                message.postValue(t.message)
             }
         })
     }
@@ -125,7 +125,7 @@ class TransactionController : ViewModel() {
                 // Handle failure scenario, like network issues
                 Log.e("MainActivity", "Error: ${t.message}")
                 status.postValue(false)
-                message.postValue("Request failed with error: ${t.message}")
+                message.postValue(t.message)
             }
         })
     }

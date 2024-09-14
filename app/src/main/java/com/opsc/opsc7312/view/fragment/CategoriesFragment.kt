@@ -65,6 +65,8 @@ class CategoriesFragment : Fragment() {
         return binding.root
     }
 
+
+
     private fun setUpRecyclerView(){
         binding.categoryRecycleView.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.categoryRecycleView.setHasFixedSize(true)
@@ -120,10 +122,9 @@ class CategoriesFragment : Fragment() {
 
     private fun redirectToDetails(category: Category){
         // Create a new instance of CategoryDetailsFragment and pass category data
-        val categoryDetailsFragment = PlaceholderFragment()
+        val categoryDetailsFragment = UpdateCategoryFragment()
         val bundle = Bundle()
         bundle.putParcelable("category", category)
-        bundle.putString("screen", "redirectToDetails")
         categoryDetailsFragment.arguments = bundle
 
         // Navigate to CategoryDetailsFragment

@@ -11,8 +11,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -20,22 +18,20 @@ import androidx.recyclerview.widget.RecyclerView
 import com.opsc.opsc7312.AppConstants
 import com.opsc.opsc7312.MainActivity
 import com.opsc.opsc7312.R
-import com.opsc.opsc7312.databinding.FragmentCreateTransactionBinding
-import com.opsc.opsc7312.databinding.FragmentTransactionsBinding
+import com.opsc.opsc7312.databinding.FragmentUpdateTransactionBinding
 import com.opsc.opsc7312.model.api.controllers.CategoryController
 import com.opsc.opsc7312.model.api.controllers.TransactionController
 import com.opsc.opsc7312.model.data.model.Category
 import com.opsc.opsc7312.model.data.model.Transaction
 import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
 import com.opsc.opsc7312.model.data.offline.preferences.UserManager
-import com.opsc.opsc7312.view.adapter.IconAdapter
 import com.opsc.opsc7312.view.adapter.SelectCategoryAdapter
 import com.opsc.opsc7312.view.custom.TimeOutDialog
 import com.opsc.opsc7312.view.observers.CategoriesObserver
 
 
-class CreateTransactionFragment : Fragment() {
-    private var _binding: FragmentCreateTransactionBinding? = null
+class UpdateTransactionFragment : Fragment() {
+    private var _binding: FragmentUpdateTransactionBinding? = null
     private val binding get() = _binding!!
 
 
@@ -57,8 +53,6 @@ class CreateTransactionFragment : Fragment() {
 
     private lateinit var categoryViewModel: CategoryController
 
-
-
     private var isRecurring = true
 
     private var selectedIconName: String = "Select an category"
@@ -66,12 +60,13 @@ class CreateTransactionFragment : Fragment() {
 
     private lateinit var timeOutDialog: TimeOutDialog
 
+    private var transactionId = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentCreateTransactionBinding.inflate(inflater, container, false)
+        _binding = FragmentUpdateTransactionBinding.inflate(inflater, container, false)
 
 
         userManager = UserManager.getInstance(requireContext())
@@ -88,41 +83,15 @@ class CreateTransactionFragment : Fragment() {
 
         adapter = SelectCategoryAdapter { selectedCategory ->
             // Set the selected icon to the ImageView
-            selectedIconName = selectedCategory.name
-            selectedCategoryId = selectedCategory.id
-            binding.categoryName.text = selectedIconName
-
-            val typedValue = TypedValue()
-            requireContext().theme.resolveAttribute(R.attr.themeBgBorder, typedValue, true)
-            val color = typedValue.data
-            binding.categoryName.setTextColor(color)
-            //binding.iconName.setTextColor(ContextCompat.getColor(requireContext(), R.color.dark_grey))
-            AppConstants.ICONS[selectedCategory.icon]?.let {
-                binding.categoryImageView.setImageResource(
-                    it
-                )
-            }
-
-            val colorResId = AppConstants.COLOR_DICTIONARY[selectedCategory.color]
-            if (colorResId != null) {
-                val originalColor = ContextCompat.getColor(requireContext(),
-                    colorResId
-                )
-                //holder.background.setBackgroundColor(originalColor)
-                binding.categoryImageContainer.setBackgroundColor(originalColor)
-                val cornerRadius = requireContext().resources.getDimensionPixelSize(R.dimen.corner_radius_main)
-                val shapeDrawable = GradientDrawable()
-                shapeDrawable.setColor(originalColor)
-                shapeDrawable.cornerRadius = cornerRadius.toFloat()
-                binding.categoryImageContainer.background = shapeDrawable
-            }
-
+            setUpCategory(selectedCategory)
 
             iconPickerDialog.dismiss() // Dismiss the dialog after selecting an icon
         }
         toggleButton()
 
         setUpInputs()
+
+        loadTransactionDetails()
 
         return binding.root
     }
@@ -131,7 +100,34 @@ class CreateTransactionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Access the MainActivity and set the toolbar title
-        (activity as? MainActivity)?.setToolbarTitle("Create Transaction")
+        (activity as? MainActivity)?.setToolbarTitle("Update Transaction")
+    }
+
+    private fun loadTransactionDetails(){
+        val transaction = arguments?.getParcelable<Transaction>("transaction")
+
+        // Update UI with category data
+        if (transaction != null){
+            Log.d("", "this is the cat: $transaction")
+
+            val transactionCategory = transaction.category
+            transactionCategory.id = transaction.categoryId
+            transactionId = transaction.id
+
+
+            val selectedIndex = transactionTypes.indexOf(transaction.type)
+
+
+            binding.transactionNameEdittext.setText(transaction.name)
+
+            binding.transactionType.selectItemByIndex(selectedIndex)
+
+            binding.amount.setText(AppConstants.formatAmount(transaction.amount))
+
+            setUpCategory(transactionCategory)
+            //adapter.setSelectedCategory(transactionCategory)
+
+        }
     }
 
     private fun setUpInputs(){
@@ -219,16 +215,15 @@ class CreateTransactionFragment : Fragment() {
         val transactionType = transactionTypes[binding.transactionType.selectedIndex]
 
 
-        val newTransaction = Transaction(
+        val updatedTransaction = Transaction(
             name = transactionName,
             amount = amount.toDouble(),
-            userid = id,
             isrecurring = isRecurring,
             type = transactionType,
             categoryId = selectedCategoryId
         )
 
-        Log.d("newTransaction", "this is the transaction: $newTransaction")
+        Log.d("newTransaction", "this is the transaction: $updatedTransaction")
 
         transactionViewModel.status.observe(viewLifecycleOwner) { status ->
             binding.progressBar.visibility = View.GONE
@@ -253,7 +248,8 @@ class CreateTransactionFragment : Fragment() {
                     progressDialog.dismiss()
 
 
-                }, 2000)            }
+                }, 2000)
+            }
         }
 
         transactionViewModel.message.observe(viewLifecycleOwner){ message ->
@@ -262,12 +258,12 @@ class CreateTransactionFragment : Fragment() {
                     //progressDialog.show()
                     timeOutDialog.showProgressDialog(requireContext())
                     timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Connecting...", hideProgressBar = false)
-                    transactionViewModel.createTransaction(token, newTransaction)
+                    transactionViewModel.updateTransaction(token, transactionId, updatedTransaction)
                 }
             }
         }
 
-        transactionViewModel.createTransaction(token, newTransaction)
+        transactionViewModel.updateTransaction(token, transactionId, updatedTransaction)
     }
 
     private fun verifyData(transactionName: String, amount: String, selectedCategory: String, transactionType: Int): Boolean {
@@ -315,14 +311,12 @@ class CreateTransactionFragment : Fragment() {
                 }, 2000)
             } else {
                 // Failure
-
-                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Category retrieval failed!", hideProgressBar = true)
+                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Category retrieval failed!", hideProgressBar = true, )
 
                 // Dismiss the dialog after 2 seconds
                 Handler(Looper.getMainLooper()).postDelayed({
                     // Dismiss the dialog after the delay
                     progressDialog.dismiss()
-
 
                 }, 2000)
             }
@@ -343,6 +337,38 @@ class CreateTransactionFragment : Fragment() {
 
         // Example API calls
         categoryViewModel.getAllCategories(token, id)
+    }
+
+    private fun setUpCategory(selectedCategory: Category){
+        selectedIconName = selectedCategory.name
+        selectedCategoryId = selectedCategory.id
+        binding.categoryName.text = selectedIconName
+
+        val typedValue = TypedValue()
+        requireContext().theme.resolveAttribute(R.attr.themeBgBorder, typedValue, true)
+        val color = typedValue.data
+        binding.categoryName.setTextColor(color)
+        //binding.iconName.setTextColor(ContextCompat.getColor(requireContext(), R.color.dark_grey))
+        AppConstants.ICONS[selectedCategory.icon]?.let {
+            binding.categoryImageView.setImageResource(
+                it
+            )
+        }
+
+        val colorResId = AppConstants.COLOR_DICTIONARY[selectedCategory.color]
+        if (colorResId != null) {
+            val originalColor = ContextCompat.getColor(requireContext(),
+                colorResId
+            )
+            //holder.background.setBackgroundColor(originalColor)
+            binding.categoryImageContainer.setBackgroundColor(originalColor)
+            val cornerRadius = requireContext().resources.getDimensionPixelSize(R.dimen.corner_radius_main)
+            val shapeDrawable = GradientDrawable()
+            shapeDrawable.setColor(originalColor)
+            shapeDrawable.cornerRadius = cornerRadius.toFloat()
+            binding.categoryImageContainer.background = shapeDrawable
+        }
+
     }
 
     private fun redirectToTransactions(){

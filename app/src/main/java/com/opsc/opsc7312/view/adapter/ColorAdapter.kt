@@ -1,5 +1,6 @@
 package com.opsc.opsc7312.view.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +20,7 @@ class ColorAdapter (private val dataList:ArrayList<Color>,
     // https://auth.geeksforgeeks.org/user/BaibhavOjha/articles?utm_source=geeksforgeeks&utm_medium=article_author&utm_campaign=auth_user
 
     private var selectedItemPosition = RecyclerView.NO_POSITION
-    private var selectedCategory: Color? = null
+    private var selectedColor: Color? = null
 
 
 
@@ -61,13 +62,15 @@ class ColorAdapter (private val dataList:ArrayList<Color>,
     }
 
     // Sets the selected category and updates the UI
-    fun setSelectedCategory(colors: Color?) {
+    fun setSelectedColor(colors: Color?) {
         val previousSelectedPosition = selectedItemPosition
-        selectedCategory = colors
+        selectedColor = colors
         if (previousSelectedPosition != RecyclerView.NO_POSITION) {
             notifyItemChanged(previousSelectedPosition)
         }
-        selectedCategory?.let { color ->
+        selectedColor?.let { color ->
+            Log.d("color", "this is the color: $color")
+            Log.d("color dataList", "this is the datalist $dataList")
             val newSelectedPosition = dataList.indexOf(color)
             if (newSelectedPosition != -1) {
                 selectedItemPosition = newSelectedPosition

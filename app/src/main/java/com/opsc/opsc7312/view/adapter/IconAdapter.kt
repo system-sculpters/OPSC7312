@@ -1,5 +1,6 @@
 package com.opsc.opsc7312.view.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -51,7 +52,7 @@ class IconAdapter (private val iconList: ArrayList<Int>, private val onItemClick
     }
 
     // Function to set the selected icon
-    fun setSelectedCategory(icon: Int?) {
+    fun setSelectedIcon(icon: Int?) {
         // Keep track of previous selected position
         val previousSelectedPosition = selectedItemPosition
         selectedIcon = icon
@@ -61,6 +62,8 @@ class IconAdapter (private val iconList: ArrayList<Int>, private val onItemClick
         }
         // Update selected position based on the new icon
         selectedIcon?.let { iconValue ->
+            Log.d("icon", "this is the icon: $iconValue")
+            Log.d("icon dataList", "this is the datalist $iconList")
             val newSelectedPosition = iconList.indexOf(iconValue)
             if (newSelectedPosition != -1) {
                 selectedItemPosition = newSelectedPosition

@@ -3,6 +3,7 @@ package com.opsc.opsc7312.view.observers
 import android.util.Log
 import android.widget.TextView
 import androidx.lifecycle.Observer
+import com.opsc.opsc7312.AppConstants
 import com.opsc.opsc7312.model.data.model.Goal
 import com.opsc.opsc7312.view.adapter.GoalAdapter
 
@@ -33,7 +34,8 @@ class GoalObserver(
             totalTargetAmount += goal.targetamount
         }
 
-        amount.text = "${totalCurrentAmount}/${totalTargetAmount} ZAR"
+        amount.text = "${AppConstants.formatAmount(totalCurrentAmount)}/" +
+                "${AppConstants.formatAmount(totalTargetAmount)} ZAR"
     }
 
 }

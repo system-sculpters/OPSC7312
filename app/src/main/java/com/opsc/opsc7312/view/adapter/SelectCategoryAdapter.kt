@@ -1,6 +1,7 @@
 package com.opsc.opsc7312.view.adapter
 
 import android.graphics.drawable.GradientDrawable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -74,6 +75,8 @@ class SelectCategoryAdapter (private val onItemClick: (Category) -> Unit) :
         }
         // Update selected position based on the new icon
         selectedCategory?.let { categoryValue ->
+            Log.d("category", "this is the cat: $categoryValue")
+            Log.d("category dataList", "this is the dataList $categories")
             val newSelectedPosition = categories.indexOf(categoryValue)
             if (newSelectedPosition != -1) {
                 selectedItemPosition = newSelectedPosition
@@ -109,8 +112,6 @@ class SelectCategoryAdapter (private val onItemClick: (Category) -> Unit) :
             shapeDrawable.cornerRadius = cornerRadius.toFloat()
             holder.background.background = shapeDrawable
         }
-
-
 
         if (icon != null) {
             holder.iconImageView.setImageResource(icon)

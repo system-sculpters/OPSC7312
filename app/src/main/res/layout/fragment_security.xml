@@ -4,12 +4,12 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:paddingHorizontal="25dp"
+    android:layout_marginVertical="20dp">
 
     <LinearLayout
-        android:layout_width="370dp"
+        android:layout_width="match_parent"
         android:layout_height="65dp"
-        android:layout_marginTop="50dp"
         android:background="@drawable/rounded_rectangle"
         android:elevation="4dp"
         android:orientation="horizontal"
@@ -30,8 +30,8 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:text="Fingerprint"
-            android:textColor="@color/black"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:fontFamily="@font/inter_medium"/>
 
         <Switch
             android:id="@+id/switch_biometrics"
