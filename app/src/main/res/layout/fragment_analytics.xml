@@ -20,7 +20,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="143dp"
+                android:layout_height="160dp"
                 android:layout_marginVertical="10dp"
                 android:background="@drawable/analytics_layout_background"
                 android:padding="10dp"
@@ -29,7 +29,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="20dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginVertical="10dp"
                     android:orientation="horizontal"
                     android:gravity="center_vertical">
@@ -37,7 +37,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Goals"
-                        android:textSize="15sp"
+                        android:textSize="20sp"
                         android:textAlignment="textEnd"
                         android:fontFamily="@font/inter_medium"
                         android:textStyle="bold"
@@ -102,6 +102,7 @@
                         android:layout_height="15dp"
                         android:src="@drawable/baseline_edit_24"/>
                     <TextView
+                        android:id="@+id/editGoal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/edit_goals"
@@ -133,11 +134,11 @@
                     android:layout_marginBottom="5dp">
 
                     <androidx.appcompat.widget.AppCompatRadioButton
-                        android:id="@+id/month"
+                        android:id="@+id/week"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:textColor="@color/white"
-                        android:text="@string/monthly"
+                        android:text="@string/week"
                         android:checked="true"
                         android:gravity="center"
                         android:button="@android:color/transparent"
@@ -147,11 +148,11 @@
                         android:textSize="8sp"
                         android:fontFamily="@font/inter_medium"/>
                     <androidx.appcompat.widget.AppCompatRadioButton
-                        android:id="@+id/week"
+                        android:id="@+id/month"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:textColor="@color/dark_grey"
-                        android:text="@string/week"
+                        android:text="@string/monthly"
                         android:gravity="center"
                         android:button="@android:color/transparent"
                         android:layout_weight="1"
@@ -160,6 +161,8 @@
                         android:textSize="8sp"
                         android:fontFamily="@font/inter_medium"/>
                 </RadioGroup>
+
+
 
                 <com.github.mikephil.charting.charts.BarChart
                     android:id="@+id/incomeExpenseBarChart"
@@ -200,24 +203,66 @@
                 android:padding="10dp"
                 android:orientation="vertical"
                 android:layout_marginBottom="10dp">
-                <TextView
-                    android:layout_width="wrap_content"
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Total Income"
-                    android:textSize="16sp"
-                    android:textAlignment="textEnd"
-                    android:textColor="@color/light_grey"
-                    android:fontFamily="@font/inter_medium"
-                    />
-                <TextView
-                    android:id="@+id/totalIncome"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="R100 000.00"
-                    android:textSize="16sp"
-                    android:textAlignment="textEnd"
-                    android:fontFamily="@font/inter_medium"
-                    />
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Total Income"
+                            android:textSize="16sp"
+                            android:textAlignment="textEnd"
+                            android:textColor="@color/light_grey"
+                            android:fontFamily="@font/inter_medium"
+                            />
+                        <TextView
+                            android:id="@+id/totalIncome"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="R100 000.00"
+                            android:textSize="16sp"
+                            android:textAlignment="textEnd"
+                            android:fontFamily="@font/inter_medium"
+                            />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"/>
+
+                    <com.skydoves.powerspinner.PowerSpinnerView
+                        android:id="@+id/months"
+                        android:layout_width="wrap_content"
+                        android:layout_height="25dp"
+                        android:layout_marginTop="12dp"
+                        android:background="@drawable/mini_powerspinner"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:hint="6 months"
+                        android:textColor="?attr/themeBgBorder"
+                        android:textColorHint="@color/light_grey"
+                        android:textSize="12sp"
+                        android:paddingHorizontal="4dp"
+                        android:gravity="center_vertical"
+                        app:spinner_arrow_gravity="end"
+                        app:spinner_arrow_padding="8dp"
+                        app:spinner_divider_color="?attr/themeBgBorder"
+                        app:spinner_divider_show="true"
+                        app:spinner_divider_size="0.4dp"
+                        app:spinner_item_array="@array/questions1"
+                        app:spinner_popup_animation="normal"
+                        app:spinner_popup_background="?attr/colorItemLayoutBg"
+                        app:spinner_popup_elevation="14dp"
+                        app:spinner_arrow_tint="?attr/themeBgBorder"
+                        android:fontFamily="@font/inter_medium"
+                        android:layout_marginBottom="20dp"/>
+                </LinearLayout>
                 <com.github.mikephil.charting.charts.BarChart
                     android:id="@+id/incomeChart"
                     android:layout_width="match_parent"

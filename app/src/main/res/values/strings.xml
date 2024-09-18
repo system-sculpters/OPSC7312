@@ -55,5 +55,7 @@
     <string name="monthly">month</string>
     <string name="google">Sign in with google</string>
     <string name="update_text">Update</string>
+    <string name="selected_language">Selected language</string>
+    <string name="show_results">Show results</string>
 
 </resources>

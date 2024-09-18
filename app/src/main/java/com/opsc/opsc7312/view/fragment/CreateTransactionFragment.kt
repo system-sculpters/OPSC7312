@@ -233,7 +233,7 @@ class CreateTransactionFragment : Fragment() {
         transactionViewModel.status.observe(viewLifecycleOwner) { status ->
             binding.progressBar.visibility = View.GONE
             if (status) {
-                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Transaction update successful!", hideProgressBar = true, )
+                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Transaction creation successful!", hideProgressBar = true, )
 
                 // Dismiss the dialog after 2 seconds
                 Handler(Looper.getMainLooper()).postDelayed({
@@ -245,7 +245,7 @@ class CreateTransactionFragment : Fragment() {
                 }, 2000)
 
             } else {
-                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Transaction update failed!", hideProgressBar = true)
+                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Transaction creation failed!", hideProgressBar = true)
 
                 // Dismiss the dialog after 2 seconds
                 Handler(Looper.getMainLooper()).postDelayed({
@@ -253,7 +253,8 @@ class CreateTransactionFragment : Fragment() {
                     progressDialog.dismiss()
 
 
-                }, 2000)            }
+                }, 2000)
+            }
         }
 
         transactionViewModel.message.observe(viewLifecycleOwner){ message ->

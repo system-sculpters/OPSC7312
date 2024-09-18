@@ -23,14 +23,16 @@
             android:background="@drawable/edittext_background"
             android:padding="8dp">
 
-            <Switch
+            <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch_notifications"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Notifications"
                 android:textSize="13sp"
                 android:fontFamily="@font/inter_semibold"
-                android:padding="12dp" />
+                android:padding="12dp"
+                android:thumbTint="?attr/thumbTint"
+                android:trackTint="?attr/trackTint" />
         </LinearLayout>
 
         <!-- Transaction Section -->
@@ -46,11 +48,11 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginBottom="8dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10dp"
             android:background="@drawable/edittext_background"
             android:padding="8dp">
 
-            <Switch
+            <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch_notify_purchase"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -72,16 +74,19 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginBottom="15dp"
+            android:layout_marginTop="10dp"
             android:background="@drawable/edittext_background"
             android:padding="8dp">
 
-            <Switch
+            <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch_notify_goal_progress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Notify at 25%, 50%, and 75% progress"
                 android:padding="12dp"
-                android:fontFamily="@font/inter_semibold" />
+                android:fontFamily="@font/inter_semibold"
+                android:thumbTint="@color/primary"
+                android:trackTint="@color/white" />
         </LinearLayout>
 
         <LinearLayout
@@ -91,7 +96,7 @@
             android:background="@drawable/edittext_background"
             android:padding="8dp">
 
-            <Switch
+            <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch_alert_goal_reached"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -117,7 +122,7 @@
             android:background="@drawable/edittext_background"
             android:padding="8dp">
 
-            <Switch
+            <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch_notify_profile_updated"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -133,7 +138,7 @@
             android:background="@drawable/edittext_background"
             android:padding="8dp">
 
-            <Switch
+            <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch_alert_new_logins"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

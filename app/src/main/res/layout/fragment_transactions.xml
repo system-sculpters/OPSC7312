@@ -28,7 +28,7 @@
                 android:id="@+id/transaction_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Total Expenses"
+                android:text="Total Balance"
                 android:textSize="14sp"
                 android:textAlignment="textEnd"
                 android:textColor="@color/light_grey"
@@ -57,42 +57,7 @@
 
         </LinearLayout>
 
-        <RadioGroup
-            android:id="@+id/radioGroup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp">
 
-            <androidx.appcompat.widget.AppCompatRadioButton
-                android:id="@+id/income"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:textColor="@color/white"
-                android:text="@string/income"
-                android:checked="true"
-                android:gravity="center"
-                android:button="@android:color/transparent"
-                android:layout_weight="1"
-                android:background="@drawable/toggle_selector_left"
-                android:onClick="onRadioButtonClicked"
-                android:textSize="24sp"
-                android:fontFamily="@font/inter_medium"/>
-            <androidx.appcompat.widget.AppCompatRadioButton
-                android:id="@+id/expense"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:textColor="@color/dark_grey"
-                android:text="@string/expense"
-                android:gravity="center"
-                android:button="@android:color/transparent"
-                android:layout_weight="1"
-                android:background="@drawable/toggle_selector_right"
-                android:onClick="onRadioButtonClicked"
-                android:textSize="24sp"
-                android:fontFamily="@font/inter_medium"/>
-        </RadioGroup>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -108,11 +73,13 @@
                 android:layout_marginEnd="12dp"
                 android:background="@drawable/filter_layout_background"
                 android:clickable="true"
-                android:focusable="true">
+                android:focusable="true"
+                android:padding="3dp">
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/baseline_sort_24"/>
+                    android:src="@drawable/baseline_sort_24"
+                    app:tint="?attr/whiteItemBorder" />
             </LinearLayout>
 
             <LinearLayout
@@ -121,11 +88,13 @@
                 android:layout_height="50dp"
                 android:background="@drawable/filter_layout_background"
                 android:clickable="true"
-                android:focusable="true">
+                android:focusable="true"
+                android:padding="3dp">
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/baseline_tune_24"/>
+                    android:src="@drawable/baseline_tune_24"
+                    app:tint="?attr/whiteItemBorder"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -137,33 +106,5 @@
             />
 
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        android:layout_weight=".6"
-        android:gravity="center_vertical"
-        >
 
-
-        <FrameLayout
-            android:id="@+id/addGoal"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="end"
-            android:clickable="true"
-            android:focusable="true"
-            android:background="@drawable/add_button_background"
-            >
-
-            <ImageView
-                android:id="@+id/card_img"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/baseline_add_light"
-                android:adjustViewBounds="true"
-                android:padding="8dp"
-                android:scaleType="fitCenter" />
-        </FrameLayout>
-    </LinearLayout>
 </LinearLayout>

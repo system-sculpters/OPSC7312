@@ -1,44 +1,28 @@
 package com.opsc.opsc7312.view.fragment
 
-import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.util.TypedValue
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatRadioButton
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.PieChart
-import com.github.mikephil.charting.components.Legend
-import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.data.BarData
-import com.github.mikephil.charting.data.BarDataSet
-import com.github.mikephil.charting.data.BarEntry
-import com.github.mikephil.charting.data.PieData
-import com.github.mikephil.charting.data.PieDataSet
-import com.github.mikephil.charting.data.PieEntry
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
-import com.github.mikephil.charting.utils.ColorTemplate
-import com.opsc.opsc7312.AppConstants
-import com.opsc.opsc7312.MainActivity
 import com.opsc.opsc7312.R
 import com.opsc.opsc7312.databinding.FragmentAnalyticsBinding
 import com.opsc.opsc7312.model.api.controllers.AnalyticsController
-import com.opsc.opsc7312.model.api.controllers.CategoryController
-import com.opsc.opsc7312.model.data.model.CategoryExpense
-import com.opsc.opsc7312.model.data.model.Goal
-import com.opsc.opsc7312.model.data.model.IncomeExpense
-import com.opsc.opsc7312.model.data.model.Transaction
+import com.opsc.opsc7312.model.data.model.AnalyticsResponse
 import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
 import com.opsc.opsc7312.model.data.offline.preferences.UserManager
 import com.opsc.opsc7312.view.adapter.AnalyticsAdapter
 import com.opsc.opsc7312.view.custom.TimeOutDialog
 import com.opsc.opsc7312.view.observers.AnalyticsObserver
-import com.opsc.opsc7312.view.observers.TransactionsObserver
 
 
 class AnalyticsFragment : Fragment() {
@@ -62,6 +46,8 @@ class AnalyticsFragment : Fragment() {
 
     private lateinit var timeOutDialog: TimeOutDialog
 
+    private lateinit var analyticsResponse: AnalyticsResponse
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -72,25 +58,36 @@ class AnalyticsFragment : Fragment() {
         incomeExpenseChart = binding.incomeExpenseBarChart
         incomeChart = binding.incomeChart
 
+        radioButtonWeek = binding.week
+        radioButtonMonth = binding.month
+
         userManager = UserManager.getInstance(requireContext())
 
         tokenManager = TokenManager.getInstance(requireContext())
 
+        analyticsResponse = AnalyticsResponse(listOf(), listOf(), listOf(), listOf())
+
         analyticsViewModel = ViewModelProvider(this).get(AnalyticsController::class.java)
 
-        adapter = AnalyticsAdapter(requireContext(), pieChart, incomeExpenseChart, incomeChart, binding.totalIncome, textColor())
+        adapter = AnalyticsAdapter(requireContext(), pieChart, incomeExpenseChart, incomeChart, binding.totalIncome, textColor(),
+            binding.amount, binding.remainingAmount, binding.progressBar)
 
         timeOutDialog = TimeOutDialog()
 
 
         setUpUserDetails()
 
+        radioButtonWeek.setOnClickListener{onRadioButtonClicked(it)}
+        radioButtonMonth.setOnClickListener{onRadioButtonClicked(it)}
+
+        setupPowerSpinner()
+
         return binding.root
     }
 
 
 
-    fun onRadioButtonClicked(view: View) {
+    private fun onRadioButtonClicked(view: View) {
         val isSelected = (view as AppCompatRadioButton).isChecked
         when (view.id) {
             R.id.month -> {
@@ -98,7 +95,7 @@ class AnalyticsFragment : Fragment() {
                     // Handle the action for "All" button
                     radioButtonMonth.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
                     radioButtonWeek.setTextColor(ContextCompat.getColor(requireContext(), R.color.dark_grey))
-
+                    adapter.updateIncomeExpenseChart(analyticsResponse.transactionsByMonth.take(6))
                 }
             }
             R.id.week -> {
@@ -107,47 +104,26 @@ class AnalyticsFragment : Fragment() {
                     radioButtonWeek.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
                     radioButtonMonth.setTextColor(ContextCompat.getColor(requireContext(), R.color.dark_grey))
                     //viewModel.getTodayLeaderboard()
-
+                    adapter.updateIncomeExpenseChart(analyticsResponse.dailyTransactions)
                 }
             }
         }
     }
 
+    private fun setupPowerSpinner(){
+        val months = listOf("1 Year", "6 Months", "3 Months")
 
-    private fun populateGoalProgress(goals: List<Goal>){
-        var totalCurrentAmount = 0.00
-        var totalGoalAmount = 0.00
+        binding.months.setItems(months)
 
-        for(goal in goals){
-            totalCurrentAmount += goal.currentamount
-            totalGoalAmount += goal.targetamount
+        binding.months.selectItemByIndex(1)
+        binding.months.setOnSpinnerItemSelectedListener<String> { _, _, newIndex, newItem ->
+            // `newItem` is the selected month from the spinner
+            // Update the chart based on the selected month
+            adapter.updateIncomeChart(newItem, analyticsResponse.transactionsByMonth)
         }
-
-        val remainingAmount = totalGoalAmount - totalCurrentAmount
-
-        val progress = if (totalGoalAmount > 0) {
-            (totalCurrentAmount / totalGoalAmount * 100).toInt()
-        } else {
-            0
-        }
-
-        binding.amount.text = "${totalCurrentAmount}/${totalGoalAmount} ZAR"
-
-        binding.remainingAmount.text = "${remainingAmount} ZAR remaining to achieve your goal"
-
-        binding.progressBar.progress = progress
 
     }
 
-    private fun populateExpenseCategories(transactions: ArrayList<Transaction>){
-        val expenses = arrayListOf<Transaction>()
-
-        for(transaction in transactions){
-            if(transaction.type == AppConstants.TRANSACTIONTYPE.EXPENSE.name){
-                expenses.add(transaction)
-            }
-        }
-    }
 
     private fun setUpUserDetails(){
         val user = userManager.getUser()
@@ -169,11 +145,19 @@ class AnalyticsFragment : Fragment() {
         analyticsViewModel.status.observe(viewLifecycleOwner)  { status ->
             // Handle status changes (success or failure)
             if (status) {
-                // Success
+                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "analytics update successful!", hideProgressBar = true, )
+
                 progressDialog.dismiss()
+
             } else {
-                // Failure
-                progressDialog.dismiss()
+                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "analytics update failed!", hideProgressBar = true)
+
+                // Dismiss the dialog after 2 seconds
+                Handler(Looper.getMainLooper()).postDelayed({
+                    // Dismiss the dialog after the delay
+                    progressDialog.dismiss()
+
+                }, 2000)
             }
         }
 
@@ -184,15 +168,20 @@ class AnalyticsFragment : Fragment() {
             if(message == "timeout"){
                 timeOutDialog.showTimeoutDialog(requireContext() ){
                     //progressDialog.show()
+                    timeOutDialog.showProgressDialog(requireContext())
+                    timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Fetching analytics...", hideProgressBar = false)
                     analyticsViewModel.fetchAllAnalytics(token, userId)
                 }
             }
         }
 
-        analyticsViewModel.analytics.observe(viewLifecycleOwner, AnalyticsObserver(adapter))
+        analyticsViewModel.analytics.observe(viewLifecycleOwner, AnalyticsObserver(this, adapter))
         analyticsViewModel.fetchAllAnalytics(token, userId)
     }
 
+    fun updateAnalyticData(data: AnalyticsResponse){
+        analyticsResponse = data
+    }
 
     private fun textColor(): Int {
         val typedValue = TypedValue()

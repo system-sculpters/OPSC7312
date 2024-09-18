@@ -1,6 +1,8 @@
 package com.opsc.opsc7312.view.adapter
 
 import android.content.Context
+import android.util.Log
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.github.mikephil.charting.charts.BarChart
@@ -18,18 +20,76 @@ import com.opsc.opsc7312.AppConstants
 import com.opsc.opsc7312.R
 import com.opsc.opsc7312.model.data.model.AnalyticsResponse
 import com.opsc.opsc7312.model.data.model.CategoryExpense
+import com.opsc.opsc7312.model.data.model.Goal
 import com.opsc.opsc7312.model.data.model.IncomeExpense
-import java.util.Calendar
 
-class AnalyticsAdapter(private val context: Context,
-    private val pieChart: PieChart, private val incomeExpenseChart: BarChart,
-                       private val incomeChart: BarChart,
-                       private val totalIncome: TextView, private val textColor: Int) {
+class AnalyticsAdapter(
+    private val context: Context,
+    private val pieChart: PieChart,
+    private val incomeExpenseChart: BarChart,
+    private val incomeChart: BarChart,
+    private val totalIncome: TextView,
+    private val textColor: Int,
+    private val amount: TextView,
+    private val remainingAmount: TextView,
+    private val progressBar: ProgressBar
+) {
 
     fun updateGraph(value: AnalyticsResponse) {
         setupPieChart(value.categoryStats)
         setupIncomeExpenseChart(value.dailyTransactions)
-        setupIncome(value.transactionsByMonth)
+        updateIncomeChart("6 Months", value.transactionsByMonth)
+        setupGoals(value.goals)
+    }
+
+    fun updateIncomeExpenseChart(value: List<IncomeExpense>){
+        setupIncomeExpenseChart(value)
+    }
+
+    fun updateIncomeChart(month: String, value: List<IncomeExpense>){
+        var incomeList: List<IncomeExpense> = listOf()
+
+        Log.d("this is the values", "List count: ${value.size}\nList: $value")
+        if(month == "3 Months"){
+            incomeList = value.take(3)
+        }
+        else if(month == "6 Months"){
+            incomeList =value.take(6)
+        }
+        else {
+            incomeList = value
+        }
+
+        Log.d("this is the income list", "List count: ${incomeList.size}\nList: $incomeList")
+        setupIncome(incomeList)
+    }
+
+    private fun setupGoals(goalsList: List<Goal>){
+        Log.d("this is the goals list", "List count: ${goalsList.size}\nList: $goalsList")
+
+        var totalTargetAmount = 0.0
+        var totalCurrentAmount = 0.0
+
+        for (goal in goalsList){
+            totalCurrentAmount += goal.currentamount
+            totalTargetAmount += goal.targetamount
+        }
+
+        val amountLeft = totalTargetAmount - totalCurrentAmount
+
+        amount.text = "${AppConstants.formatAmount(totalCurrentAmount)}/${AppConstants.formatAmount(totalTargetAmount)} ZAR"
+        remainingAmount.text = "${AppConstants.formatAmount(amountLeft)} ZAR remaining to achieve your goal"
+
+        val progress = if (totalTargetAmount > 0) {
+            (totalCurrentAmount / totalTargetAmount * 100).toInt()
+        } else {
+            0
+        }
+        progressBar.progress = progress
+
+        Log.d("this is the goals list", "\n$amountLeft $totalTargetAmount $totalCurrentAmount" +
+                "${AppConstants.formatAmount(totalCurrentAmount)}/${AppConstants.formatAmount(totalTargetAmount)} ZAR\n" +
+                "\"${AppConstants.formatAmount(amountLeft)} ZAR remaining to achieve your goal")
     }
 
     private fun setupPieChart(categoryList: List<CategoryExpense>) {
@@ -47,6 +107,7 @@ class AnalyticsAdapter(private val context: Context,
 
         val dataSet = PieDataSet(pieEntries, "")
         dataSet.colors = colors
+
 
         val data = PieData(dataSet)
         pieChart.data = data
@@ -69,7 +130,7 @@ class AnalyticsAdapter(private val context: Context,
 
         // Optional: Customize legend appearance (font size, color, etc.)
         legend.textSize = 12f
-        legend.textColor = ContextCompat.getColor(context, R.color.dark_grey)
+        legend.textColor = textColor
 
         pieChart.animateY(1400)
         pieChart.invalidate() // Refresh the chart
@@ -78,17 +139,18 @@ class AnalyticsAdapter(private val context: Context,
 
 
     private fun setupIncomeExpenseChart(incomeExpense: List<IncomeExpense>) {
+        val reversedList = incomeExpense.reversed()
         val incomeEntries = ArrayList<BarEntry>()
         val expenseEntries = ArrayList<BarEntry>()
         val labels = mutableListOf<String>()
 
         // Populating data for the income and expense bars
-        for (i in incomeExpense.indices) {
+        for (i in reversedList.indices) {
 
 
-            incomeEntries.add(BarEntry(i.toFloat(), incomeExpense[i].income.toFloat()))
-            expenseEntries.add(BarEntry(i.toFloat(), incomeExpense[i].expense.toFloat()))
-            labels.add(incomeExpense[i].label)
+            incomeEntries.add(BarEntry(i.toFloat(), reversedList[i].income.toFloat()))
+            expenseEntries.add(BarEntry(i.toFloat(), reversedList[i].expense.toFloat()))
+            labels.add(reversedList[i].label)
         }
 
         // Creating datasets for income and expenses
@@ -159,15 +221,18 @@ class AnalyticsAdapter(private val context: Context,
     }
 
     private fun setupIncome(incomeExpense: List<IncomeExpense>) {
-        totalIncome.text = totalIncome(incomeExpense)
+
+        val lastSixMonths = incomeExpense.reversed()
+        Log.d("incomeExpense list", "this is the count: ${incomeExpense.size}")
+        totalIncome.text = totalIncome(lastSixMonths)
 
         val incomeEntries = ArrayList<BarEntry>()
         val labels = mutableListOf<String>()
 
         // Populating data for the income bars
-        for (i in incomeExpense.indices) {
-            incomeEntries.add(BarEntry(i.toFloat(), incomeExpense[i].income.toFloat()))
-            labels.add(incomeExpense[i].label)
+        for (i in lastSixMonths.indices) {
+            incomeEntries.add(BarEntry(i.toFloat(), lastSixMonths[i].income.toFloat()))
+            labels.add(lastSixMonths[i].label)
         }
 
         // Creating the dataset for income
@@ -183,7 +248,9 @@ class AnalyticsAdapter(private val context: Context,
 
         // Set bar width
         data.barWidth = 0.7f  // Adjust this value for desired bar width
-
+        if(incomeEntries.size > 6){
+            data.barWidth = 0.4f  // Adjust this value for desired bar width
+        }
         // Set the data to the chart
         incomeChart.data = data
 
@@ -191,12 +258,20 @@ class AnalyticsAdapter(private val context: Context,
         legend.textColor = textColor
         // Customize X-axis labels
         val xAxis = incomeChart.xAxis
+        //xAxis.setLabelCount(lastSixMonths.size, true)
+        //xAxis.setAvoidFirstLastClipping(true)
         xAxis.valueFormatter = IndexAxisValueFormatter(labels)  // Set custom labels
         xAxis.position = XAxis.XAxisPosition.BOTTOM
         xAxis.setDrawGridLines(false)  // Disable grid lines
         xAxis.granularity = 1f  // Ensure labels align with bars
         xAxis.isGranularityEnabled = true
         xAxis.textColor = textColor
+
+        if(incomeEntries.size > 6){
+            xAxis.setLabelRotationAngle(45f)  // Rotate labels to avoid overlapping
+            xAxis.spaceMin = 0.35f  // Adjust spacing to make room for labels
+
+        }
 
 
         val yAxisLeft = incomeChart.axisLeft

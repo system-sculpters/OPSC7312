@@ -9,30 +9,25 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.opsc.opsc7312.AppConstants
 import com.opsc.opsc7312.MainActivity
 import com.opsc.opsc7312.R
-import com.opsc.opsc7312.databinding.FragmentCreateGoalBinding
-import com.opsc.opsc7312.model.api.controllers.CategoryController
+import com.opsc.opsc7312.databinding.FragmentUpdateGoalBinding
 import com.opsc.opsc7312.model.api.controllers.GoalController
-import com.opsc.opsc7312.model.api.retrofitclients.GoalRetrofitClient
 import com.opsc.opsc7312.model.data.model.Goal
+import com.opsc.opsc7312.model.data.model.Transaction
 import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
 import com.opsc.opsc7312.model.data.offline.preferences.UserManager
 import com.opsc.opsc7312.view.custom.TimeOutDialog
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
 
-class CreateGoalFragment : Fragment() {
-    private var _binding: FragmentCreateGoalBinding? = null
+class UpdateGoalFragment : Fragment() {
+    private var _binding: FragmentUpdateGoalBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var contributionTypes: List<String>
@@ -45,11 +40,13 @@ class CreateGoalFragment : Fragment() {
 
     private lateinit var timeOutDialog: TimeOutDialog
 
+    private var goalId = ""
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentCreateGoalBinding.inflate(inflater, container, false)
+    ): View? {
+        _binding = FragmentUpdateGoalBinding.inflate(inflater, container, false)
 
 
         userManager = UserManager.getInstance(requireContext())
@@ -64,6 +61,8 @@ class CreateGoalFragment : Fragment() {
 
         setUpInputs()
 
+        loadTransactionDetails()
+
         return binding.root
     }
 
@@ -71,7 +70,25 @@ class CreateGoalFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Access the MainActivity and set the toolbar title
-        (activity as? MainActivity)?.setToolbarTitle("Create Goal")
+        (activity as? MainActivity)?.setToolbarTitle("Goal Details")
+    }
+
+    private fun loadTransactionDetails(){
+        val goal = arguments?.getParcelable<Goal>("goal")
+
+        // Update UI with category data
+        if (goal != null){
+            Log.d("goal", "this is the goal: $goal")
+            val selectedIndex = contributionTypes.indexOf(goal.contrubitiontype)
+            goalId = goal.id
+            binding.goalName.setText(goal.name)
+            binding.targetAmount.setText(AppConstants.formatAmount(goal.targetamount))
+            binding.currentAmount.setText(AppConstants.formatAmount(goal.currentamount))
+            binding.selectedDateText.setText(AppConstants.longToDate(goal.deadline))
+            binding.contributionType.selectItemByIndex(selectedIndex)
+            binding.contributionAmount.setText(AppConstants.formatAmount(goal.currentamount))
+
+        }
     }
 
     private fun setUpInputs(){
@@ -115,12 +132,6 @@ class CreateGoalFragment : Fragment() {
         }
     }
 
-    fun getCurrentDate(): String {
-        val calendar = Calendar.getInstance()
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        return dateFormat.format(calendar.time)
-    }
-
     private fun setUpCategoriesDetails(){
         val user = userManager.getUser()
 
@@ -128,13 +139,13 @@ class CreateGoalFragment : Fragment() {
 
 
         if(token != null){
-            addGoal(token, user.id)
+            updateGoal(token, user.id)
         } else {
 
         }
     }
 
-    private fun addGoal(token: String, id: String) {
+    private fun updateGoal(token: String, id: String) {
         val progressDialog = timeOutDialog.showProgressDialog(requireContext())
 
         val name = binding.goalName.text.toString()
@@ -157,7 +168,7 @@ class CreateGoalFragment : Fragment() {
             return
         }
 
-        val newGoal = Goal(
+        val updatedGoal = Goal(
             userid = id,
             name = name,
             targetamount = targetAmount.toDouble(),
@@ -168,7 +179,7 @@ class CreateGoalFragment : Fragment() {
         )
 
         goalViewModel.status.observe(viewLifecycleOwner){
-            status ->
+                status ->
 
             if (status) {
                 timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Goal creation successful!", hideProgressBar = true)
@@ -178,6 +189,7 @@ class CreateGoalFragment : Fragment() {
                     // Dismiss the dialog after the delay
                     progressDialog.dismiss()
 
+                    changeCurrentFragment(GoalsFragment())
                 }, 2000)
 
             } else {
@@ -198,11 +210,11 @@ class CreateGoalFragment : Fragment() {
                     //progressDialog.show()
                     timeOutDialog.showProgressDialog(requireContext())
                     timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Creating Goal...", hideProgressBar = false)
-                    goalViewModel.createGoal(token, newGoal)                }
+                    goalViewModel.updateGoal(token, goalId, updatedGoal)                }
             }
         }
 
-        goalViewModel.createGoal(token, newGoal)
+        goalViewModel.updateGoal(token, goalId, updatedGoal)
     }
 
     private fun validateData(name: String, targetAmount: String, selectedIndex: Int, contributionAmount: String): Boolean {
@@ -251,9 +263,8 @@ class CreateGoalFragment : Fragment() {
     private fun convertStringToLong(dateString: String): Long {
         val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
-         val date: Date = dateFormat.parse(dateString) ?: throw IllegalArgumentException("Invalid date format")
+        val date: Date = dateFormat.parse(dateString) ?: throw IllegalArgumentException("Invalid date format")
 
         return date.time
     }
-
 }

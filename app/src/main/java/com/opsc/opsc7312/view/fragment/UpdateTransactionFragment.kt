@@ -100,7 +100,7 @@ class UpdateTransactionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Access the MainActivity and set the toolbar title
-        (activity as? MainActivity)?.setToolbarTitle("Update Transaction")
+        (activity as? MainActivity)?.setToolbarTitle("Transaction Details")
     }
 
     private fun loadTransactionDetails(){
@@ -125,6 +125,15 @@ class UpdateTransactionFragment : Fragment() {
             binding.amount.setText(AppConstants.formatAmount(transaction.amount))
 
             setUpCategory(transactionCategory)
+
+            if (transaction.isrecurring) {
+                // Set the toggle button for "Yes" to indicate the transaction is recurring
+                binding.isRecurring.check(R.id.toggleYes)
+            } else {
+                // Set the toggle button for "No" to indicate the transaction is not recurring
+                binding.isRecurring.check(R.id.toggleNo)
+            }
+
             //adapter.setSelectedCategory(transactionCategory)
 
         }

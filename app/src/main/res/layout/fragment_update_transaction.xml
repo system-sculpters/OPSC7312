@@ -175,7 +175,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Yes"
-                android:checked="true"
                 app:cornerRadius="16dp"
                 android:textColor="?attr/colorItemLayoutBg"
                 app:backgroundTint="@color/primary" />

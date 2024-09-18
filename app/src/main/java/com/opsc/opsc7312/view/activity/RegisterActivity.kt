@@ -14,11 +14,12 @@ import com.opsc.opsc7312.databinding.ActivityRegisterBinding
 import com.opsc.opsc7312.model.api.controllers.AuthController
 import com.opsc.opsc7312.model.data.model.User
 import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
+import com.opsc.opsc7312.view.custom.TimeOutDialog
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
     private lateinit var auth: AuthController
-    //private lateinit var tokenManager: TokenManager
+    private lateinit var timeOutDialog: TimeOutDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,12 +34,18 @@ class RegisterActivity : AppCompatActivity() {
         binding.tvSignUpPrompt.setOnClickListener{
             redirectToLogin()
         }
+
+        timeOutDialog = TimeOutDialog()
     }
 
     private fun registerUser() {
+        val progressDialog = timeOutDialog.showProgressDialog(this)
+
         val username = binding.etUsername.text.toString()
         val email = binding.etEmail.text.toString()
         val password = binding.etUsername.text.toString()
+
+        val user = User(username = username, email = email, password = password)
 
         auth.status.observe(this)  { status ->
             // Handle status changes (success or failure)
@@ -52,12 +59,16 @@ class RegisterActivity : AppCompatActivity() {
 
         auth.message.observe(this) { message ->
             // Show message to the user, if needed
-            Log.d("Registration message", message)
+            if(message == "timeout"){
+                timeOutDialog.showTimeoutDialog(this ){
+                    //progressDialog.show()
+                    timeOutDialog.showProgressDialog(this)
+                    timeOutDialog.updateProgressDialog(this, progressDialog, "Connecting...", hideProgressBar = false)
+                    auth.register(user)
+                }
+            }
         }
 
-
-        val user = User(username = username, email = email, password = password)
-        // Example API calls
         auth.register(user)
     }
 

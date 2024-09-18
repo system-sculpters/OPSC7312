@@ -7,5 +7,6 @@
         <attr name="themeBgBorder" format="color"/>
         <attr name="darkerTitle" format="color"/>
         <attr name="userHomeImg" format="color"/>
+        <attr name="switchCompat" format="reference|color"/>
     </declare-styleable>
 </resources>

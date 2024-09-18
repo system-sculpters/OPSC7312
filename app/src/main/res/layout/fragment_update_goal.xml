@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".view.fragment.UpdateGoalFragment"
+    android:orientation="vertical"
+    android:paddingVertical="10dp"
+    android:paddingHorizontal="25dp">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="7"
+        android:paddingBottom="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/name"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/inter_medium"/>
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/goalName"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:inputType="text"
+                android:layout_marginTop="8dp"
+                android:hint="Enter category name"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="4dp"
+                android:background="@drawable/edittext_background"
+                android:fontFamily="@font/inter_medium"
+                android:layout_marginBottom="20dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_medium"
+                android:text="@string/target_amount"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/targetAmount"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:inputType="number"
+                android:layout_marginTop="8dp"
+                android:hint="Enter target amount"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="4dp"
+                android:background="@drawable/edittext_background"
+                android:fontFamily="@font/inter_medium"
+                android:layout_marginBottom="20dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/current_amount"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/inter_medium"/>
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/currentAmount"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:inputType="number"
+                android:layout_marginTop="8dp"
+                android:hint="Enter current amount"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="4dp"
+                android:background="@drawable/edittext_background"
+                android:fontFamily="@font/inter_medium"
+                android:layout_marginBottom="20dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/contribution_amount"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/inter_medium"/>
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/contributionAmount"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:inputType="number"
+                android:layout_marginTop="8dp"
+                android:hint="Enter contribution amount"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="4dp"
+                android:background="@drawable/edittext_background"
+                android:fontFamily="@font/inter_medium"
+                android:layout_marginBottom="20dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/contribution_type"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/inter_medium"/>
+
+            <com.skydoves.powerspinner.PowerSpinnerView
+                android:id="@+id/contributionType"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/edittext_background"
+                android:foreground="?attr/selectableItemBackground"
+                android:hint="Select a question"
+                android:padding="10dp"
+                android:textColor="?attr/themeBgBorder"
+                android:textColorHint="@color/light_grey"
+                android:textSize="16sp"
+                android:gravity="center_vertical"
+                app:spinner_arrow_gravity="end"
+                app:spinner_arrow_padding="8dp"
+                app:spinner_divider_color="@color/dark_grey"
+                app:spinner_divider_show="true"
+                app:spinner_divider_size="0.4dp"
+                app:spinner_item_array="@array/questions1"
+                app:spinner_popup_animation="normal"
+                app:spinner_popup_background="@color/white"
+                app:spinner_popup_elevation="14dp"
+                app:spinner_arrow_tint="@color/dark_grey"
+                android:fontFamily="@font/inter_medium"
+                android:layout_marginBottom="20dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/deadline"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/inter_medium"
+                android:layout_marginBottom="10dp"/>
+
+            <LinearLayout
+                android:id="@+id/deadline"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:background="@drawable/edittext_background"
+                android:padding="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick="showDatePicker"
+                android:gravity="center"
+                android:layout_marginBottom="10dp">
+
+                <ImageView
+                    android:id="@+id/calendar_icon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/baseline_calendar_month_24"
+                    android:scaleType="centerInside"
+                    android:padding="8dp"
+                    android:background="@drawable/rounded_image_background"
+                    android:layout_marginStart="20dp"
+                    app:tint="?attr/whiteItemBorder"/>
+
+                <TextView
+                    android:id="@+id/selectedDateText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:textSize="24sp"
+                    android:textAlignment="center"
+                    android:textStyle="bold"
+                    android:layout_marginStart="20dp"
+                    android:padding="8dp"
+                    android:scaleType="centerInside"/>
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical">
+        <Button
+            android:id="@+id/submitButton"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="@string/update_text"
+            android:textSize="24sp"
+            android:fontFamily="@font/inter_medium"
+            android:background="@drawable/button_background"
+            android:textColor="@color/white"
+            android:elevation="100dp"/>
+    </LinearLayout>
+
+</LinearLayout>

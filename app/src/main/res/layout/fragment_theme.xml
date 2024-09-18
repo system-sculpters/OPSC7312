@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".view.fragment.ThemeFragment"
     android:orientation="vertical"
     android:paddingVertical="25dp"
@@ -78,12 +79,15 @@
 
         <LinearLayout
             android:layout_width="20dp"
-            android:layout_height="20dp">
+            android:layout_height="20dp"
+            android:padding="5dp"
+            android:background="@drawable/theme_checked_background">
             <ImageView
                 android:id="@+id/isCheckedLight"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_automatic_mode" />
+                android:src="@drawable/baseline_check_24"
+                app:tint="?attr/whiteItemBorder" />
         </LinearLayout>
 
     </com.opsc.opsc7312.view.custom.CheckableLinearLayout>
@@ -167,12 +171,15 @@
 
         <LinearLayout
             android:layout_width="20dp"
-            android:layout_height="20dp">
+            android:layout_height="20dp"
+            android:padding="5dp"
+            android:background="@drawable/theme_checked_background">
             <ImageView
                 android:id="@+id/isCheckedDark"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_automatic_mode" />
+                android:src="@drawable/baseline_check_24"
+                app:tint="?attr/whiteItemBorder"/>
         </LinearLayout>
 
     </com.opsc.opsc7312.view.custom.CheckableLinearLayout>
@@ -252,12 +259,15 @@
 
         <LinearLayout
             android:layout_width="20dp"
-            android:layout_height="20dp">
+            android:layout_height="20dp"
+            android:padding="5dp"
+            android:background="@drawable/theme_checked_background">
             <ImageView
                 android:id="@+id/isCheckedSystem"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_automatic_mode" />
+                android:src="@drawable/baseline_check_24"
+                app:tint="?attr/whiteItemBorder"/>
         </LinearLayout>
 
     </com.opsc.opsc7312.view.custom.CheckableLinearLayout>

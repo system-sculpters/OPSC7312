@@ -8,18 +8,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Switch
+import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.opsc.opsc7312.R
 
 class NotificationsFragment : Fragment() {
 
-    private lateinit var switchNotifications: Switch
-    private lateinit var switchNotifyPurchase: Switch
-    private lateinit var switchNotifyGoalProgress: Switch
-    private lateinit var switchAlertGoalReached: Switch
-    private lateinit var switchNotifyProfileUpdated: Switch
-    private lateinit var switchAlertNewLogins: Switch
+    private lateinit var switchNotifications: SwitchCompat
+    private lateinit var switchNotifyPurchase: SwitchCompat
+    private lateinit var switchNotifyGoalProgress: SwitchCompat
+    private lateinit var switchAlertGoalReached: SwitchCompat
+    private lateinit var switchNotifyProfileUpdated: SwitchCompat
+    private lateinit var switchAlertNewLogins: SwitchCompat
 
     private lateinit var sharedPreferences: SharedPreferences
 

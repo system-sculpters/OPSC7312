@@ -1,6 +1,8 @@
 package com.opsc.opsc7312.view.fragment
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +17,7 @@ import com.opsc.opsc7312.model.data.model.Category
 import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
 import com.opsc.opsc7312.model.data.offline.preferences.UserManager
 import com.opsc.opsc7312.view.adapter.CategoryAdapter
+import com.opsc.opsc7312.view.custom.TimeOutDialog
 import com.opsc.opsc7312.view.observers.CategoriesObserver
 
 
@@ -32,6 +35,8 @@ class CategoriesFragment : Fragment() {
 
     private lateinit var tokenManager: TokenManager
 
+    private lateinit var timeOutDialog: TimeOutDialog
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -46,6 +51,7 @@ class CategoriesFragment : Fragment() {
 
         categoryViewModel = ViewModelProvider(this).get(CategoryController::class.java)
 
+        timeOutDialog = TimeOutDialog()
 
         categoryAdapter = CategoryAdapter{
                 category ->
@@ -88,19 +94,31 @@ class CategoriesFragment : Fragment() {
     
 
     private fun observeViewModel(token: String, id: String) {
+        val progressDialog = timeOutDialog.showProgressDialog(requireContext())
+
         // Observe LiveData
         categoryViewModel.status.observe(viewLifecycleOwner)  { status ->
             // Handle status changes (success or failure)
             if (status) {
-                // Success
+                progressDialog.dismiss()
+
+
             } else {
-                // Failure
+               progressDialog.dismiss()
+
             }
         }
 
         categoryViewModel.message.observe(viewLifecycleOwner) { message ->
             // Show message to the user, if needed
-            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+            if(message == "timeout"){
+                timeOutDialog.showTimeoutDialog(requireContext() ){
+                    //progressDialog.show()
+                    timeOutDialog.showProgressDialog(requireContext())
+                    timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "fetching categories...", hideProgressBar = false)
+                    categoryViewModel.getAllCategories(token, id)
+                }
+            }
         }
 
         categoryViewModel.categoryList.observe(viewLifecycleOwner, CategoriesObserver(categoryAdapter, null))

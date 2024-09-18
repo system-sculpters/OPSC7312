@@ -36,6 +36,10 @@ class GoalAdapter (private val onItemClick: (Goal) -> Unit) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val goal = goals[position]
 
+        holder.itemView.setOnClickListener {
+            onItemClick(goal)
+        }
+
         holder.goal_name.text = goal.name
 
         //holder.deadline.text = goal.deadline.toString()
@@ -47,11 +51,8 @@ class GoalAdapter (private val onItemClick: (Goal) -> Unit) :
             holder.deadline.text = AppConstants.convertLongToString(goal.deadline)
         }
 
-        Log.d("deadline", "this is the deadline ${goal.deadline}")
-
-
         holder.progress_amount.text = "${AppConstants.formatAmount(goal.currentamount)}/" +
-                "${AppConstants.formatAmount(goal.targetamount)} ZAR"
+                "${AppConstants.formatAmount(goal.targetamount)}"
 
         val progress = if (goal.targetamount > 0) {
             (goal.currentamount / goal.targetamount * 100).toInt()
@@ -66,8 +67,6 @@ class GoalAdapter (private val onItemClick: (Goal) -> Unit) :
     override fun getItemCount(): Int {
         return goals.size
     }
-
-
 
     // View holder class
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

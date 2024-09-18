@@ -12,50 +12,47 @@ import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import com.opsc.opsc7312.R
 import android.content.res.Configuration
+import com.opsc.opsc7312.databinding.FragmentCreateTransactionBinding
+import com.opsc.opsc7312.databinding.FragmentLanguageBinding
+import com.skydoves.powerspinner.PowerSpinnerView
 import java.util.Locale
 
 class LanguageFragment : Fragment() {
+    private var _binding: FragmentLanguageBinding? = null
+    private val binding get() = _binding!!
 
     private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var languageSpinner: Spinner
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragement_languages, container, false)
+        _binding = FragmentLanguageBinding.inflate(inflater, container, false)
 
         // Initialize SharedPreferences
         sharedPreferences = requireActivity().getSharedPreferences("LanguagePreferences", Context.MODE_PRIVATE)
 
-        // Initialize Spinner
-        languageSpinner = view.findViewById(R.id.languageSpinner)
-
         // Set up the Spinner with English, Afrikaans, and Zulu
-        val languages = arrayOf("English", "Afrikaans", "Zulu")
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, languages)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        languageSpinner.adapter = adapter
+        val languages = listOf("English", "Afrikaans", "Zulu")
+        binding.languageSpinner.setItems(languages)
+
 
         // Load saved language preference and set Spinner selection
         val savedLanguage = sharedPreferences.getString("selectedLanguage", "English")
-        languageSpinner.setSelection(languages.indexOf(savedLanguage))
+        binding.languageSpinner.selectItemByIndex(languages.indexOf(savedLanguage))
 
         // Handle language selection
-        languageSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                val selectedLanguage = parent.getItemAtPosition(position).toString()
-                saveLanguagePreference(selectedLanguage)
-                setLocale(selectedLanguage)
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {
-                // Do nothing
-            }
+        // Assuming 'binding.languageSpinner' is your PowerSpinnerView instance
+        binding.languageSpinner.setOnSpinnerItemSelectedListener<String> { oldIndex, oldItem, newIndex, newItem ->
+            // newItem is the selected language
+            saveLanguagePreference(newItem)
+            setLocale(newItem)
         }
 
-        return view
+
+        return binding.root
     }
 
     private fun saveLanguagePreference(language: String) {

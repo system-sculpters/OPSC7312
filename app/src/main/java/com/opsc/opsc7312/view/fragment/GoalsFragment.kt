@@ -1,6 +1,8 @@
 package com.opsc.opsc7312.view.fragment
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +17,7 @@ import com.opsc.opsc7312.model.data.model.Goal
 import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
 import com.opsc.opsc7312.model.data.offline.preferences.UserManager
 import com.opsc.opsc7312.view.adapter.GoalAdapter
+import com.opsc.opsc7312.view.custom.TimeOutDialog
 import com.opsc.opsc7312.view.observers.GoalObserver
 
 
@@ -31,6 +34,8 @@ class GoalsFragment : Fragment() {
     private lateinit var userManager: UserManager
 
     private lateinit var tokenManager: TokenManager
+
+    private lateinit var timeOutDialog: TimeOutDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,6 +56,8 @@ class GoalsFragment : Fragment() {
         tokenManager = TokenManager.getInstance(requireContext())
 
         goalViewModel = ViewModelProvider(this).get(GoalController::class.java)
+
+        timeOutDialog = TimeOutDialog()
 
         setUpRecyclerView()
 
@@ -73,14 +80,14 @@ class GoalsFragment : Fragment() {
     }
     private fun redirectToDetails(goal: Goal){
         // Create a new instance of CategoryDetailsFragment and pass category data
-        val categoryDetailsFragment = PlaceholderFragment()
+        val goalDetailsFragment = UpdateGoalFragment()
         val bundle = Bundle()
         bundle.putParcelable("goal", goal)
         bundle.putString("screen", "redirectToDetails goal")
-        categoryDetailsFragment.arguments = bundle
+        goalDetailsFragment.arguments = bundle
 
         // Navigate to CategoryDetailsFragment
-        changeCurrentFragment(categoryDetailsFragment)
+        changeCurrentFragment(goalDetailsFragment)
     }
 
     private fun changeCurrentFragment(fragment: Fragment) {
@@ -106,20 +113,27 @@ class GoalsFragment : Fragment() {
     }
 
     private fun observeViewModel(token: String, id: String) {
+        val progressDialog = timeOutDialog.showProgressDialog(requireContext())
         // Observe LiveData
         goalViewModel.status.observe(viewLifecycleOwner)  { status ->
             // Handle status changes (success or failure)
             if (status) {
-                // Success
+                progressDialog.dismiss()
             } else {
-                // Failure
+                progressDialog.dismiss()
             }
         }
 
-        goalViewModel.message.observe(viewLifecycleOwner) { message ->
-            // Show message to the user, if needed
-            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        goalViewModel.message.observe(viewLifecycleOwner){ message ->
+            if(message == "timeout"){
+                timeOutDialog.showTimeoutDialog(requireContext() ){
+                    //progressDialog.show()
+                    timeOutDialog.showProgressDialog(requireContext())
+                    timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Connecting...", hideProgressBar = false)
+                    goalViewModel.getAllGoals(token, id)                }
+            }
         }
+
 
         goalViewModel.goalList.observe(viewLifecycleOwner, GoalObserver(goalAdapter, binding.amount))
 

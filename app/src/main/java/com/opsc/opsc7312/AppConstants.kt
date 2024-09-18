@@ -31,6 +31,11 @@ object AppConstants {
         WEEKLY, BIWEEKLY, MONTHLY
     }
 
+    enum class SORT_TYPE{
+        NAME_ASCENDING, NAME_DESCENDING, DATE_ASCENDING,
+        DATE_DESCENDING, HIGHEST_AMOUNT, LOWEST_AMOUNT
+    }
+
     val COLOR_DICTIONARY = mapOf(
         "Red" to R.color.red,
         "Blue" to R.color.blue,
@@ -138,4 +143,10 @@ object AppConstants {
         return String.format("%.2f", amount)
     }
 
+    fun longToDate(timestamp: Long): String{
+        val date = Date(timestamp)
+        val sdf = SimpleDateFormat("dd/MM/yyyy")
+        val formattedDate = sdf.format(date)
+        return formattedDate
+    }
 }

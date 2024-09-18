@@ -78,7 +78,7 @@
         android:textSize="20sp"
         android:textStyle="bold"
         android:layout_marginBottom="10dp"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="25dp"/>
     <!-- Language Setting -->
     <LinearLayout
         android:id="@+id/language_section"

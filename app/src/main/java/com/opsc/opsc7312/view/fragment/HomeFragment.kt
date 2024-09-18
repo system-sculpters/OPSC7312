@@ -62,6 +62,10 @@ class HomeFragment : Fragment() {
             redirectToDetails(transaction)
         }
 
+        binding.seeAll.setOnClickListener {
+            changeCurrentFragment(TransactionsFragment())
+        }
+
         setUpUserDetails()
 
         setUpRecyclerView()

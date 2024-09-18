@@ -110,6 +110,7 @@ class LoginActivity : AppCompatActivity() {
             if(message == "timeout"){
                 timeOutDialog.showTimeoutDialog(this ){
                     //progressDialog.show()
+                    timeOutDialog.showProgressDialog(this)
                     timeOutDialog.updateProgressDialog(this, progressDialog, "Connecting...", hideProgressBar = false)
                     auth.login(user)
                 }

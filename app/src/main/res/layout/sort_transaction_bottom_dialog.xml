@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/sortByLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sort by"
+        android:textColor="@color/light_grey"
+        android:fontFamily="@font/inter_medium"
+        android:textSize="15sp"/>
+
+    <RadioGroup
+        android:id="@+id/sortOptionsGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/sortByNameAscending"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Name (A to Z)"
+            android:fontFamily="@font/inter_semibold"
+            android:layoutDirection="rtl"
+            android:textSize="15sp"/>
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/sortByNameDescending"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Name (Z to A)"
+            android:fontFamily="@font/inter_semibold"
+            android:layoutDirection="rtl"
+            android:textSize="15sp"/>
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/sortByDateAscending"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Date (ascending)"
+            android:fontFamily="@font/inter_semibold"
+            android:layoutDirection="rtl"
+            android:textSize="15sp"/>
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/sortByDateDescending"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Date (descending)"
+            android:fontFamily="@font/inter_semibold"
+            android:layoutDirection="rtl"
+            android:textSize="15sp"/>
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/sortByHigehestAmount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Amount: High to Low"
+            android:fontFamily="@font/inter_semibold"
+            android:layoutDirection="rtl"
+            android:textSize="15sp" />
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/sortByLowestAmount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Amount: Low to High"
+            android:fontFamily="@font/inter_semibold"
+            android:layoutDirection="rtl"
+            android:textSize="15sp"/>
+    </RadioGroup>
+
+</LinearLayout>

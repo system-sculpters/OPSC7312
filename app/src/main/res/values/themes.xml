@@ -27,10 +27,21 @@
         <item name="darkerTitle">@color/darkerTitle</item>
 
         <item name="userHomeImg">@color/userHomeImg</item>
+
+        <item name="thumbTint">@color/textPrimary</item>
+
+        <item name="trackTint">@color/textPrimary</item>
+
+
     </style>
 
     <style name="Theme.OPSC7312" parent="Base.Theme.OPSC7312" />
 
+    <style name="CustomSwitchStyle" parent="Widget.AppCompat.CompoundButton.Switch">
+        <item name="thumbTint">@color/textPrimary</item>
+
+        <item name="trackTint">@color/textPrimary</item>
+    </style>
 
 
 </resources>

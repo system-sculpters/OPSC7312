@@ -9,6 +9,8 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
@@ -32,6 +34,7 @@ import com.opsc.opsc7312.model.api.controllers.UserController
 import com.opsc.opsc7312.model.data.model.User
 import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
 import com.opsc.opsc7312.model.data.offline.preferences.UserManager
+import com.opsc.opsc7312.view.custom.TimeOutDialog
 import java.io.ByteArrayOutputStream
 
 class ProfileFragment : Fragment() {
@@ -50,10 +53,13 @@ class ProfileFragment : Fragment() {
     private lateinit var takePictureLauncher: ActivityResultLauncher<Intent>
     private lateinit var pickPictureLauncher: ActivityResultLauncher<Intent>
 
+    private lateinit var timeOutDialog: TimeOutDialog
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        _binding = FragmentProfileBinding.inflate(inflater, container, false)
 
         // Initialize SharedPreferences
         sharedPreferences = requireActivity().getSharedPreferences("User", Context.MODE_PRIVATE)
@@ -65,7 +71,7 @@ class ProfileFragment : Fragment() {
 
         userViewModel = ViewModelProvider(this).get(UserController::class.java)
 
-        _binding = FragmentProfileBinding.inflate(inflater, container, false)
+        timeOutDialog = TimeOutDialog()
 
         // Load profile data
         loadProfileData()
@@ -175,6 +181,8 @@ class ProfileFragment : Fragment() {
     }
 
     private fun saveProfileData() {
+        val progressDialog = timeOutDialog.showProgressDialog(requireContext())
+
         val user = userManager.getUser()
         val token = tokenManager.getToken()
         val username = binding.username.text.toString()
@@ -185,12 +193,29 @@ class ProfileFragment : Fragment() {
 
         userViewModel.status.observe(viewLifecycleOwner){
             status ->
-            if(status){
-                userManager.saveUser(updatedUser)
-                Toast.makeText(requireContext(), "Profile data updated successfully!", Toast.LENGTH_SHORT).show()
 
+            if (status) {
+                userManager.saveUser(updatedUser)
+                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Profile update successful!", hideProgressBar = true, )
+
+                // Dismiss the dialog after 2 seconds
+                Handler(Looper.getMainLooper()).postDelayed({
+                    // Dismiss the dialog after the delay
+                    progressDialog.dismiss()
+
+                }, 2000)
+
+                //Toast.makeText(requireContext(), "Category creation successful", Toast.LENGTH_LONG).show()
             } else {
-                Toast.makeText(requireContext(), "Profile update unsuccessful", Toast.LENGTH_SHORT).show()
+                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Profile update failed!", hideProgressBar = true)
+
+                // Dismiss the dialog after 2 seconds
+                Handler(Looper.getMainLooper()).postDelayed({
+                    // Dismiss the dialog after the delay
+                    progressDialog.dismiss()
+
+
+                }, 2000)
             }
         }
 
@@ -243,10 +268,20 @@ class ProfileFragment : Fragment() {
     }
 
     private fun saveNewPassword(newPassword: String, confirmPassword: String) {
+        val progressDialog = timeOutDialog.showProgressDialog(requireContext())
+
         val user = userManager.getUser()
         val token = tokenManager.getToken()
 
         if(newPassword != confirmPassword){
+            timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Confirm new password does not match", hideProgressBar = true)
+
+            Handler(Looper.getMainLooper()).postDelayed({
+                // Dismiss the dialog after the delay
+                progressDialog.dismiss()
+
+            }, 2000)
+
             return
         }
 
@@ -254,12 +289,27 @@ class ProfileFragment : Fragment() {
 
         userViewModel.status.observe(viewLifecycleOwner){
                 status ->
-            if(status){
 
-                Toast.makeText(requireContext(), "Password updated successfully!", Toast.LENGTH_SHORT).show()
+            if (status) {
+                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Password update successful!", hideProgressBar = true, )
+
+                // Dismiss the dialog after 2 seconds
+                Handler(Looper.getMainLooper()).postDelayed({
+                    // Dismiss the dialog after the delay
+                    progressDialog.dismiss()
+
+                }, 2000)
 
             } else {
-                Toast.makeText(requireContext(), "Password update unsuccessful", Toast.LENGTH_SHORT).show()
+                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Password update failed!", hideProgressBar = true)
+
+                // Dismiss the dialog after 2 seconds
+                Handler(Looper.getMainLooper()).postDelayed({
+                    // Dismiss the dialog after the delay
+                    progressDialog.dismiss()
+
+
+                }, 2000)
             }
         }
 

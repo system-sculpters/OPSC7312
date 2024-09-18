@@ -225,10 +225,6 @@ class UpdateCategoryFragment : Fragment() {
 
 
     private fun setUpInputs(){
-        //binding.selectedDateText.text = getCurrentDate()
-
-
-
         binding.contributionType.setItems(transactionTypes)
 
         binding.iconContainer.setOnClickListener {
@@ -263,8 +259,6 @@ class UpdateCategoryFragment : Fragment() {
         val selectedIcon = iconAdapter.getSelectedItem()
 
         if (!validateCategoryData(catName, binding.contributionType.selectedIndex, selectedColor, selectedIcon)) {
-            binding.progressBar.visibility = View.GONE
-            //AppConstants.showCustomToasts(binding.root, messages)
             return
         }
 
@@ -280,7 +274,6 @@ class UpdateCategoryFragment : Fragment() {
         )
 
         categoryViewModel.status.observe(viewLifecycleOwner) { status ->
-            binding.progressBar.visibility = View.GONE
             if (status) {
                 timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Category update successful!", hideProgressBar = true, )
 

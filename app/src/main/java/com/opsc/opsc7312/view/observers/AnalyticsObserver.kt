@@ -4,8 +4,10 @@ import android.util.Log
 import androidx.lifecycle.Observer
 import com.opsc.opsc7312.model.data.model.AnalyticsResponse
 import com.opsc.opsc7312.view.adapter.AnalyticsAdapter
+import com.opsc.opsc7312.view.fragment.AnalyticsFragment
 
 class AnalyticsObserver(
+    private val fragment: AnalyticsFragment,
     private val adapter: AnalyticsAdapter
 ): Observer<AnalyticsResponse> {
 
@@ -18,6 +20,8 @@ class AnalyticsObserver(
     override fun onChanged(value: AnalyticsResponse) {
         // Update the data in the CategoryListAdapter
         adapter.updateGraph(value)
+
+        fragment.updateAnalyticData(value)
 
         Log.d("Analytics", "Analytics retrieved: $value")
     }
