@@ -42,6 +42,8 @@ class UpdateGoalFragment : Fragment() {
 
     private var goalId = ""
 
+    private var errorMessage = ""
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -70,7 +72,7 @@ class UpdateGoalFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Access the MainActivity and set the toolbar title
-        (activity as? MainActivity)?.setToolbarTitle("Goal Details")
+        (activity as? MainActivity)?.setToolbarTitle("Details")
     }
 
     private fun loadTransactionDetails(){
@@ -165,6 +167,9 @@ class UpdateGoalFragment : Fragment() {
         }
 
         if(!validateData(name, targetAmount, contributionType.selectedIndex, contributionAmount)){
+            progressDialog.dismiss()
+            timeOutDialog.showAlertDialog(requireContext(), errorMessage)
+            errorMessage = ""
             return
         }
 
@@ -221,36 +226,27 @@ class UpdateGoalFragment : Fragment() {
         var errors = 0
 
         if (name.isBlank()) {
-            AppConstants.showFloatingToast(requireContext(), "Enter a goal name")
             errors += 1
+            errorMessage += "• Enter a goal name\n"
         }
 
         if (targetAmount.isBlank()) {
-            AppConstants.showFloatingToast(requireContext(), "Enter a target amount")
+            errorMessage += "• Enter a target amount\n"
             errors += 1
         }
 
         if (selectedIndex == -1) {
             //binding.contributionType.error = "Enter a transaction type"
-            AppConstants.showFloatingToast(requireContext(), "Select a contribution type")
+            errorMessage += "• Select a contribution type\n"
             errors += 1
         }
 
         if (contributionAmount.isBlank()) {
-            AppConstants.showFloatingToast(requireContext(), "Select contribution amount")
+            errorMessage += "• Enter a contribution amount"
             errors += 1
         }
 
         return errors == 0
-    }
-
-
-    private fun redirectToGoals(){
-        // Create a new instance of GoalsFragment
-        val goalsFragment = GoalsFragment()
-
-        // Navigate to CategoryDetailsFragment
-        changeCurrentFragment(goalsFragment)
     }
 
     private fun changeCurrentFragment(fragment: Fragment) {

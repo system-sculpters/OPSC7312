@@ -72,6 +72,8 @@ class CreateCategoryFragment : Fragment() {
 
     private var selectedIconName:String = "Select an icon"
 
+    private var errorMessage = ""
+
     private lateinit var timeOutDialog: TimeOutDialog
 
 
@@ -123,13 +125,8 @@ class CreateCategoryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Access the MainActivity and set the toolbar title
-        (activity as? MainActivity)?.setToolbarTitle("Create Category")
+        (activity as? MainActivity)?.setToolbarTitle("Create")
 
-        // Check if permission is granted
-        if (!Settings.canDrawOverlays(requireContext())) {
-            val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + requireContext().packageName))
-            startActivityForResult(intent, REQUEST_CODE)
-        }
     }
 
     private fun setUpColors(){
@@ -217,7 +214,9 @@ class CreateCategoryFragment : Fragment() {
         val selectedIcon = iconAdapter.getSelectedItem()
 
         if (!validateCategoryData(catName, binding.contributionType.selectedIndex, selectedColor, selectedIcon)) {
-            //AppConstants.showCustomToasts(binding.root, messages)
+            progressDialog.dismiss()
+            timeOutDialog.showAlertDialog(requireContext(), errorMessage)
+            errorMessage = ""
             return
         }
 
@@ -235,17 +234,17 @@ class CreateCategoryFragment : Fragment() {
         categoryViewModel.status.observe(viewLifecycleOwner)  { status ->
             // Handle status changes (success or failure)
             if (status) {
-                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "analytics update successful!", hideProgressBar = true, )
+                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "category created successfully!", hideProgressBar = true, )
 
                 // Dismiss the dialog after 2 seconds
                 Handler(Looper.getMainLooper()).postDelayed({
                     // Dismiss the dialog after the delay
                     progressDialog.dismiss()
-
+                    redirectToCategories()
                 }, 2000)
 
             } else {
-                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "analytics update failed!", hideProgressBar = true)
+                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "category creation failed!", hideProgressBar = true)
 
                 // Dismiss the dialog after 2 seconds
                 Handler(Looper.getMainLooper()).postDelayed({
@@ -279,37 +278,24 @@ class CreateCategoryFragment : Fragment() {
         var errors = 0
 
         if (catName.isBlank()) {
-            AppConstants.showFloatingToast(requireContext(), "Enter a category name")
             errors += 1
             messages.add("Enter a category name")
+            errorMessage += "• Enter a category name\n"
         }
 
         if (transactionType == -1) {
-            //binding.contributionType.error = "Enter a transaction type"
-            AppConstants.showFloatingToast(requireContext(), "Select a transaction type")
             messages.add("Select a transaction type")
+            errorMessage += "• Select a transaction type\n"
             errors += 1
         }
 
         if (selectedColor == null) {
-            //binding.colorLabel.text = "Select a color"
-            //binding.colorLabel.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
-            AppConstants.showFloatingToast(requireContext(), "Select a color")
-            messages.add("Select an color")
+            errorMessage +="• Select an color\n"
             errors += 1
-        } else {
-            binding.colorLabel.text = "Color"
-//            val typedValue = TypedValue()
-//            requireContext().theme.resolveAttribute(R.attr.themeBgBorder, typedValue, true)
-//            val color = typedValue.data
-//            binding.colorLabel.setTextColor(color)
         }
 
         if (selectedIcon == null) {
-            messages.add("Select an icon")
-            AppConstants.showFloatingToast(requireContext(), "Select an icon")
-//            binding.iconName.text = "Select an icon"
-//            binding.iconName.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
+            errorMessage += "• Select an icon"
             errors += 1
         }
 

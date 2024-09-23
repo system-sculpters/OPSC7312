@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.opsc.opsc7312.AppConstants
 import com.opsc.opsc7312.R
 import com.opsc.opsc7312.model.data.model.Goal
+import java.lang.ref.WeakReference
 
 class GoalAdapter (private val onItemClick: (Goal) -> Unit) :
     RecyclerView.Adapter<GoalAdapter.ViewHolder>(){
@@ -74,6 +75,7 @@ class GoalAdapter (private val onItemClick: (Goal) -> Unit) :
         val deadline: TextView = itemView.findViewById(R.id.deadline)
         val progress_amount: TextView = itemView.findViewById(R.id.progress_amount)
         val progressBar: ProgressBar = itemView.findViewById(R.id.progressBar)
+
 
     }
 }

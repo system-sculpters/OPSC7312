@@ -8,178 +8,184 @@
     android:orientation="vertical"
     android:paddingHorizontal="25dp"
     android:paddingVertical="20dp">
-
-    <TextView
-        android:id="@+id/category_name_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/name"
-        android:textSize="20sp"
-        android:fontFamily="@font/inter_medium"
-        android:layout_marginTop="10dp"/>
-
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/category_name_edittext"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:inputType="text"
-        android:layout_marginTop="8dp"
-        android:paddingHorizontal="12dp"
-        android:paddingVertical="4dp"
-        android:background="@drawable/edittext_background"
-        android:fontFamily="@font/inter_medium"
-        android:hint="Enter category name"
-        />
-
-    <TextView
-        android:id="@+id/color_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/color_label"
-        android:textSize="17sp"
-        android:textStyle="bold"
-        android:layout_marginTop="20dp"/>
-
-    <LinearLayout
-        android:id="@+id/color_layout_container"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:orientation="horizontal"
-        android:layout_marginTop="8dp">
-
+        android:layout_height="0dp"
+        android:layout_weight="7"
+        android:paddingBottom="10dp">
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:orientation="horizontal">
-
-            <!-- RecyclerView -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/color_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" />
-        </LinearLayout>
-
-
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/icon_label"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:text="@string/icon_label"
-        android:textSize="20sp"
-        android:fontFamily="@font/inter_medium"
-        android:layout_marginTop="20dp"/>
-
-
-
-    <LinearLayout
-        android:layout_width="250dp"
-        android:layout_height="60dp"
-        android:orientation="horizontal"
-        android:background="@drawable/edittext_background"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="8dp"
-        android:id="@+id/icon_container"
-        android:clickable="true"
-        android:focusable="true"
-        android:onClick="showIconPickerDialog"
-        android:gravity="center_vertical"
-        >
-        <LinearLayout
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:orientation="vertical"
-            android:background="@drawable/edittext_background"
-
-            android:layout_marginStart="8dp"
-            android:id="@+id/icon_image_container"
-
-            android:gravity="center"
-            >
-            <ImageView
-                android:id="@+id/icon_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/category_name_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/transparent"
-                app:tint="?attr/themeBgBorder"
+                android:text="@string/name"
+                android:textSize="20sp"
+                android:fontFamily="@font/inter_medium"
+                android:layout_marginTop="10dp"/>
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/category_name_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:inputType="text"
+                android:layout_marginTop="8dp"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="4dp"
+                android:background="@drawable/edittext_background"
+                android:fontFamily="@font/inter_medium"
+                android:hint="Enter category name"
                 />
 
-        </LinearLayout>
+            <TextView
+                android:id="@+id/color_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/color_label"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:layout_marginTop="20dp"/>
 
-        <TextView
-            android:id="@+id/icon_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/icon_selection"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_marginStart="20dp"
-            android:textColor="?attr/themeBgBorder"/>
+            <LinearLayout
+                android:id="@+id/color_layout_container"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
+                    <!-- RecyclerView -->
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/color_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" />
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/icon_label"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="@string/icon_label"
+                android:textSize="20sp"
+                android:fontFamily="@font/inter_medium"
+                android:layout_marginTop="20dp"/>
+
+
+
+            <LinearLayout
+                android:layout_width="250dp"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:background="@drawable/edittext_background"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="8dp"
+                android:id="@+id/icon_container"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick="showIconPickerDialog"
+                android:gravity="center_vertical"
+                >
+                <LinearLayout
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:orientation="vertical"
+                    android:background="@drawable/edittext_background"
+
+                    android:layout_marginStart="8dp"
+                    android:id="@+id/icon_image_container"
+
+                    android:gravity="center"
+                    >
+                    <ImageView
+                        android:id="@+id/icon_image_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/transparent"
+                        app:tint="?attr/themeBgBorder"
+                        />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/icon_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/icon_selection"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="20dp"
+                    android:textColor="?attr/themeBgBorder"/>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/type"
+                android:textSize="20sp"
+                android:fontFamily="@font/inter_medium"
+                android:layout_marginTop="20dp"/>
+
+            <com.skydoves.powerspinner.PowerSpinnerView
+                android:id="@+id/contributionType"
+                android:layout_width="250dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/edittext_background"
+                android:foreground="?attr/selectableItemBackground"
+                android:hint="Select a question"
+                android:padding="10dp"
+                android:textColor="?attr/themeBgBorder"
+                android:textColorHint="@color/light_grey"
+                android:textSize="16sp"
+                android:gravity="center_vertical"
+                app:spinner_arrow_gravity="end"
+                app:spinner_arrow_padding="8dp"
+                app:spinner_divider_color="?attr/themeBgBorder"
+                app:spinner_divider_show="true"
+                app:spinner_divider_size="0.4dp"
+                app:spinner_item_array="@array/questions1"
+                app:spinner_popup_animation="normal"
+                app:spinner_popup_background="?attr/colorItemLayoutBg"
+                app:spinner_popup_elevation="14dp"
+                app:spinner_arrow_tint="?attr/themeBgBorder"
+                android:fontFamily="@font/inter_medium"
+                android:layout_marginBottom="20dp"/>
+        </LinearLayout>
+    </ScrollView>
+
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical">
+        <Button
+            android:id="@+id/submit_button"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="@string/create_text"
+            android:textSize="30sp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/inter_medium"
+            android:background="@drawable/button_background"
+            android:elevation="100dp"/>
     </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/type"
-        android:textSize="20sp"
-        android:fontFamily="@font/inter_medium"
-        android:layout_marginTop="20dp"/>
 
-    <com.skydoves.powerspinner.PowerSpinnerView
-        android:id="@+id/contributionType"
-        android:layout_width="250dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="12dp"
-        android:background="@drawable/edittext_background"
-        android:foreground="?attr/selectableItemBackground"
-        android:hint="Select a question"
-        android:padding="10dp"
-        android:textColor="?attr/themeBgBorder"
-        android:textColorHint="@color/light_grey"
-        android:textSize="16sp"
-        android:gravity="center_vertical"
-        app:spinner_arrow_gravity="end"
-        app:spinner_arrow_padding="8dp"
-        app:spinner_divider_color="?attr/themeBgBorder"
-        app:spinner_divider_show="true"
-        app:spinner_divider_size="0.4dp"
-        app:spinner_item_array="@array/questions1"
-        app:spinner_popup_animation="normal"
-        app:spinner_popup_background="?attr/colorItemLayoutBg"
-        app:spinner_popup_elevation="14dp"
-        app:spinner_arrow_tint="?attr/themeBgBorder"
-        android:fontFamily="@font/inter_medium"
-        android:layout_marginBottom="20dp"/>
-
-
-    <View
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
-
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone"
-        style="?android:attr/progressBarStyle"
-        />
-
-    <Button
-        android:id="@+id/submit_button"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:text="@string/create_text"
-        android:textSize="30sp"
-        android:textColor="@color/white"
-        android:fontFamily="@font/inter_medium"
-        android:background="@drawable/button_background"
-        android:layout_marginTop="80dp"
-        android:elevation="100dp"/>
 
 </LinearLayout>

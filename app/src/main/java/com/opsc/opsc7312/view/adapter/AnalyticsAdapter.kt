@@ -2,6 +2,7 @@ package com.opsc.opsc7312.view.adapter
 
 import android.content.Context
 import android.util.Log
+import android.util.TypedValue
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -16,6 +17,7 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.github.mikephil.charting.formatter.ValueFormatter
 import com.opsc.opsc7312.AppConstants
 import com.opsc.opsc7312.R
 import com.opsc.opsc7312.model.data.model.AnalyticsResponse
@@ -108,8 +110,8 @@ class AnalyticsAdapter(
         val dataSet = PieDataSet(pieEntries, "")
         dataSet.colors = colors
 
-
         val data = PieData(dataSet)
+        data.setValueFormatter(PercentValueFormatter())
         pieChart.data = data
 
         // Customize PieChart appearance
@@ -120,22 +122,39 @@ class AnalyticsAdapter(
         // Remove entry labels (text on the chart)
         pieChart.setDrawEntryLabels(false)
 
-        // Move the legend to the right
+        // Adjust the hole size to create more space for labels
+        pieChart.holeRadius = 50f // Increase this to make the hole bigger
+        pieChart.transparentCircleRadius = 55f // Optional, increase the transparent circle radius
+
+        // Move the PieChart to the left by increasing the right offset and decreasing the left offset
+        pieChart.setExtraOffsets(0f, 10f, 50f, 10f) // Left, Top, Right, Bottom offsets
+
+        // Customize the legend (labels) appearance and position
         val legend = pieChart.legend
         legend.isEnabled = true
         legend.verticalAlignment = Legend.LegendVerticalAlignment.TOP
-        legend.horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT
-        legend.orientation = Legend.LegendOrientation.VERTICAL
+        legend.horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT // Place the labels at the end (right)
+        legend.orientation = Legend.LegendOrientation.VERTICAL // Display labels in vertical orientation
         legend.setDrawInside(false) // Keep the legend outside the chart
-
-        // Optional: Customize legend appearance (font size, color, etc.)
         legend.textSize = 12f
         legend.textColor = textColor
+        legend.xOffset = -70f // Adjust this to move the legend more to the right
 
+        // Optionally, reduce the label size if needed
+        data.setValueTextSize(10f)
+
+        // Animate and refresh the chart
         pieChart.animateY(1400)
+
+        // Set the color of the center hole using the ?attr/colorItemLayoutBg attribute
+        val typedValue = TypedValue()
+        val theme = context?.theme
+        theme?.resolveAttribute(R.attr.colorItemLayoutBg, typedValue, true)
+        val holeColor = ContextCompat.getColor(context, typedValue.resourceId)
+        pieChart.setHoleColor(holeColor)
+
         pieChart.invalidate() // Refresh the chart
     }
-
 
 
     private fun setupIncomeExpenseChart(incomeExpense: List<IncomeExpense>) {
@@ -301,5 +320,10 @@ class AnalyticsAdapter(
 
     private fun getColor(color: String): Int {
         return AppConstants.COLOR_DICTIONARY[color] ?: R.color.dark_grey // Return black if color not found
+    }
+    class PercentValueFormatter : ValueFormatter() {
+        override fun getPieLabel(value: Float, pieEntry: PieEntry?): String {
+            return String.format("%.1f%%", value) // Format to one decimal place
+        }
     }
 }

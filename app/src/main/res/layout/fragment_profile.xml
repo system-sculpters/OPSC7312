@@ -9,36 +9,7 @@
     android:paddingHorizontal="20dp">
 
     <!-- Profile Picture with Edit Icon -->
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        >
 
-        <!-- Profile Image with Rounded Border -->
-        <ImageView
-            android:id="@+id/iconImageView"
-            android:layout_width="130dp"
-            android:layout_height="130dp"
-            android:src="@drawable/ic_profile"
-            android:background="@drawable/rounded_image_background"
-            android:scaleType="centerCrop"
-            android:padding="10dp"
-            android:clipToOutline="true"
-            android:outlineProvider="background" />
-
-
-        <!-- Pencil Icon Overlay for Editing Profile Picture -->
-        <ImageButton
-            android:id="@+id/btnEditProfileImage"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="8dp"
-            android:padding="5dp"
-            android:background="@drawable/rounded_image_background2"
-            android:src="@drawable/ic_pencil" />
-    </FrameLayout>
 
     <!-- Username Label and Container -->
     <TextView
@@ -104,12 +75,12 @@
         android:gravity="center_vertical">
 
         <TextView
+            android:id="@+id/password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Password"
             android:fontFamily="@font/inter_medium"
-            android:textSize="20sp"
-            android:textColor="@color/lighter_grey"/>
+            android:textSize="20sp"/>
 
         <View
             android:layout_width="0dp"

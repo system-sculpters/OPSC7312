@@ -31,6 +31,7 @@ class AuthController : ViewModel() {
                     createdUser?.let {
                         status.postValue(true)
                         message.postValue("Request failed with code: ${it}")
+                        userData.postValue(it)
                         Log.d("MainActivity", "User created: $it")
                     }
                 } else {
@@ -126,6 +127,58 @@ class AuthController : ViewModel() {
                 Log.e("MainActivity", "Error: ${t.message}")
                 status.postValue(false)
                 message.postValue("Request failed with code: ${t.message }")
+            }
+        })
+    }
+
+    fun registerWithSSO(user: User){
+        api.registerWithSSO(user).enqueue(object : Callback<User> {
+            override fun onResponse(call: Call<User>, response: Response<User>) {
+                if (response.isSuccessful) {
+                    val createdUser = response.body()
+                    createdUser?.let {
+                        status.postValue(true)
+                        message.postValue("Request failed with code: ${it}")
+                        Log.d("MainActivity", "User created: $it")
+                    }
+                } else {
+                    status.postValue(false)
+                    message.postValue("Request failed with code: ${response.code()}: ${response.body()?.error}")
+                    Log.e("MainActivity", "Request failed with code: ${response.code()}: ${response.body()?.error}")
+                }
+            }
+
+            override fun onFailure(call: Call<User>, t: Throwable) {
+                Log.e("MainActivity", "Error: ${t.message}")
+                status.postValue(false)
+                message.postValue(t.message)
+            }
+        })
+    }
+
+    fun loginWithSSO(user: User) {
+        api.loginWithSSO(user).enqueue(object : Callback<User> {
+            override fun onResponse(call: Call<User>, response: Response<User>) {
+                if (response.isSuccessful) {
+                    val loggedInUser = response.body()
+                    //tokenManager.saveToken(token)
+                    loggedInUser?.let {
+                        status.postValue(true)
+                        message.postValue("Request failed with code: ${it}")
+                        userData.postValue(it)
+                        Log.d("MainActivity", "User created: $it")
+                    }
+                } else {
+                    status.postValue(false)
+                    message.postValue("Request failed with code: ${response.code()}")
+                    Log.e("MainActivity", "Request failed with code: ${response.code()}:  ${response.body()?.error}")
+                }
+            }
+
+            override fun onFailure(call: Call<User>, t: Throwable) {
+                Log.e("MainActivity", "Error: ${t.message}")
+                status.postValue(false)
+                message.postValue(t.message)
             }
         })
     }

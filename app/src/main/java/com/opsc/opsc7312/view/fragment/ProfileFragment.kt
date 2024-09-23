@@ -77,7 +77,6 @@ class ProfileFragment : Fragment() {
         loadProfileData()
 
         // Set up listeners
-        binding.btnEditProfileImage.setOnClickListener { showImagePickerDialog() }
         binding.btnSave.setOnClickListener {
             saveProfileData()
         }
@@ -166,11 +165,15 @@ class ProfileFragment : Fragment() {
 
         val username = user.username
         val email = user.email
+        val password = userManager.getPassword()
         val profileImageBase64 = sharedPreferences.getString("profileImage", "")
+
 
         binding.username.setText(username)
         binding.email.setText(email)
-        //passwordEditText.setText(password)
+
+
+        binding.password.setText(maskPassword(password))
 
         // Load profile image if available
         if (!profileImageBase64.isNullOrEmpty()) {
@@ -207,7 +210,7 @@ class ProfileFragment : Fragment() {
 
                 //Toast.makeText(requireContext(), "Category creation successful", Toast.LENGTH_LONG).show()
             } else {
-                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Profile update failed!", hideProgressBar = true)
+                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "The email address is already in use by another account!", hideProgressBar = true)
 
                 // Dismiss the dialog after 2 seconds
                 Handler(Looper.getMainLooper()).postDelayed({
@@ -274,23 +277,18 @@ class ProfileFragment : Fragment() {
         val token = tokenManager.getToken()
 
         if(newPassword != confirmPassword){
-            timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Confirm new password does not match", hideProgressBar = true)
+            progressDialog.dismiss()
 
-            Handler(Looper.getMainLooper()).postDelayed({
-                // Dismiss the dialog after the delay
-                progressDialog.dismiss()
-
-            }, 2000)
+            timeOutDialog.showAlertDialog(requireContext(), "Confirm new password does not match")
 
             return
         }
-
-        //val updatedUser = User(id = user.id, username = username, email = email)
 
         userViewModel.status.observe(viewLifecycleOwner){
                 status ->
 
             if (status) {
+                userManager.savePassword(newPassword)
                 timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Password update successful!", hideProgressBar = true, )
 
                 // Dismiss the dialog after 2 seconds
@@ -317,4 +315,8 @@ class ProfileFragment : Fragment() {
             userViewModel.updatePassword(token, user.id, newPassword)
         }
     }
+    private fun maskPassword(password: String): String {
+        return "*".repeat(password.length) // Replace each character with '*'
+    }
+
 }

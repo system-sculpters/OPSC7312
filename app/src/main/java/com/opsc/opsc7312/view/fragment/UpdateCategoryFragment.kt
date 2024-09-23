@@ -72,6 +72,7 @@ class UpdateCategoryFragment : Fragment() {
 
     private lateinit var timeOutDialog: TimeOutDialog
 
+    private var errorMessage = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -122,13 +123,8 @@ class UpdateCategoryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Access the MainActivity and set the toolbar title
-        (activity as? MainActivity)?.setToolbarTitle("Category Details")
+        (activity as? MainActivity)?.setToolbarTitle("Details")
 
-        // Check if permission is granted
-        if (!Settings.canDrawOverlays(requireContext())) {
-            val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + requireContext().packageName))
-            startActivityForResult(intent, REQUEST_CODE)
-        }
     }
 
     private fun loadCategoryDetails(){
@@ -252,13 +248,15 @@ class UpdateCategoryFragment : Fragment() {
     private fun updateCategory(token: String, id: String) {
         val progressDialog = timeOutDialog.showProgressDialog(requireContext())
 
-        Log.d("selectedIndex", "the selected index is ${binding.contributionType.selectedIndex}")
         val catName = binding.categoryNameEdittext.text.toString()
 
         val selectedColor = colorAdapter.getSelectedItem()
         val selectedIcon = iconAdapter.getSelectedItem()
 
         if (!validateCategoryData(catName, binding.contributionType.selectedIndex, selectedColor, selectedIcon)) {
+            progressDialog.dismiss()
+            timeOutDialog.showAlertDialog(requireContext(), errorMessage)
+            errorMessage = ""
             return
         }
 
@@ -323,39 +321,27 @@ class UpdateCategoryFragment : Fragment() {
         var errors = 0
 
         if (catName.isBlank()) {
-            AppConstants.showFloatingToast(requireContext(), "Enter a category name")
             errors += 1
             messages.add("Enter a category name")
+            errorMessage += "• Enter a category name\n"
         }
 
         if (transactionType == -1) {
-            //binding.contributionType.error = "Enter a transaction type"
-            AppConstants.showFloatingToast(requireContext(), "Select a transaction type")
             messages.add("Select a transaction type")
+            errorMessage += "• Select a transaction type\n"
             errors += 1
         }
 
         if (selectedColor == null) {
-            //binding.colorLabel.text = "Select a color"
-            //binding.colorLabel.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
-            AppConstants.showFloatingToast(requireContext(), "Select a color")
-            messages.add("Select an color")
+            errorMessage +="• Select an color\n"
             errors += 1
-        } else {
-            binding.colorLabel.text = "Color"
-//            val typedValue = TypedValue()
-//            requireContext().theme.resolveAttribute(R.attr.themeBgBorder, typedValue, true)
-//            val color = typedValue.data
-//            binding.colorLabel.setTextColor(color)
         }
 
         if (selectedIcon == null) {
-            messages.add("Select an icon")
-            AppConstants.showFloatingToast(requireContext(), "Select an icon")
-//            binding.iconName.text = "Select an icon"
-//            binding.iconName.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
+            errorMessage += "• Select an icon"
             errors += 1
         }
+
 
         val test = "Cat Name: $catName, transaction type: $transactionType, Color: ${selectedColor?.name}, icon: ${selectedIcon?.let { getIconName(it) }}"
         Log.d("Category", test)

@@ -12,6 +12,7 @@ import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import com.opsc.opsc7312.R
 import android.content.res.Configuration
+import com.opsc.opsc7312.MainActivity
 import com.opsc.opsc7312.databinding.FragmentCreateTransactionBinding
 import com.opsc.opsc7312.databinding.FragmentLanguageBinding
 import com.skydoves.powerspinner.PowerSpinnerView
@@ -53,6 +54,13 @@ class LanguageFragment : Fragment() {
 
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Access the MainActivity and set the toolbar title
+        (activity as? MainActivity)?.setToolbarTitle("Language")
     }
 
     private fun saveLanguagePreference(language: String) {

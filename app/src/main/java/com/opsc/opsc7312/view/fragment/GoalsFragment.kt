@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.opsc.opsc7312.MainActivity
 import com.opsc.opsc7312.R
 import com.opsc.opsc7312.databinding.FragmentGoalsBinding
 import com.opsc.opsc7312.model.api.controllers.GoalController
@@ -66,11 +67,22 @@ class GoalsFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Access the MainActivity and set the toolbar title
+        (activity as? MainActivity)?.setToolbarTitle("Goals")
+    }
+
     private fun setUpRecyclerView(){
+
         binding.recycleView.layoutManager = LinearLayoutManager(requireContext())
         binding.recycleView.setHasFixedSize(true)
         binding.recycleView.adapter = goalAdapter
+
+        setItemTouchHelper()
     }
+
 
     private fun redirectToCreate(){
         // Create a new instance of CategoryDetailsFragment and pass category data
@@ -139,5 +151,9 @@ class GoalsFragment : Fragment() {
 
         // Example API calls
         goalViewModel.getAllGoals(token, id)
+    }
+
+    private fun setItemTouchHelper(){
+
     }
 }

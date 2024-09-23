@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 
 object AppConstants {
 
@@ -140,7 +141,7 @@ object AppConstants {
     }
 
     fun formatAmount(amount: Double): String {
-        return String.format("%.2f", amount)
+        return String.format(Locale.US,"%.2f", amount)
     }
 
     fun longToDate(timestamp: Long): String{

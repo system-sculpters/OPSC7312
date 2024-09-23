@@ -44,7 +44,7 @@
                 android:id="@+id/amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="4000 ZAR"
+                android:text="0,00/0,00 ZAR"
                 android:textSize="20sp"
                 android:textAlignment="textEnd"
                 android:fontFamily="@font/inter_bold"
@@ -95,12 +95,13 @@
 
         </LinearLayout>
 
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycle_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:layout_weight="2"
+
             />
     </LinearLayout>
 

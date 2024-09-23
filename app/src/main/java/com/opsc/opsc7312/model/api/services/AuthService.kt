@@ -14,6 +14,12 @@ interface AuthService {
     @POST("auth/signin")
     fun login(@Body user: User): Call<User>
 
+    @POST("auth/signup-sso")
+    fun registerWithSSO(@Body user: User): Call<User>
+
+    @POST("auth/signin-sso")
+    fun loginWithSSO(@Body user: User): Call<User>
+
     @POST("auth/logout")
     fun logout(@Header("Authorization") token: String): Call<Void>
 

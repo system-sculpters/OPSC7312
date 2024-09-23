@@ -3,10 +3,13 @@ package com.opsc.opsc7312.model.data.offline.preferences
 import android.content.Context
 import android.content.SharedPreferences
 import com.opsc.opsc7312.model.data.model.User
+import java.security.MessageDigest
 
 class UserManager private constructor(context: Context){
     private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+
+
 
     // Save token
     fun saveUser(user: User) {
@@ -38,6 +41,16 @@ class UserManager private constructor(context: Context){
         editor.apply()
     }
 
+    fun savePassword(password: String) {
+        val editor = sharedPreferences.edit()
+        editor.putString("password", password) // Save the hashed password
+        editor.apply()
+    }
+
+    fun getPassword(): String {
+        val password = sharedPreferences.getString("password", null)!!
+        return password
+    }
     companion object {
         @Volatile
         private var INSTANCE: UserManager? = null

@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.PieChart
+import com.opsc.opsc7312.MainActivity
 import com.opsc.opsc7312.R
 import com.opsc.opsc7312.databinding.FragmentAnalyticsBinding
 import com.opsc.opsc7312.model.api.controllers.AnalyticsController
@@ -80,11 +81,20 @@ class AnalyticsFragment : Fragment() {
         radioButtonWeek.setOnClickListener{onRadioButtonClicked(it)}
         radioButtonMonth.setOnClickListener{onRadioButtonClicked(it)}
 
+        binding.editGoals.setOnClickListener {
+            changeCurrentFragment(GoalsFragment())
+        }
+
         setupPowerSpinner()
 
         return binding.root
     }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
+        // Access the MainActivity and set the toolbar title
+        (activity as? MainActivity)?.setToolbarTitle("Analytics")
+    }
 
 
     private fun onRadioButtonClicked(view: View) {
@@ -165,7 +175,7 @@ class AnalyticsFragment : Fragment() {
             // Show message to the user, if needed
             Log.d("Transactions message", message)
 
-            if(message == "timeout"){
+            if(message == "timeout" || message.contains("Unable to resolve host")){
                 timeOutDialog.showTimeoutDialog(requireContext() ){
                     //progressDialog.show()
                     timeOutDialog.showProgressDialog(requireContext())
@@ -188,5 +198,12 @@ class AnalyticsFragment : Fragment() {
         requireContext().theme.resolveAttribute(R.attr.themeBgBorder, typedValue, true)
         val color = typedValue.data
         return color
+    }
+
+    private fun changeCurrentFragment(fragment: Fragment) {
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.frame_layout, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 }

@@ -11,6 +11,7 @@ import android.widget.Switch
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.opsc.opsc7312.MainActivity
 import com.opsc.opsc7312.R
 
 class NotificationsFragment : Fragment() {
@@ -52,6 +53,13 @@ class NotificationsFragment : Fragment() {
         setupListeners()
 
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Access the MainActivity and set the toolbar title
+        (activity as? MainActivity)?.setToolbarTitle("Notifications")
     }
 
     private fun applySwitchStyles() {

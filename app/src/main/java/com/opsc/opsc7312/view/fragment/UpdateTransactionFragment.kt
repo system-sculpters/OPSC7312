@@ -62,6 +62,8 @@ class UpdateTransactionFragment : Fragment() {
 
     private var transactionId = ""
 
+    private var errorMessage = ""
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -100,7 +102,7 @@ class UpdateTransactionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Access the MainActivity and set the toolbar title
-        (activity as? MainActivity)?.setToolbarTitle("Transaction Details")
+        (activity as? MainActivity)?.setToolbarTitle("Details")
     }
 
     private fun loadTransactionDetails(){
@@ -219,6 +221,9 @@ class UpdateTransactionFragment : Fragment() {
 
 
         if(!verifyData(transactionName, amount, selectedCategoryId, binding.transactionType.selectedIndex)){
+            progressDialog.dismiss()
+            timeOutDialog.showAlertDialog(requireContext(), errorMessage)
+            errorMessage = ""
             return
         }
         val transactionType = transactionTypes[binding.transactionType.selectedIndex]
@@ -235,7 +240,6 @@ class UpdateTransactionFragment : Fragment() {
         Log.d("newTransaction", "this is the transaction: $updatedTransaction")
 
         transactionViewModel.status.observe(viewLifecycleOwner) { status ->
-            binding.progressBar.visibility = View.GONE
             if (status) {
                 timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Transaction update successful!", hideProgressBar = true, )
 
@@ -255,7 +259,6 @@ class UpdateTransactionFragment : Fragment() {
                 Handler(Looper.getMainLooper()).postDelayed({
                     // Dismiss the dialog after the delay
                     progressDialog.dismiss()
-
 
                 }, 2000)
             }
@@ -279,23 +282,22 @@ class UpdateTransactionFragment : Fragment() {
         var errors = 0
 
         if (transactionName.isBlank()) {
-            AppConstants.showFloatingToast(requireContext(), "Enter a transaction name")
+            errorMessage += "• Enter a transaction name\n"
             errors += 1
         }
 
         if (amount.isBlank()) {
-            AppConstants.showFloatingToast(requireContext(), "Enter a transaction amount")
+            errorMessage += "• Enter a transaction amount\n"
             errors += 1
         }
 
         if (selectedCategory.isBlank()) {
-            AppConstants.showFloatingToast(requireContext(), "Select a category")
+            errorMessage += "• Select a category\n"
             errors += 1
         }
 
         if (transactionType == -1) {
-            //binding.contributionType.error = "Enter a transaction type"
-            AppConstants.showFloatingToast(requireContext(), "Select a transaction type")
+            errorMessage += "• Select a transaction type"
             errors += 1
         }
 
@@ -305,7 +307,6 @@ class UpdateTransactionFragment : Fragment() {
     private fun observeViewModel(token: String, id: String) {
         val progressDialog = timeOutDialog.showProgressDialog(requireContext())
 
-// Observe LiveData
         categoryViewModel.status.observe(viewLifecycleOwner)  { status ->
             // Handle status changes (success or failure)
             if (status) {

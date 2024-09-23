@@ -45,6 +45,8 @@ class CreateGoalFragment : Fragment() {
 
     private lateinit var timeOutDialog: TimeOutDialog
 
+    private var errorMessage = ""
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -71,7 +73,7 @@ class CreateGoalFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Access the MainActivity and set the toolbar title
-        (activity as? MainActivity)?.setToolbarTitle("Create Goal")
+        (activity as? MainActivity)?.setToolbarTitle("Create")
     }
 
     private fun setUpInputs(){
@@ -115,12 +117,6 @@ class CreateGoalFragment : Fragment() {
         }
     }
 
-    fun getCurrentDate(): String {
-        val calendar = Calendar.getInstance()
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        return dateFormat.format(calendar.time)
-    }
-
     private fun setUpCategoriesDetails(){
         val user = userManager.getUser()
 
@@ -154,6 +150,9 @@ class CreateGoalFragment : Fragment() {
         }
 
         if(!validateData(name, targetAmount, contributionType.selectedIndex, contributionAmount)){
+            progressDialog.dismiss()
+            timeOutDialog.showAlertDialog(requireContext(), errorMessage)
+            errorMessage = ""
             return
         }
 
@@ -177,7 +176,7 @@ class CreateGoalFragment : Fragment() {
                 Handler(Looper.getMainLooper()).postDelayed({
                     // Dismiss the dialog after the delay
                     progressDialog.dismiss()
-
+                    redirectToGoals()
                 }, 2000)
 
             } else {
@@ -209,23 +208,23 @@ class CreateGoalFragment : Fragment() {
         var errors = 0
 
         if (name.isBlank()) {
-            AppConstants.showFloatingToast(requireContext(), "Enter a goal name")
             errors += 1
+            errorMessage += "• Enter a goal name\n"
         }
 
         if (targetAmount.isBlank()) {
-            AppConstants.showFloatingToast(requireContext(), "Enter a target amount")
+            errorMessage += "• Enter a target amount\n"
             errors += 1
         }
 
         if (selectedIndex == -1) {
             //binding.contributionType.error = "Enter a transaction type"
-            AppConstants.showFloatingToast(requireContext(), "Select a contribution type")
+            errorMessage += "• Select a contribution type\n"
             errors += 1
         }
 
         if (contributionAmount.isBlank()) {
-            AppConstants.showFloatingToast(requireContext(), "Select contribution amount")
+            errorMessage += "• Enter a contribution amount"
             errors += 1
         }
 

@@ -122,7 +122,7 @@
                 android:foreground="?attr/selectableItemBackground"
                 android:hint="Select a question"
                 android:padding="10dp"
-                android:textColor="@color/dark_grey"
+                android:textColor="?attr/themeBgBorder"
                 android:textColorHint="@color/light_grey"
                 android:textSize="16sp"
                 android:gravity="center_vertical"
@@ -133,9 +133,9 @@
                 app:spinner_divider_size="0.4dp"
                 app:spinner_item_array="@array/questions1"
                 app:spinner_popup_animation="normal"
-                app:spinner_popup_background="@color/white"
+                app:spinner_popup_background="?attr/colorItemLayoutBg"
                 app:spinner_popup_elevation="14dp"
-                app:spinner_arrow_tint="@color/dark_grey"
+                app:spinner_arrow_tint="?attr/themeBgBorder"
                 android:fontFamily="@font/inter_medium"
                 android:layout_marginBottom="20dp"/>
 

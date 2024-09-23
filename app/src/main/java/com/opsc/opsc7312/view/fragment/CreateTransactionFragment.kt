@@ -57,7 +57,7 @@ class CreateTransactionFragment : Fragment() {
 
     private lateinit var categoryViewModel: CategoryController
 
-
+    private var errorMessage = ""
 
     private var isRecurring = true
 
@@ -131,7 +131,7 @@ class CreateTransactionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Access the MainActivity and set the toolbar title
-        (activity as? MainActivity)?.setToolbarTitle("Create Transaction")
+        (activity as? MainActivity)?.setToolbarTitle("Create")
     }
 
     private fun setUpInputs(){
@@ -214,6 +214,9 @@ class CreateTransactionFragment : Fragment() {
 
 
         if(!verifyData(transactionName, amount, selectedCategoryId, binding.transactionType.selectedIndex)){
+            progressDialog.dismiss()
+            timeOutDialog.showAlertDialog(requireContext(), errorMessage)
+            errorMessage = ""
             return
         }
         val transactionType = transactionTypes[binding.transactionType.selectedIndex]
@@ -231,7 +234,6 @@ class CreateTransactionFragment : Fragment() {
         Log.d("newTransaction", "this is the transaction: $newTransaction")
 
         transactionViewModel.status.observe(viewLifecycleOwner) { status ->
-            binding.progressBar.visibility = View.GONE
             if (status) {
                 timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Transaction creation successful!", hideProgressBar = true, )
 
@@ -275,23 +277,22 @@ class CreateTransactionFragment : Fragment() {
         var errors = 0
 
         if (transactionName.isBlank()) {
-            AppConstants.showFloatingToast(requireContext(), "Enter a transaction name")
+            errorMessage += "• Enter a transaction name\n"
             errors += 1
         }
 
         if (amount.isBlank()) {
-            AppConstants.showFloatingToast(requireContext(), "Enter a transaction amount")
+            errorMessage += "• Enter a transaction amount\n"
             errors += 1
         }
 
         if (selectedCategory.isBlank()) {
-            AppConstants.showFloatingToast(requireContext(), "Select a category")
+            errorMessage += "• Select a category\n"
             errors += 1
         }
 
         if (transactionType == -1) {
-            //binding.contributionType.error = "Enter a transaction type"
-            AppConstants.showFloatingToast(requireContext(), "Select a transaction type")
+            errorMessage += "• Select a transaction type"
             errors += 1
         }
 
@@ -309,11 +310,8 @@ class CreateTransactionFragment : Fragment() {
                 timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Categories retrieved successfully!", hideProgressBar = true, )
 
                 // Dismiss the dialog after 2 seconds
-                Handler(Looper.getMainLooper()).postDelayed({
-                    // Dismiss the dialog after the delay
-                    progressDialog.dismiss()
+                progressDialog.dismiss()
 
-                }, 2000)
             } else {
                 // Failure
 
@@ -330,7 +328,8 @@ class CreateTransactionFragment : Fragment() {
         }
 
         categoryViewModel.message.observe(viewLifecycleOwner){ message ->
-            if(message == "timeout"){
+            if(message == "timeout" || message.contains("Unable to resolve host")){
+                progressDialog.dismiss()
                 timeOutDialog.showTimeoutDialog(requireContext() ){
                     //progressDialog.show()
                     timeOutDialog.showProgressDialog(requireContext())

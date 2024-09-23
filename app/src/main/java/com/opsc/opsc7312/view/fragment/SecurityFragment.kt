@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.Switch
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.opsc.opsc7312.MainActivity
 import com.opsc.opsc7312.R
 
 
@@ -16,6 +17,7 @@ class SecurityFragment : Fragment(R.layout.fragment_security) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as? MainActivity)?.setToolbarTitle("Security")
 
         // Initialize SharedPreferences
         sharedPreferences = requireActivity().getSharedPreferences("SecurityPreferences", Context.MODE_PRIVATE)
@@ -34,6 +36,8 @@ class SecurityFragment : Fragment(R.layout.fragment_security) {
             updateSwitchColors(isChecked, biometricsSwitch)
         }
     }
+
+
 
     private fun getBiometricPreference(): Boolean {
         // Retrieve the saved biometric preference, default to false if not set

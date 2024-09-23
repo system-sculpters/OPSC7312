@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.opsc.opsc7312.AppConstants
+import com.opsc.opsc7312.MainActivity
 import com.opsc.opsc7312.R
 import com.opsc.opsc7312.databinding.FragmentHomeBinding
 import com.opsc.opsc7312.model.api.controllers.AuthController
@@ -73,7 +74,12 @@ class HomeFragment : Fragment() {
 
         return binding.root
     }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
+        // Access the MainActivity and set the toolbar title
+        (activity as? MainActivity)?.setToolbarTitle("Home")
+    }
     private fun setUpUserDetails(){
         val user = userManager.getUser()
 
@@ -106,11 +112,8 @@ class HomeFragment : Fragment() {
                 timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Transaction retrieval successful!", hideProgressBar = true)
 
                 // Dismiss the dialog after 2 seconds
-                Handler(Looper.getMainLooper()).postDelayed({
-                    // Dismiss the dialog after the delay
-                    progressDialog.dismiss()
+                progressDialog.dismiss()
 
-                }, 1000)
 
             } else {
                 timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Transaction retrieval failed!", hideProgressBar = true)
@@ -120,7 +123,7 @@ class HomeFragment : Fragment() {
                     // Dismiss the dialog after the delay
                     progressDialog.dismiss()
 
-                }, 2000)
+                }, 1000)
             }
 
         }

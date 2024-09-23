@@ -46,7 +46,12 @@ class UserController : ViewModel() {
 
     fun updateEmailAndUsername(userToken: String, id: String, user: User){
         val token = "Bearer $userToken"
-        api.updateEmailAndUsername(token, id, user).enqueue(object : Callback<User> {
+
+
+        val call = api.updateEmailAndUsername(token, id, user)
+        val url = call.request().url.toString()
+        Log.d("MainActivity", "Request URL: $url")
+        call.enqueue(object : Callback<User> {
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 if (response.isSuccessful) {
                     val updatedUser = response.body()
@@ -72,7 +77,11 @@ class UserController : ViewModel() {
 
     fun updatePassword(userToken: String, id: String, password: String){
         val token = "Bearer $userToken"
-        api.updatePassword(token, id, password).enqueue(object : Callback<User> {
+        val call = api.updatePassword(token, id, password)
+        val url = call.request().url.toString()
+        Log.d("MainActivity", "Request URL: $url")
+
+        call.enqueue(object : Callback<User> {
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 if (response.isSuccessful) {
                     val updatedPassword = response.body()

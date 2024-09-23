@@ -6,13 +6,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".view.activity.RegisterActivity"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingHorizontal="25dp"
-    android:paddingVertical="20dp">
+    android:paddingHorizontal="32dp"
+    android:paddingVertical="15dp"
+    >
 
     <ImageView
         android:id="@+id/imageViewTop"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="120dp"
         android:contentDescription="Top Image"
         android:src="@drawable/register"
         app:layout_constraintTop_toTopOf="parent"
@@ -50,9 +51,9 @@
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/etUsername"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="55dp"
         android:inputType="text"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         android:hint="Username"
         android:paddingHorizontal="12dp"
         android:background="@drawable/edittext_background"
@@ -64,9 +65,9 @@
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/etEmail"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="55dp"
         android:inputType="text"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="25dp"
         android:hint="Email"
         android:paddingHorizontal="12dp"
         android:paddingVertical="4dp"
@@ -80,20 +81,21 @@
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/etPassword"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="55dp"
         android:inputType="textPassword"
         android:hint="Password"
         android:paddingHorizontal="12dp"
         android:paddingVertical="4dp"
         android:background="@drawable/edittext_background"
         android:fontFamily="@font/inter_medium"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="25dp"
         app:layout_constraintTop_toBottomOf="@id/etEmail"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
 
     <LinearLayout
+        android:id="@+id/loginOptions"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -102,11 +104,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginBottom="30dp"
-        android:layout_marginTop="40dp">
+        android:layout_marginTop="20dp">
         <Button
             android:id="@+id/btnSignIn"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="55dp"
             android:text="Sign Up"
             android:textColor="@color/white"
             android:textSize="24sp"
@@ -124,5 +126,34 @@
             android:text="@string/signin_redirect"
             android:textSize="14sp"/>
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/google_login"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="20dp"
+        android:background="@drawable/edittext_background"
+        android:layout_marginTop="30dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintTop_toBottomOf="@id/loginOptions"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:contentDescription="Top Image"
+            android:src="@drawable/google"
+            android:layout_marginEnd="20dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/whiteItemBorder"
+            android:text="@string/google"
+            android:fontFamily="@font/inter_medium"
+            android:textSize="20sp"/>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
