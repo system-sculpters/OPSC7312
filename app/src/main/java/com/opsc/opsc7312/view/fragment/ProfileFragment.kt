@@ -28,8 +28,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.opsc.opsc7312.MainActivity
 import com.opsc.opsc7312.R
 import com.opsc.opsc7312.databinding.FragmentProfileBinding
-import com.opsc.opsc7312.databinding.FragmentSettingsBinding
-import com.opsc.opsc7312.model.api.controllers.TransactionController
 import com.opsc.opsc7312.model.api.controllers.UserController
 import com.opsc.opsc7312.model.data.model.User
 import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
@@ -77,13 +75,8 @@ class ProfileFragment : Fragment() {
         loadProfileData()
 
         // Set up listeners
-        binding.btnSave.setOnClickListener {
-            saveProfileData()
-        }
+        setUpListeners()
 
-        binding.ChangePassword.setOnClickListener{
-            showChangePasswordDialog()
-        }
 
         // Initialize activity result launchers
         initializeActivityResultLaunchers()
@@ -91,6 +84,23 @@ class ProfileFragment : Fragment() {
         return binding.root
     }
 
+    private fun setUpListeners(){
+        //binding.selectedDateText.text = getCurrentDate()
+
+        val user = userManager.getUser()
+
+        val token = tokenManager.getToken()
+
+        binding.btnSave.setOnClickListener {
+            if (token != null) {
+                saveProfileData(token, user.id)
+            }
+        }
+
+        binding.ChangePassword.setOnClickListener{
+            showChangePasswordDialog()
+        }
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -183,16 +193,14 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun saveProfileData() {
+    private fun saveProfileData(token: String, userId: String) {
         val progressDialog = timeOutDialog.showProgressDialog(requireContext())
 
-        val user = userManager.getUser()
-        val token = tokenManager.getToken()
         val username = binding.username.text.toString()
         val email = binding.email.text.toString()
         //val password = passwordEditText.text.toString()
 
-        val updatedUser = User(id = user.id, username = username, email = email)
+        val updatedUser = User(id = userId, username = username, email = email)
 
         userViewModel.status.observe(viewLifecycleOwner){
             status ->
@@ -222,9 +230,19 @@ class ProfileFragment : Fragment() {
             }
         }
 
-        if (token != null) {
-            userViewModel.updateEmailAndUsername(token, user.id, updatedUser)
+        userViewModel.message.observe(viewLifecycleOwner){ message ->
+            if(message == "timeout"|| message.contains("Unable to resolve host")){
+                timeOutDialog.showTimeoutDialog(requireContext() ){
+                    progressDialog.dismiss()
+                    timeOutDialog.showProgressDialog(requireContext())
+                    timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Connecting...", hideProgressBar = false)
+                    userViewModel.updateEmailAndUsername(token, userId, updatedUser)
+                }
+            }
         }
+
+        userViewModel.updateEmailAndUsername(token, userId, updatedUser)
+
     }
 
     private fun saveProfileImageToPreferences(bitmap: Bitmap) {

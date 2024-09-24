@@ -150,8 +150,12 @@ class RegisterActivity : AppCompatActivity() {
 
 
     fun signInWithGoogle() {
-        val signInIntent = googleSignInClient.signInIntent
-        startActivityForResult(signInIntent, RC_SIGN_IN)
+        firebaseAuth.signOut()
+
+        googleSignInClient.signOut().addOnCompleteListener {
+            val signInIntent = googleSignInClient.signInIntent
+            startActivityForResult(signInIntent, RC_SIGN_IN)
+        }
     }
 
     // Handle the sign-in result
@@ -182,7 +186,6 @@ class RegisterActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     val firebaseUser = firebaseAuth.currentUser
-                    Toast.makeText(this, "firebaseUser: ${firebaseUser?.displayName}, ${firebaseUser?.email}", Toast.LENGTH_SHORT).show()
 
                     // Send ID token to the backend
                     if (firebaseUser != null) {

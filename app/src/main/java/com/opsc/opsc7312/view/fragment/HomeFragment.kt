@@ -118,12 +118,9 @@ class HomeFragment : Fragment() {
             } else {
                 timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Transaction retrieval failed!", hideProgressBar = true)
 
-                // Dismiss the dialog after 2 seconds
-                Handler(Looper.getMainLooper()).postDelayed({
-                    // Dismiss the dialog after the delay
-                    progressDialog.dismiss()
+                // Dismiss the dialog after the delay
+                progressDialog.dismiss()
 
-                }, 1000)
             }
 
         }
@@ -132,6 +129,8 @@ class HomeFragment : Fragment() {
             if(message == "timeout"){
                 timeOutDialog.showTimeoutDialog(requireContext() ){
                     //progressDialog.show()
+                    // Dismiss the previous progress dialog (if visible)
+                    progressDialog.dismiss()
                     timeOutDialog.showProgressDialog(requireContext())
                     timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Connecting...", hideProgressBar = false)
                     transactionViewModel.getAllTransactions(token, userId)

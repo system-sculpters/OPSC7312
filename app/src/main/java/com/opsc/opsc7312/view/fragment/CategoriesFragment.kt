@@ -120,7 +120,7 @@ class CategoriesFragment : Fragment() {
             // Show message to the user, if needed
             if(message == "timeout" || message.contains("Unable to resolve host")){
                 timeOutDialog.showTimeoutDialog(requireContext() ){
-                    //progressDialog.show()
+                    progressDialog.dismiss()
                     timeOutDialog.showProgressDialog(requireContext())
                     timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "fetching categories...", hideProgressBar = false)
                     categoryViewModel.getAllCategories(token, id)

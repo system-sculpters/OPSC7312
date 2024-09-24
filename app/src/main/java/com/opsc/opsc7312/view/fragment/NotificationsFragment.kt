@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -71,7 +72,7 @@ class NotificationsFragment : Fragment() {
             ),
             intArrayOf(
                 ContextCompat.getColor(requireContext(), R.color.primary),
-                ContextCompat.getColor(requireContext(), R.color.dark_grey)
+                textColor()
             )
         )
 
@@ -83,7 +84,7 @@ class NotificationsFragment : Fragment() {
             ),
             intArrayOf(
                 ContextCompat.getColor(requireContext(), R.color.primary),
-                ContextCompat.getColor(requireContext(), R.color.dark_grey)
+                textColor()
             )
         )
 
@@ -154,5 +155,12 @@ class NotificationsFragment : Fragment() {
         switchAlertGoalReached.isChecked = sharedPreferences.getBoolean("alert_goal_reached", false)
         switchNotifyProfileUpdated.isChecked = sharedPreferences.getBoolean("notify_profile_updated", false)
         switchAlertNewLogins.isChecked = sharedPreferences.getBoolean("alert_new_logins", false)
+    }
+
+    private fun textColor(): Int {
+        val typedValue = TypedValue()
+        requireContext().theme.resolveAttribute(R.attr.themeBgBorder, typedValue, true)
+        val color = typedValue.data
+        return color
     }
 }

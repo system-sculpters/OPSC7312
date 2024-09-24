@@ -32,7 +32,6 @@
 
         <item name="trackTint">@color/textPrimary</item>
 
-
     </style>
 
     <style name="Theme.OPSC7312" parent="Base.Theme.OPSC7312" />
@@ -44,7 +43,7 @@
     </style>
 
     <style name="splashScreenTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="android:windowBackground">@drawable/result</item>
+        <item name="android:windowBackground">@drawable/splash_image</item>
         <item name="android:statusBarColor">@color/light_grey</item>
     </style>
 

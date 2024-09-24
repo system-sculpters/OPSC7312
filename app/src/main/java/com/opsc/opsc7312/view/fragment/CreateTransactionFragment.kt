@@ -260,9 +260,9 @@ class CreateTransactionFragment : Fragment() {
         }
 
         transactionViewModel.message.observe(viewLifecycleOwner){ message ->
-            if(message == "timeout"){
+            if(message == "timeout"|| message.contains("Unable to resolve host")){
                 timeOutDialog.showTimeoutDialog(requireContext() ){
-                    //progressDialog.show()
+                    progressDialog.dismiss()
                     timeOutDialog.showProgressDialog(requireContext())
                     timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Connecting...", hideProgressBar = false)
                     transactionViewModel.createTransaction(token, newTransaction)
@@ -302,7 +302,6 @@ class CreateTransactionFragment : Fragment() {
     private fun observeViewModel(token: String, id: String) {
         val progressDialog = timeOutDialog.showProgressDialog(requireContext())
 
-// Observe LiveData
         categoryViewModel.status.observe(viewLifecycleOwner)  { status ->
             // Handle status changes (success or failure)
             if (status) {
@@ -331,7 +330,7 @@ class CreateTransactionFragment : Fragment() {
             if(message == "timeout" || message.contains("Unable to resolve host")){
                 progressDialog.dismiss()
                 timeOutDialog.showTimeoutDialog(requireContext() ){
-                    //progressDialog.show()
+                    progressDialog.dismiss()
                     timeOutDialog.showProgressDialog(requireContext())
                     timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Connecting...", hideProgressBar = false)
                     categoryViewModel.getAllCategories(token, id)

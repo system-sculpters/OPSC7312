@@ -15,24 +15,27 @@
         android:orientation="vertical">
 
         <!-- Notifications Toggle -->
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/edittext_background"
+            android:background="@drawable/settings_background"
+            android:elevation="4dp"
+            android:orientation="horizontal"
             android:padding="8dp">
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch_notifications"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:text="Notifications"
-                android:textSize="13sp"
-                android:fontFamily="@font/inter_semibold"
-                android:padding="12dp"
-                android:thumbTint="?attr/thumbTint"
-                android:trackTint="?attr/trackTint" />
+                android:thumbTint="@color/white"
+                android:trackTint="@color/black"
+                android:textSize="15sp"
+                />
+
         </LinearLayout>
 
         <!-- Transaction Section -->
@@ -47,19 +50,26 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/edittext_background"
-            android:padding="8dp">
+            android:background="@drawable/settings_background"
+            android:elevation="4dp"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:layout_marginTop="10dp">
+
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch_notify_purchase"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:thumbTint="@color/white"
+                android:trackTint="@color/black"
                 android:text="Notify after every purchase"
-                android:padding="12dp"
-                android:fontFamily="@font/inter_semibold" />
+                android:textSize="15sp"
+                />
+
         </LinearLayout>
+
 
         <!-- Goal Section -->
         <TextView
@@ -70,39 +80,51 @@
             android:fontFamily="@font/inter_bold"
             android:textSize="24sp" />
 
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/edittext_background"
-            android:padding="8dp">
+            android:background="@drawable/settings_background"
+            android:elevation="4dp"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:layout_marginTop="10dp">
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch_notify_goal_progress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:thumbTint="@color/white"
+                android:trackTint="@color/black"
                 android:text="Notify at 25%, 50%, and 75% progress"
-                android:padding="12dp"
-                android:fontFamily="@font/inter_semibold"
-                android:thumbTint="@color/primary"
-                android:trackTint="@color/white" />
+                android:textSize="15sp"
+                />
+
         </LinearLayout>
+
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/edittext_background"
-            android:padding="8dp">
+            android:background="@drawable/settings_background"
+            android:elevation="4dp"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:layout_marginTop="10dp">
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch_alert_goal_reached"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:thumbTint="@color/white"
+                android:trackTint="@color/black"
                 android:text="Alert when goal is reached"
-                android:padding="12dp"
-                android:fontFamily="@font/inter_semibold" />
+                android:textSize="15sp"
+                />
+
         </LinearLayout>
 
         <!-- General Section -->
@@ -114,37 +136,55 @@
             android:fontFamily="@font/inter_bold"
             android:textSize="24sp" />
 
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/edittext_background"
-            android:padding="8dp">
+            android:background="@drawable/settings_background"
+            android:elevation="4dp"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:layout_marginTop="10dp">
+
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch_notify_profile_updated"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:thumbTint="@color/white"
+                android:trackTint="@color/black"
                 android:text="Notify when profile is updated"
-                android:padding="12dp"
-                android:fontFamily="@font/inter_semibold" />
+                android:textSize="15sp"
+                android:fontFamily="@font/inter_medium"
+                />
+
         </LinearLayout>
+
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/edittext_background"
-            android:padding="8dp">
+            android:background="@drawable/settings_background"
+            android:elevation="4dp"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:layout_marginTop="10dp">
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch_alert_new_logins"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:thumbTint="@color/white"
+                android:trackTint="@color/black"
                 android:text="Alert for new logins or failed attempts"
-                android:padding="12dp"
-                android:fontFamily="@font/inter_semibold" />
+                android:textSize="15sp"
+                android:fontFamily="@font/inter_medium"
+                />
+
         </LinearLayout>
 
     </LinearLayout>

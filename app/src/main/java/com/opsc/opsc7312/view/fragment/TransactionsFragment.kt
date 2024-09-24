@@ -163,9 +163,11 @@ class TransactionsFragment : Fragment() {
             // Show message to the user, if needed
             Log.d("Transactions message", message)
 
-            if(message == "timeout"){
+            if(message == "timeout" || message.contains("Unable to resolve host")){
                 timeOutDialog.showTimeoutDialog(requireContext() ){
-                    //progressDialog.show()
+                    progressDialog.dismiss()
+                    timeOutDialog.showProgressDialog(requireContext())
+                    timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Connecting...", hideProgressBar = false)
                     transactionViewModel.getAllTransactions(token, userId)
                 }
             }

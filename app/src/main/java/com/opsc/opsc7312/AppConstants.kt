@@ -37,6 +37,10 @@ object AppConstants {
         DATE_DESCENDING, HIGHEST_AMOUNT, LOWEST_AMOUNT
     }
 
+    enum class Filter_TYPE{
+        ALL, INCOME, EXPENSE,
+    }
+
     val COLOR_DICTIONARY = mapOf(
         "Red" to R.color.red,
         "Blue" to R.color.blue,

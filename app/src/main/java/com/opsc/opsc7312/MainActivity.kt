@@ -16,6 +16,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
 import com.opsc.opsc7312.databinding.ActivityMainBinding
 import com.opsc.opsc7312.model.api.controllers.AuthController
 import com.opsc.opsc7312.model.data.model.User
@@ -35,8 +36,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private lateinit var drawerLayout: DrawerLayout
 
-    //private lateinit var toolbar: Toolbar
-
     private lateinit var  navigationView: NavigationView
 
     private lateinit var sharedPreferences: SharedPreferences
@@ -47,14 +46,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private lateinit var auth: AuthController
 
+    private val firebaseAuth = FirebaseAuth.getInstance()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         // Load the selected theme before setting the content view
+       loadAndApplyTheme()
 
-        loadAndApplyTheme()
+        setTheme(R.style.Theme_OPSC7312)
 
         super.onCreate(savedInstanceState)
-        //Thread.sleep(3000)
-        //installSplashScreen()
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -70,16 +70,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         userManager = UserManager.getInstance(this)
         auth = ViewModelProvider(this).get(AuthController::class.java)
 
-
-
         if(isLoggedIn()){
             setupBottomNavigation()
             setupNavigationView()
         } else {
             navigateToWelcome()
         }
-
-
 
         findViewById<ImageButton>(R.id.back_button).setOnClickListener {
             onBackPressed()
@@ -180,7 +176,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun logOut(){
         tokenManager.clearToken()
         userManager.clearUser()
+        firebaseAuth.signOut()
         Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show()
         startActivity(Intent(this, MainActivity::class.java))
+        finish()
     }
 }

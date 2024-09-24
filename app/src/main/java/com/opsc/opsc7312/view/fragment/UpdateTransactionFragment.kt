@@ -265,9 +265,9 @@ class UpdateTransactionFragment : Fragment() {
         }
 
         transactionViewModel.message.observe(viewLifecycleOwner){ message ->
-            if(message == "timeout"){
+            if(message == "timeout" || message.contains("Unable to resolve host")){
                 timeOutDialog.showTimeoutDialog(requireContext() ){
-                    //progressDialog.show()
+                    progressDialog.dismiss()
                     timeOutDialog.showProgressDialog(requireContext())
                     timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Connecting...", hideProgressBar = false)
                     transactionViewModel.updateTransaction(token, transactionId, updatedTransaction)
@@ -333,9 +333,9 @@ class UpdateTransactionFragment : Fragment() {
         }
 
         categoryViewModel.message.observe(viewLifecycleOwner){ message ->
-            if(message == "timeout"){
+            if(message == "timeout" || message.contains("Unable to resolve host")){
                 timeOutDialog.showTimeoutDialog(requireContext() ){
-                    //progressDialog.show()
+                    progressDialog.dismiss()
                     timeOutDialog.showProgressDialog(requireContext())
                     timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Connecting...", hideProgressBar = false)
                     categoryViewModel.getAllCategories(token, id)

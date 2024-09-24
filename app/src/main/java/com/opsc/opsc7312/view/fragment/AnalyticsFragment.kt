@@ -178,6 +178,7 @@ class AnalyticsFragment : Fragment() {
             if(message == "timeout" || message.contains("Unable to resolve host")){
                 timeOutDialog.showTimeoutDialog(requireContext() ){
                     //progressDialog.show()
+                    progressDialog.dismiss()
                     timeOutDialog.showProgressDialog(requireContext())
                     timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Fetching analytics...", hideProgressBar = false)
                     analyticsViewModel.fetchAllAnalytics(token, userId)

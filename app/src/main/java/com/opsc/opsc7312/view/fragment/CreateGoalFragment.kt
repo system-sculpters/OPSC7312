@@ -192,9 +192,9 @@ class CreateGoalFragment : Fragment() {
         }
 
         goalViewModel.message.observe(viewLifecycleOwner){ message ->
-            if(message == "timeout"){
+            if(message == "timeout"|| message.contains("Unable to resolve host")){
                 timeOutDialog.showTimeoutDialog(requireContext()){
-                    //progressDialog.show()
+                    progressDialog.dismiss()
                     timeOutDialog.showProgressDialog(requireContext())
                     timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Creating Goal...", hideProgressBar = false)
                     goalViewModel.createGoal(token, newGoal)                }
