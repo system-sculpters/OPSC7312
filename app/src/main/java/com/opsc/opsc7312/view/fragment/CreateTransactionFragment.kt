@@ -34,81 +34,93 @@ import com.opsc.opsc7312.view.custom.TimeOutDialog
 import com.opsc.opsc7312.view.observers.CategoriesObserver
 
 
+// This class represents a Fragment that allows users to create a new transaction.
 class CreateTransactionFragment : Fragment() {
+    // Private variable to hold the binding instance for the Fragment's layout
     private var _binding: FragmentCreateTransactionBinding? = null
-    private val binding get() = _binding!!
+    private val binding get() = _binding!! // Non-nullable reference to binding
 
-
+    // List to store different types of transactions
     private lateinit var transactionTypes: List<String>
 
-
+    // ViewModel for handling transaction-related operations
     private lateinit var transactionViewModel: TransactionController
 
+    // UserManager instance to manage user-related information
     private lateinit var userManager: UserManager
 
+    // TokenManager instance to handle authentication tokens
     private lateinit var tokenManager: TokenManager
 
-
+    // RecyclerView for displaying icons for category selection
     private lateinit var iconRecyclerView: RecyclerView
 
+    // AlertDialog for selecting icons from a list
     private lateinit var iconPickerDialog: AlertDialog
 
+    // Adapter for managing category selection in the RecyclerView
     private lateinit var adapter: SelectCategoryAdapter
 
+    // ViewModel for managing category-related operations
     private lateinit var categoryViewModel: CategoryController
 
+    // Variable to store error messages for validation
     private var errorMessage = ""
 
+    // Boolean variable indicating if the transaction is recurring
     private var isRecurring = true
 
-    private var selectedIconName: String = "Select an category"
+    // String variables to store the name and ID of the selected category
+    private var selectedIconName: String = "Select a category"
     private var selectedCategoryId: String = ""
 
+    // Instance of TimeOutDialog for managing timeout-related dialogs
     private lateinit var timeOutDialog: TimeOutDialog
 
-
+    // Inflates the Fragment's layout and initializes necessary components
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        // Inflate the Fragment's layout and initialize binding
         _binding = FragmentCreateTransactionBinding.inflate(inflater, container, false)
 
-
+        // Initialize UserManager and TokenManager instances
         userManager = UserManager.getInstance(requireContext())
-
         tokenManager = TokenManager.getInstance(requireContext())
 
+        // Retrieve the list of transaction types from AppConstants
         transactionTypes = AppConstants.TRANSACTIONTYPE.entries.map { it.name }
 
+        // Initialize ViewModels for transaction and category management
         transactionViewModel = ViewModelProvider(this).get(TransactionController::class.java)
-
         categoryViewModel = ViewModelProvider(this).get(CategoryController::class.java)
 
+        // Initialize the TimeOutDialog instance
         timeOutDialog = TimeOutDialog()
 
+        // Create an adapter for selecting categories and set its click listener
         adapter = SelectCategoryAdapter { selectedCategory ->
-            // Set the selected icon to the ImageView
+            // Update the selected icon and category ID
             selectedIconName = selectedCategory.name
             selectedCategoryId = selectedCategory.id
             binding.categoryName.text = selectedIconName
 
+            // Get the current theme color for the category name
             val typedValue = TypedValue()
             requireContext().theme.resolveAttribute(R.attr.themeBgBorder, typedValue, true)
             val color = typedValue.data
             binding.categoryName.setTextColor(color)
-            //binding.iconName.setTextColor(ContextCompat.getColor(requireContext(), R.color.dark_grey))
+
+            // Set the selected category icon in the ImageView
             AppConstants.ICONS[selectedCategory.icon]?.let {
-                binding.categoryImageView.setImageResource(
-                    it
-                )
+                binding.categoryImageView.setImageResource(it)
             }
 
+            // Update the background color of the category image container
             val colorResId = AppConstants.COLOR_DICTIONARY[selectedCategory.color]
             if (colorResId != null) {
-                val originalColor = ContextCompat.getColor(requireContext(),
-                    colorResId
-                )
-                //holder.background.setBackgroundColor(originalColor)
+                val originalColor = ContextCompat.getColor(requireContext(), colorResId)
                 binding.categoryImageContainer.setBackgroundColor(originalColor)
                 val cornerRadius = requireContext().resources.getDimensionPixelSize(R.dimen.corner_radius_main)
                 val shapeDrawable = GradientDrawable()
@@ -117,87 +129,94 @@ class CreateTransactionFragment : Fragment() {
                 binding.categoryImageContainer.background = shapeDrawable
             }
 
-
-            iconPickerDialog.dismiss() // Dismiss the dialog after selecting an icon
+            // Dismiss the icon picker dialog after selecting an icon
+            iconPickerDialog.dismiss()
         }
+
+        // Set up the toggle button for recurring transactions
         toggleButton()
 
+        // Set up input fields for transaction creation
         setUpInputs()
 
+        // Return the root view of the binding
         return binding.root
     }
 
+    // Lifecycle method called after the view is created
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Access the MainActivity and set the toolbar title
+        // Access the MainActivity and set the toolbar title to "Create"
         (activity as? MainActivity)?.setToolbarTitle("Create")
     }
 
-    private fun setUpInputs(){
-        //binding.selectedDateText.text = getCurrentDate()
-
+    // Initializes input fields and sets up listeners for user interactions
+    private fun setUpInputs() {
+        // Get the current user and token
         val user = userManager.getUser()
-
         val token = tokenManager.getToken()
 
+        // Observe the ViewModel if a token is available
         if (token != null) {
             observeViewModel(token, user.id)
         }
 
+        // Set the available transaction types in the dropdown
         binding.transactionType.setItems(transactionTypes)
 
+        // Set up the listener for the icon container click
         binding.iconContainer.setOnClickListener {
-            showIconPickerDialog()
+            showIconPickerDialog() // Show the icon picker dialog
         }
 
+        // Set up the listener for the submit button
         binding.submitButton.setOnClickListener {
             if (token != null) {
-                addTransaction(token, user.id)
+                addTransaction(token, user.id) // Add the transaction if a token is available
             }
         }
     }
 
+    // Displays a dialog for the user to pick an icon for the transaction category
     private fun showIconPickerDialog() {
+        // Inflate the icon picker dialog layout
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.icon_picker_dialog, null)
 
-        iconRecyclerView= dialogView.findViewById(R.id.icon_recycler_view)
+        // Initialize the RecyclerView for icon selection
+        iconRecyclerView = dialogView.findViewById(R.id.icon_recycler_view)
+        iconRecyclerView.layoutManager = GridLayoutManager(requireContext(), 3) // Set layout manager with a span count of 3
+        iconRecyclerView.adapter = adapter // Set the adapter for the RecyclerView
 
-
-        iconRecyclerView.layoutManager = GridLayoutManager(requireContext(), 3) // Adjust the span count as needed
-
-        iconRecyclerView.adapter = adapter
-
+        // Create and show the icon picker dialog
         iconPickerDialog = AlertDialog.Builder(requireContext())
             .setView(dialogView)
             .create()
 
-        iconPickerDialog.show()
+        iconPickerDialog.show() // Show the dialog
     }
 
-
-
-
-    private fun toggleButton(){
-        binding.isRecurring.addOnButtonCheckedListener{
-                group, checkedId, isChecked ->
+    // Sets up the toggle button for selecting whether the transaction is recurring
+    private fun toggleButton() {
+        binding.isRecurring.addOnButtonCheckedListener { group, checkedId, isChecked ->
+            // Check which button is selected and update the recurring status and UI accordingly
             when (checkedId) {
                 R.id.toggleYes -> if (isChecked) {
-                    isRecurring = true
+                    isRecurring = true // Set the recurring status to true
                     binding.toggleYes.backgroundTintList =
-                        ContextCompat.getColorStateList(requireContext(), R.color.colorPrimary)
-                    binding.toggleYes.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white))
+                        ContextCompat.getColorStateList(requireContext(), R.color.colorPrimary) // Update background color
+                    binding.toggleYes.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white)) // Update text color
 
+                    // Update the appearance of the "No" button
                     binding.toggleNo.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), android.R.color.white))
                     binding.toggleNo.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
-
-
                 }
                 R.id.toggleNo -> if (isChecked) {
-                    isRecurring = false
-                    binding.toggleNo.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.colorPrimary))
-                    binding.toggleNo.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white))
+                    isRecurring = false // Set the recurring status to false
+                    binding.toggleNo.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.colorPrimary)) // Update background color
+                    binding.toggleNo.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white)) // Update text color
 
+                    // Update the appearance of the "Yes" button
                     binding.toggleYes.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), android.R.color.white))
                     binding.toggleYes.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
                 }
@@ -205,23 +224,27 @@ class CreateTransactionFragment : Fragment() {
         }
     }
 
-
-    private fun addTransaction(token: String, id: String){
+    // Adds a new transaction based on the user input
+    private fun addTransaction(token: String, id: String) {
+        // Show a progress dialog while the transaction is being created
         val progressDialog = timeOutDialog.showProgressDialog(requireContext())
 
+        // Retrieve the transaction name and amount from the input fields
         val transactionName = binding.transactionNameEdittext.text.toString()
         val amount = binding.amount.text.toString()
 
-
-        if(!verifyData(transactionName, amount, selectedCategoryId, binding.transactionType.selectedIndex)){
-            progressDialog.dismiss()
-            timeOutDialog.showAlertDialog(requireContext(), errorMessage)
-            errorMessage = ""
-            return
+        // Verify the entered data before proceeding
+        if (!verifyData(transactionName, amount, selectedCategoryId, binding.transactionType.selectedIndex)) {
+            progressDialog.dismiss() // Dismiss the progress dialog if validation fails
+            timeOutDialog.showAlertDialog(requireContext(), errorMessage) // Show error message dialog
+            errorMessage = "" // Reset error message
+            return // Exit the function
         }
+
+        // Get the selected transaction type from the dropdown
         val transactionType = transactionTypes[binding.transactionType.selectedIndex]
 
-
+        // Create a new Transaction object with the user input
         val newTransaction = Transaction(
             name = transactionName,
             amount = amount.toDouble(),
@@ -231,127 +254,146 @@ class CreateTransactionFragment : Fragment() {
             categoryId = selectedCategoryId
         )
 
+        // Log the new transaction for debugging purposes
         Log.d("newTransaction", "this is the transaction: $newTransaction")
 
+        // Observe the status of the transaction creation process
         transactionViewModel.status.observe(viewLifecycleOwner) { status ->
             if (status) {
-                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Transaction creation successful!", hideProgressBar = true, )
+                // Show success message if transaction creation is successful
+                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Transaction creation successful!", hideProgressBar = true)
 
-                // Dismiss the dialog after 2 seconds
+                // Dismiss the dialog after a delay
                 Handler(Looper.getMainLooper()).postDelayed({
-                    // Dismiss the dialog after the delay
-                    progressDialog.dismiss()
-
-                    // Navigate to MainActivity
-                    redirectToTransactions()
+                    progressDialog.dismiss() // Dismiss the progress dialog
+                    redirectToTransactions() // Navigate to the Transactions screen
                 }, 2000)
-
             } else {
+                // Show error message if transaction creation fails
                 timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Transaction creation failed!", hideProgressBar = true)
 
-                // Dismiss the dialog after 2 seconds
+                // Dismiss the dialog after a delay
                 Handler(Looper.getMainLooper()).postDelayed({
-                    // Dismiss the dialog after the delay
-                    progressDialog.dismiss()
-
-
+                    progressDialog.dismiss() // Dismiss the progress dialog
                 }, 2000)
             }
         }
 
-        transactionViewModel.message.observe(viewLifecycleOwner){ message ->
-            if(message == "timeout"|| message.contains("Unable to resolve host")){
-                timeOutDialog.showTimeoutDialog(requireContext() ){
+        // Observe the 'message' LiveData from the transactionViewModel to handle different message responses
+        transactionViewModel.message.observe(viewLifecycleOwner) { message ->
+            // Check if the message indicates a timeout or if the host could not be resolved
+            if (message == "timeout" || message.contains("Unable to resolve host")) {
+                // Show a timeout dialog to inform the user about the connection issue
+                timeOutDialog.showTimeoutDialog(requireContext()) {
+                    // Dismiss the current progress dialog when the timeout dialog is confirmed
                     progressDialog.dismiss()
+                    // Show a new progress dialog to indicate that a reconnection attempt is being made
                     timeOutDialog.showProgressDialog(requireContext())
+                    // Update the progress dialog message to inform the user that the application is attempting to connect
                     timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Connecting...", hideProgressBar = false)
+                    // Attempt to create the transaction again after the user acknowledges the timeout dialog
                     transactionViewModel.createTransaction(token, newTransaction)
                 }
             }
         }
 
+        // Trigger the ViewModel to create the new transaction
         transactionViewModel.createTransaction(token, newTransaction)
     }
 
+    // Verifies the user input data before creating a transaction
     private fun verifyData(transactionName: String, amount: String, selectedCategory: String, transactionType: Int): Boolean {
         var errors = 0
 
+        // Check if the transaction name is empty or blank
         if (transactionName.isBlank()) {
-            errorMessage += "• Enter a transaction name\n"
-            errors += 1
+            errorMessage += "• Enter a transaction name\n"  // Append error message for empty transaction name
+            errors += 1  // Increment error count
         }
 
+        // Check if the amount is empty or blank
         if (amount.isBlank()) {
-            errorMessage += "• Enter a transaction amount\n"
-            errors += 1
+            errorMessage += "• Enter a transaction amount\n"  // Append error message for empty amount
+            errors += 1  // Increment error count
         }
 
+        // Check if a category has been selected
         if (selectedCategory.isBlank()) {
-            errorMessage += "• Select a category\n"
-            errors += 1
+            errorMessage += "• Select a category\n"  // Append error message for no category selection
+            errors += 1  // Increment error count
         }
 
+        // Check if the transaction type is valid (not selected)
         if (transactionType == -1) {
-            errorMessage += "• Select a transaction type"
-            errors += 1
+            errorMessage += "• Select a transaction type"  // Append error message for no transaction type selected
+            errors += 1  // Increment error count
         }
 
+        // Return true if no errors were found; otherwise, return false
         return errors == 0
     }
 
     private fun observeViewModel(token: String, id: String) {
+        // Show a progress dialog to indicate loading
         val progressDialog = timeOutDialog.showProgressDialog(requireContext())
 
-        categoryViewModel.status.observe(viewLifecycleOwner)  { status ->
+        // Observe the status of the category retrieval
+        categoryViewModel.status.observe(viewLifecycleOwner) { status ->
             // Handle status changes (success or failure)
             if (status) {
-                // Success
-                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Categories retrieved successfully!", hideProgressBar = true, )
+                // Success case
+                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Categories retrieved successfully!", hideProgressBar = true)
 
-                // Dismiss the dialog after 2 seconds
+                // Dismiss the dialog immediately after success
                 progressDialog.dismiss()
 
             } else {
-                // Failure
-
+                // Failure case
                 timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Category retrieval failed!", hideProgressBar = true)
 
-                // Dismiss the dialog after 2 seconds
+                // Dismiss the dialog after a delay of 2 seconds to show the failure message
                 Handler(Looper.getMainLooper()).postDelayed({
-                    // Dismiss the dialog after the delay
-                    progressDialog.dismiss()
-
-
+                    progressDialog.dismiss()  // Dismiss the dialog after the delay
                 }, 2000)
             }
         }
 
-        categoryViewModel.message.observe(viewLifecycleOwner){ message ->
-            if(message == "timeout" || message.contains("Unable to resolve host")){
-                progressDialog.dismiss()
-                timeOutDialog.showTimeoutDialog(requireContext() ){
+        // Observe messages for timeout or connection issues
+        categoryViewModel.message.observe(viewLifecycleOwner) { message ->
+            // Check for timeout or inability to resolve host
+            if (message == "timeout" || message.contains("Unable to resolve host")) {
+                progressDialog.dismiss()  // Dismiss the current progress dialog
+                timeOutDialog.showTimeoutDialog(requireContext()) {
+                    // Retry logic: dismiss the current dialog and show a new one
                     progressDialog.dismiss()
                     timeOutDialog.showProgressDialog(requireContext())
                     timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Connecting...", hideProgressBar = false)
-                    categoryViewModel.getAllCategories(token, id)
+                    categoryViewModel.getAllCategories(token, id)  // Retry fetching categories
                 }
             }
         }
+
+        // Observe the category list and update the UI with the retrieved categories
         categoryViewModel.categoryList.observe(viewLifecycleOwner, CategoriesObserver(null, adapter))
 
-
-        // Example API calls
+        // Initial API call to retrieve all categories
         categoryViewModel.getAllCategories(token, id)
     }
 
+
     private fun redirectToTransactions(){
         val transactionsFragment = TransactionsFragment()
-
 
         // Navigate to CategoryDetailsFragment
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.frame_layout, transactionsFragment)
             .addToBackStack(null)
             .commit()
+    }
+
+    // Clean up resources and bindings when the fragment is destroyed
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null // Clear the binding reference
     }
 }

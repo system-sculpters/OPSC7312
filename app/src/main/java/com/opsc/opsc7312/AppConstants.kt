@@ -25,6 +25,9 @@ object AppConstants {
     // This URL is used as the prefix for all network requests.
     const val BASE_URL = "https://pennywise-1rw5.onrender.com/api/"
 
+
+    const val UNCATEGORIZED = "wEijTYKaY8738zHM4oJb"
+
     // Enumeration defining the types of transactions available in the application.
     // The types include INCOME and EXPENSE, allowing for categorization of financial transactions.
     enum class TRANSACTIONTYPE {
@@ -133,5 +136,17 @@ object AppConstants {
         val sdf = SimpleDateFormat("dd/MM/yyyy")
         val formattedDate = sdf.format(date)
         return formattedDate
+    }
+
+    // Converts a date string in "dd/MM/yyyy" format to a Long timestamp
+    fun convertStringToLong(dateString: String): Long {
+        // Create a date format object for parsing the date string
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+
+        // Parse the date string into a Date object
+        val date: Date = dateFormat.parse(dateString) ?: throw IllegalArgumentException("Invalid date format")
+
+        // Return the timestamp of the date
+        return date.time
     }
 }

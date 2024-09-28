@@ -59,5 +59,7 @@
     <string name="show_results">Show results</string>
     <string name="default_web_client_id">577849445889-0bk53jvg92vut6tiqn0tkgomueu67bg3.apps.googleusercontent.com</string>
     <string name="password">Password</string>
+    <string name="delete_text">Delete</string>
+    <string name="cancel_text">Cancel</string>
 
 </resources>

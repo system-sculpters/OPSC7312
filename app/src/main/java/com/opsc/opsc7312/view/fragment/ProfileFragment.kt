@@ -37,304 +37,293 @@ import java.io.ByteArrayOutputStream
 
 class ProfileFragment : Fragment() {
 
+    // Binding for the fragment's view to access UI elements
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
 
+    // SharedPreferences for storing user-related preferences
     private lateinit var sharedPreferences: SharedPreferences
 
+    // UserManager to manage user data and actions
     private lateinit var userManager: UserManager
 
+    // TokenManager to handle authentication tokens
     private lateinit var tokenManager: TokenManager
 
+    // ViewModel to manage user data in a lifecycle-conscious way
     private lateinit var userViewModel: UserController
 
-    private lateinit var takePictureLauncher: ActivityResultLauncher<Intent>
-    private lateinit var pickPictureLauncher: ActivityResultLauncher<Intent>
-
+    // Dialog for handling session timeouts
     private lateinit var timeOutDialog: TimeOutDialog
 
+    // Inflate the fragment layout and initialize necessary components
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        // Inflate the layout for this fragment using View Binding
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
 
-        // Initialize SharedPreferences
+        // Initialize SharedPreferences to store user-related settings
         sharedPreferences = requireActivity().getSharedPreferences("User", Context.MODE_PRIVATE)
 
-
+        // Get instances of UserManager and TokenManager
         userManager = UserManager.getInstance(requireContext())
-
         tokenManager = TokenManager.getInstance(requireContext())
 
+        // Initialize the ViewModel for user operations
         userViewModel = ViewModelProvider(this).get(UserController::class.java)
 
+        // Initialize the timeout dialog
         timeOutDialog = TimeOutDialog()
 
-        // Load profile data
+        // Load existing profile data into the UI
         loadProfileData()
 
-        // Set up listeners
+        // Set up button listeners for interactions
         setUpListeners()
 
-
-        // Initialize activity result launchers
-        initializeActivityResultLaunchers()
-
+        // Return the root view of the binding
         return binding.root
     }
 
-    private fun setUpListeners(){
-        //binding.selectedDateText.text = getCurrentDate()
-
+    // Set up listeners for UI interactions
+    private fun setUpListeners() {
+        // Get the current user and their token
         val user = userManager.getUser()
-
         val token = tokenManager.getToken()
 
+        // Check if the token is null (not authenticated)
+        if (token == null) {
+            // Handle the case where the user is not authenticated (e.g., show a login screen)
+        }
+
+        // Set a click listener for the Save button
         binding.btnSave.setOnClickListener {
             if (token != null) {
+                // Save the user's profile data if the token is valid
                 saveProfileData(token, user.id)
+            } else {
+                // Handle the case where there is no valid token (e.g., show an error message)
             }
         }
 
-        binding.ChangePassword.setOnClickListener{
-            showChangePasswordDialog()
+        // Set a click listener for changing the password
+        binding.ChangePassword.setOnClickListener {
+            showChangePasswordDialog() // Show dialog to change the password
         }
     }
+
+    // Called when the fragment's view is created
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Access the MainActivity and set the toolbar title
+        // Set the toolbar title in the MainActivity
         (activity as? MainActivity)?.setToolbarTitle("Profile")
     }
 
-    private fun initializeActivityResultLaunchers() {
-        takePictureLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val imageBitmap = result.data?.extras?.get("data") as? Bitmap
-                imageBitmap?.let {
-                    setProfileImage(it)
-                    saveProfileImageToPreferences(it)
-                }
-            }
-        }
-
-        pickPictureLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val selectedImageUri = result.data?.data
-                selectedImageUri?.let {
-                    val inputStream = requireActivity().contentResolver.openInputStream(it)
-                    val imageBitmap = BitmapFactory.decodeStream(inputStream)
-                    setProfileImage(imageBitmap)
-                    saveProfileImageToPreferences(imageBitmap)
-                }
-            } else {
-                Toast.makeText(context, "No image selected", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    private fun showImagePickerDialog() {
-        AlertDialog.Builder(requireContext())
-            .setTitle("Select Profile Picture")
-            .setItems(arrayOf("Take Photo", "Choose from Gallery")) { _, which ->
-                when (which) {
-                    0 -> checkAndRequestPermission(Manifest.permission.CAMERA) {
-                        dispatchTakePictureIntent()
-                    }
-                    1 -> checkAndRequestPermission(Manifest.permission.READ_EXTERNAL_STORAGE) {
-                        dispatchPickPictureIntent()
-                    }
-                }
-            }
-            .show()
-    }
-
-    private fun checkAndRequestPermission(permission: String, onGranted: () -> Unit) {
-        if (ContextCompat.checkSelfPermission(requireContext(), permission) == PackageManager.PERMISSION_GRANTED) {
-            onGranted()
-        } else {
-            ActivityCompat.requestPermissions(requireActivity(), arrayOf(permission), 1)
-        }
-    }
-
-    private fun dispatchTakePictureIntent() {
-        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        takePictureLauncher.launch(takePictureIntent)
-    }
-
-    private fun dispatchPickPictureIntent() {
-        Log.d("ProfileFragment", "Attempting to open gallery...")
-        val pickPhotoIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        pickPhotoIntent.type = "image/*"
-        pickPictureLauncher.launch(pickPhotoIntent)
-    }
-
+    // Load the user's profile data and display it in the UI
     private fun loadProfileData() {
-        val user = userManager.getUser()
+        val user = userManager.getUser() // Get the current user
 
+        // Retrieve user details
         val username = user.username
         val email = user.email
-        val password = userManager.getPassword()
-        val profileImageBase64 = sharedPreferences.getString("profileImage", "")
+        val password = userManager.getPassword() // Get the stored password
 
-
+        // Set the retrieved values to the corresponding UI elements
         binding.username.setText(username)
         binding.email.setText(email)
 
-
-        binding.password.setText(maskPassword(password))
-
-        // Load profile image if available
-        if (!profileImageBase64.isNullOrEmpty()) {
-            val imageBytes = Base64.decode(profileImageBase64, Base64.DEFAULT)
-            val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-            setProfileImage(bitmap)
-        }
+        // Mask the password for display purposes
+        binding.password.text = maskPassword(password)
     }
 
     private fun saveProfileData(token: String, userId: String) {
+        // Show a progress dialog to inform the user about the ongoing operation
         val progressDialog = timeOutDialog.showProgressDialog(requireContext())
 
+        // Retrieve the updated username and email from the UI input fields
         val username = binding.username.text.toString()
         val email = binding.email.text.toString()
-        //val password = passwordEditText.text.toString()
 
+        // Create an updated User object with the new information
         val updatedUser = User(id = userId, username = username, email = email)
 
-        userViewModel.status.observe(viewLifecycleOwner){
-            status ->
-
+        // Observe the status of the update operation from the UserViewModel
+        userViewModel.status.observe(viewLifecycleOwner) { status ->
             if (status) {
+                // If the update is successful, save the updated user information
                 userManager.saveUser(updatedUser)
-                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Profile update successful!", hideProgressBar = true, )
+                // Update the progress dialog to show success message
+                timeOutDialog.updateProgressDialog(
+                    requireContext(),
+                    progressDialog,
+                    "Profile update successful!",
+                    hideProgressBar = true
+                )
 
-                // Dismiss the dialog after 2 seconds
+                // Dismiss the dialog after a delay of 2 seconds
                 Handler(Looper.getMainLooper()).postDelayed({
-                    // Dismiss the dialog after the delay
-                    progressDialog.dismiss()
-
+                    progressDialog.dismiss() // Dismiss the dialog after the delay
                 }, 2000)
 
-                //Toast.makeText(requireContext(), "Category creation successful", Toast.LENGTH_LONG).show()
+                // Optionally, show a toast message indicating success
+                // Toast.makeText(requireContext(), "Category creation successful", Toast.LENGTH_LONG).show()
             } else {
-                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "The email address is already in use by another account!", hideProgressBar = true)
+                // If the update fails (e.g., email already in use), show an error message
+                timeOutDialog.updateProgressDialog(
+                    requireContext(),
+                    progressDialog,
+                    "The email address is already in use by another account!",
+                    hideProgressBar = true
+                )
 
-                // Dismiss the dialog after 2 seconds
+                // Dismiss the dialog after a delay of 2 seconds
                 Handler(Looper.getMainLooper()).postDelayed({
-                    // Dismiss the dialog after the delay
-                    progressDialog.dismiss()
-
-
+                    progressDialog.dismiss() // Dismiss the dialog after the delay
                 }, 2000)
             }
         }
 
-        userViewModel.message.observe(viewLifecycleOwner){ message ->
-            if(message == "timeout"|| message.contains("Unable to resolve host")){
-                timeOutDialog.showTimeoutDialog(requireContext() ){
-                    progressDialog.dismiss()
-                    timeOutDialog.showProgressDialog(requireContext())
-                    timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Connecting...", hideProgressBar = false)
+        // Observe any messages from the ViewModel, particularly for timeout or connection issues
+        userViewModel.message.observe(viewLifecycleOwner) { message ->
+            if (message == "timeout" || message.contains("Unable to resolve host")) {
+                // Show a timeout dialog and attempt to reconnect
+                timeOutDialog.showTimeoutDialog(requireContext()) {
+                    progressDialog.dismiss() // Dismiss the current progress dialog
+                    timeOutDialog.showProgressDialog(requireContext()) // Show a new progress dialog
+                    timeOutDialog.updateProgressDialog(
+                        requireContext(),
+                        progressDialog,
+                        "Connecting...",
+                        hideProgressBar = false
+                    )
+                    // Retry updating the email and username
                     userViewModel.updateEmailAndUsername(token, userId, updatedUser)
                 }
             }
         }
 
+        // Initiate the update of email and username in the ViewModel
         userViewModel.updateEmailAndUsername(token, userId, updatedUser)
-
     }
 
-    private fun saveProfileImageToPreferences(bitmap: Bitmap) {
-        val outputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
-        val imageBytes = outputStream.toByteArray()
-        val imageBase64 = Base64.encodeToString(imageBytes, Base64.DEFAULT)
+    private fun showChangePasswordDialog() {
 
-        with(sharedPreferences.edit()) {
-            putString("profileImage", imageBase64)
-            apply()
-        }
-    }
+        // Retrieve the currently logged-in user and token for authentication
+        val user = userManager.getUser()
+        val token = tokenManager.getToken()
 
-    private fun setProfileImage(bitmap: Bitmap) {
-        //profileImageView.setImageBitmap(bitmap)
-    }
-
-    private fun showChangePasswordDialog(){
+        // Inflate the custom dialog layout for changing the password
         val dialogView = LayoutInflater.from(context).inflate(R.layout.change_password_dialog, null)
 
+        // Retrieve UI elements from the dialog layout
         val closeBtn: ImageView = dialogView.findViewById(R.id.closeView)
-
         val newPassword: EditText = dialogView.findViewById(R.id.newPassword)
-
         val confirmPassword: EditText = dialogView.findViewById(R.id.confirmPassword)
-
         val saveBtn: Button = dialogView.findViewById(R.id.btnSave)
 
+        // Create an AlertDialog with the inflated view and make it non-cancelable
         val dialog = android.app.AlertDialog.Builder(requireContext())
             .setView(dialogView)
-            .setCancelable(false)
+            .setCancelable(false) // Prevent dismissal by tapping outside
             .create()
 
+        // Set the close button to dismiss the dialog when clicked
         closeBtn.setOnClickListener {
             dialog.dismiss()
         }
 
-        saveBtn.setOnClickListener{
-            saveNewPassword(newPassword.text.toString(), confirmPassword.text.toString())
+        // Set the save button's click listener to handle saving the new password
+        saveBtn.setOnClickListener {
+            // Call method to save the new password with the input values
+            if (token != null) {
+                saveNewPassword(token, user.id, newPassword.text.toString(), confirmPassword.text.toString())
+            } else {
+
+            }
+
         }
 
+        // Show the dialog to the user
         dialog.show()
     }
 
-    private fun saveNewPassword(newPassword: String, confirmPassword: String) {
+    private fun saveNewPassword(token: String, userId: String, newPassword: String, confirmPassword: String) {
+        // Show a progress dialog to inform the user about the ongoing password update process
         val progressDialog = timeOutDialog.showProgressDialog(requireContext())
 
-        val user = userManager.getUser()
-        val token = tokenManager.getToken()
+        // Check if the new password and confirmation match
+        if (newPassword != confirmPassword) {
+            progressDialog.dismiss() // Dismiss the progress dialog
 
-        if(newPassword != confirmPassword){
-            progressDialog.dismiss()
-
+            // Show an alert dialog to inform the user of the mismatch
             timeOutDialog.showAlertDialog(requireContext(), "Confirm new password does not match")
 
-            return
+            return // Exit the method to prevent further processing
         }
 
-        userViewModel.status.observe(viewLifecycleOwner){
-                status ->
-
+        // Observe the status of the password update operation from the UserViewModel
+        userViewModel.status.observe(viewLifecycleOwner) { status ->
             if (status) {
+                // If the update is successful, save the new password
                 userManager.savePassword(newPassword)
-                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Password update successful!", hideProgressBar = true, )
+                // Update the progress dialog to show a success message
+                timeOutDialog.updateProgressDialog(
+                    requireContext(),
+                    progressDialog,
+                    "Password update successful!",
+                    hideProgressBar = true
+                )
 
-                // Dismiss the dialog after 2 seconds
+                // Dismiss the dialog after a delay of 2 seconds
                 Handler(Looper.getMainLooper()).postDelayed({
-                    // Dismiss the dialog after the delay
-                    progressDialog.dismiss()
-
+                    progressDialog.dismiss() // Dismiss the dialog after the delay
                 }, 2000)
-
             } else {
-                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Password update failed!", hideProgressBar = true)
+                // If the update fails, show an error message
+                timeOutDialog.updateProgressDialog(
+                    requireContext(),
+                    progressDialog,
+                    "Password update failed!",
+                    hideProgressBar = true
+                )
 
-                // Dismiss the dialog after 2 seconds
+                // Dismiss the dialog after a delay of 2 seconds
                 Handler(Looper.getMainLooper()).postDelayed({
-                    // Dismiss the dialog after the delay
-                    progressDialog.dismiss()
-
-
+                    progressDialog.dismiss() // Dismiss the dialog after the delay
                 }, 2000)
             }
         }
 
-        if (token != null) {
-            userViewModel.updatePassword(token, user.id, newPassword)
+        // Observe any messages from the ViewModel, particularly for timeout or connection issues
+        userViewModel.message.observe(viewLifecycleOwner) { message ->
+            if (message == "timeout" || message.contains("Unable to resolve host")) {
+                // Show a timeout dialog and attempt to reconnect
+                timeOutDialog.showTimeoutDialog(requireContext()) {
+                    progressDialog.dismiss() // Dismiss the current progress dialog
+                    timeOutDialog.showProgressDialog(requireContext()) // Show a new progress dialog
+                    timeOutDialog.updateProgressDialog(
+                        requireContext(),
+                        progressDialog,
+                        "Connecting...",
+                        hideProgressBar = false
+                    )
+                    // Retry updating the email and username
+                    userViewModel.updatePassword(token, userId, newPassword)
+                }
+            }
         }
+
+        // If a token is available, initiate the password update in the ViewModel
+        userViewModel.updatePassword(token, userId, newPassword)
+
     }
+
     private fun maskPassword(password: String): String {
-        return "*".repeat(password.length) // Replace each character with '*'
+        // Replace each character in the password with '*' for security
+        return "*".repeat(password.length)
     }
 
 }

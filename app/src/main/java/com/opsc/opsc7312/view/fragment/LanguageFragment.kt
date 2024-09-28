@@ -18,12 +18,16 @@ import com.opsc.opsc7312.databinding.FragmentLanguageBinding
 import com.skydoves.powerspinner.PowerSpinnerView
 import java.util.Locale
 
+// LanguageFragment is a Fragment that allows users to select and manage their preferred language settings.
 class LanguageFragment : Fragment() {
+    // Backing property for binding, which is used to access the views in the Fragment
     private var _binding: FragmentLanguageBinding? = null
+
+    // Public property to provide access to the binding while ensuring it is non-null
     private val binding get() = _binding!!
 
+    // SharedPreferences instance to manage and persist the user's language preferences
     private lateinit var sharedPreferences: SharedPreferences
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,10 +56,10 @@ class LanguageFragment : Fragment() {
             setLocale(newItem)
         }
 
-
         return binding.root
     }
 
+    //Called when the view has been created. This is where initialization of views and data can occur.
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -63,37 +67,42 @@ class LanguageFragment : Fragment() {
         (activity as? MainActivity)?.setToolbarTitle("Language")
     }
 
+    //Saves the selected language preference to SharedPreferences.
     private fun saveLanguagePreference(language: String) {
         with(sharedPreferences.edit()) {
-            putString("selectedLanguage", language)
-            apply()
+            putString("selectedLanguage", language) // Store the selected language
+            apply() // Apply changes asynchronously
         }
     }
 
+    //Sets the application locale based on the selected language
     private fun setLocale(language: String) {
+        // Determine the locale code based on the selected language
         val localeCode = when (language) {
-            "Afrikaans" -> "af"
-            "Zulu" -> "zu"
-            else -> "en" // Default to English
+            "Afrikaans" -> "af" // Afrikaans language code
+            "Zulu" -> "zu" // Zulu language code
+            else -> "en" // Default to English if no match is found
         }
 
-        val locale = Locale(localeCode)
-        Locale.setDefault(locale)
-        val config = Configuration()
-        config.setLocale(locale)
-        requireContext().createConfigurationContext(config)
+        val locale = Locale(localeCode) // Create a new Locale object
+        Locale.setDefault(locale) // Set the default locale
+        val config = Configuration() // Create a new Configuration object
+        config.setLocale(locale) // Set the locale in the configuration
+        requireContext().createConfigurationContext(config) // Apply the configuration context
 
         // Refresh the UI to reflect the new language
-        refreshUI()
+        refreshUI() // Call to update the UI with the new locale
     }
 
-    private fun refreshUI() {
-        // You need to manually update the text for each UI component here
-        // Example:
-        // languageSpinner.setSelection(languages.indexOf(getString(R.string.language)))
-        // Additional UI updates as needed
+    ///Refreshes the user interface by detaching and re-attaching the fragment.
 
-        // Alternatively, navigate back to the previous fragment or refresh the fragment itself
-        parentFragmentManager.beginTransaction().detach(this).attach(this).commit()
+    private fun refreshUI() {
+        parentFragmentManager.beginTransaction().detach(this).attach(this).commit() // Restart the fragment to refresh the UI
+    }
+
+    // Clean up binding object when the fragment is destroyed
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

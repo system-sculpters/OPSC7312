@@ -13,6 +13,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,228 +34,245 @@ import com.opsc.opsc7312.view.adapter.IconAdapter
 import com.opsc.opsc7312.view.custom.TimeOutDialog
 
 
+// Fragment for updating the details of a category
 class UpdateCategoryFragment : Fragment() {
+
+    // View binding for the fragment's layout
     private var _binding: FragmentUpdateCategoryBinding? = null
     private val binding get() = _binding!!
 
-
-
+    // ViewModel and manager instances
     private lateinit var categoryViewModel: CategoryController
-
     private lateinit var userManager: UserManager
-
     private lateinit var tokenManager: TokenManager
 
-
+    // Lists to hold color and icon data
     private lateinit var dataList: ArrayList<Color>
-
     private lateinit var iconList: ArrayList<Int>
-
     private lateinit var transactionTypes: List<String>
-
     private lateinit var messages: MutableList<String>
 
-
-
+    // Adapters for displaying colors and icons
     private lateinit var colorAdapter: ColorAdapter
-
     private lateinit var iconAdapter: IconAdapter
 
-
-
+    // RecyclerView and dialog for selecting icons
     private lateinit var iconRecyclerView: RecyclerView
-
     private lateinit var iconPickerDialog: AlertDialog
 
-    private val REQUEST_CODE = 1234
-
-    private var selectedIconName:String = "Select an icon"
-
+    // Variables for selected icon and category ID
+    private var selectedIconName: String = "Select an icon"
     private var categoryId: String = ""
+    private var categoryName: String = ""
 
+    // Dialog for handling timeout scenarios
     private lateinit var timeOutDialog: TimeOutDialog
 
+    // Error message variable
     private var errorMessage = ""
 
+    // Inflate the fragment's view and set up UI components
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        // Inflate the layout for this fragment using view binding
         _binding = FragmentUpdateCategoryBinding.inflate(inflater, container, false)
 
+        // Initialize data lists
         dataList = arrayListOf<Color>()
         iconList = getIconData()
-
         messages = arrayListOf()
 
+        // Initialize user and token managers
         userManager = UserManager.getInstance(requireContext())
-
         tokenManager = TokenManager.getInstance(requireContext())
 
+        // Initialize ViewModel
         categoryViewModel = ViewModelProvider(this).get(CategoryController::class.java)
 
+        // Initialize timeout dialog
         timeOutDialog = TimeOutDialog()
 
+        // Get transaction types from constants
         transactionTypes = AppConstants.TRANSACTIONTYPE.entries.map { it.name }
 
+        // Set up the icon adapter with a click listener
         iconAdapter = IconAdapter(iconList) { selectedIcon ->
-            // Set the selected icon to the ImageView
+            // Set the selected icon to the ImageView and update UI
             selectedIconName = getIconName(selectedIcon)
             binding.iconName.text = selectedIconName
 
+            // Retrieve the theme color for setting text color
             val typedValue = TypedValue()
             requireContext().theme.resolveAttribute(R.attr.themeBgBorder, typedValue, true)
             val color = typedValue.data
             binding.iconName.setTextColor(color)
-            //binding.iconName.setTextColor(ContextCompat.getColor(requireContext(), R.color.dark_grey))
             binding.iconImageView.setImageResource(selectedIcon)
-            iconPickerDialog.dismiss() // Dismiss the dialog after selecting an icon
+
+            // Dismiss the icon picker dialog after selection
+            iconPickerDialog.dismiss()
         }
+
+        // Set up input fields and load category data
         setUpInputs()
-
         getCategoryData()
-
         setUpColors()
-
         loadCategoryDetails()
 
-        return binding.root
+        return binding.root // Return the root view
     }
 
+    // Called after the view has been created
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Access the MainActivity and set the toolbar title
+        // Set the toolbar title in the MainActivity
         (activity as? MainActivity)?.setToolbarTitle("Details")
-
     }
 
-    private fun loadCategoryDetails(){
+    // Load the category details into the UI
+    private fun loadCategoryDetails() {
+        // Retrieve the category passed as an argument
         val category = arguments?.getParcelable<Category>("category")
 
-        // Update UI with category data
-        if (category != null){
-            Log.d("", "this is the cat: $category")
-
+        // Update UI components with the category data
+        if (category != null) {
             categoryId = category.id
 
+            categoryName = category.name
+
             val colorId = AppConstants.COLOR_LIST.indexOf(category.color).toString()
-
             val selectedIndex = transactionTypes.indexOf(category.transactiontype)
-
-            val selectedColor = Color(Id=colorId, name = category.color)
+            val selectedColor = Color(Id = colorId, name = category.color)
             val selectedIcon = getIconNames().indexOf(category.icon)
             val iconValue = AppConstants.ICONS.entries.find { it.key == category.icon }?.value
 
+            // Populate the UI fields with the category details
             binding.categoryNameEdittext.setText(category.name)
             binding.contributionType.selectItemByIndex(selectedIndex)
 
             colorAdapter.setSelectedColor(selectedColor)
-
-
             iconAdapter.setSelectedIcon(iconValue)
-
 
             binding.iconName.text = category.icon
 
+            // Set text color for the icon name
             val typedValue = TypedValue()
             requireContext().theme.resolveAttribute(R.attr.themeBgBorder, typedValue, true)
             val color = typedValue.data
             binding.iconName.setTextColor(color)
-            //binding.iconName.setTextColor(ContextCompat.getColor(requireContext(), R.color.dark_grey))
             binding.iconImageView.setImageResource(iconList[selectedIcon])
-
         }
     }
 
-    private fun setUpColors(){
+    // Set up the color list in the UI
+    private fun setUpColors() {
         binding.colorList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.colorList.setHasFixedSize(true)
 
+        // Initialize color adapter with a click listener
         colorAdapter = ColorAdapter(dataList) { selectedCategory ->
             Log.d("SelectedCategory", "Selected category: $selectedCategory")
             // Handle the selected category here
         }
 
+        // Set the adapter for the color list
         binding.colorList.adapter = colorAdapter
     }
 
+    // Show the dialog for picking an icon
     private fun showIconPickerDialog() {
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.icon_picker_dialog, null)
 
-        iconRecyclerView= dialogView.findViewById(R.id.icon_recycler_view)
+        // Initialize RecyclerView for displaying icons
+        iconRecyclerView = dialogView.findViewById(R.id.icon_recycler_view)
+        iconRecyclerView.layoutManager = GridLayoutManager(requireContext(), 3) // Set span count for grid layout
+        iconRecyclerView.adapter = iconAdapter // Set the icon adapter
 
-
-        iconRecyclerView.layoutManager = GridLayoutManager(requireContext(), 3) // Adjust the span count as needed
-
-        iconRecyclerView.adapter = iconAdapter
-
+        // Create and show the icon picker dialog
         iconPickerDialog = AlertDialog.Builder(requireContext())
             .setView(dialogView)
             .create()
 
-        iconPickerDialog.show()
+        iconPickerDialog.show() // Show the dialog
     }
 
-    private fun getCategoryData(): ArrayList<Color>{
-        for(i in AppConstants.COLOR_LIST.indices){
+    // Retrieve color data for categories
+    private fun getCategoryData(): ArrayList<Color> {
+        // Populate the dataList with Color objects based on AppConstants
+        for (i in AppConstants.COLOR_LIST.indices) {
             val dataClass = Color(i.toString(), AppConstants.COLOR_LIST[i])
             dataList.add(dataClass)
         }
-        return dataList
+        return dataList // Return the populated dataList
     }
 
+    // Get the name of an icon based on its drawable ID
     private fun getIconName(iconDrawableId: Int): String {
-        // Implement your logic here to map the icon drawable ID to its corresponding name
-        // For simplicity, I'll use a hardcoded map for demonstration purposes
+        // Implement logic to map the icon drawable ID to its corresponding name
         val iconsMap = AppConstants.ICONS
         return iconsMap.entries.find { it.value == iconDrawableId }?.key ?: "Unknown Icon"
     }
 
+    // Get the icon data (drawable IDs)
     private fun getIconData(): ArrayList<Int> {
         val iconsMap = AppConstants.ICONS
-        return ArrayList(iconsMap.values)
+        return ArrayList(iconsMap.values) // Return a list of icon drawable IDs
     }
 
+    // Get the names of the icons
     private fun getIconNames(): ArrayList<String> {
         val iconsMap = AppConstants.ICONS
-        return ArrayList(iconsMap.keys)
+        return ArrayList(iconsMap.keys) // Return a list of icon names
     }
 
+    // Set up input fields and their listeners
+    private fun setUpInputs() {
+        // Retrieve the current user and token
+        val user = userManager.getUser()
+        val token = tokenManager.getToken()
 
-    private fun setUpInputs(){
-        binding.contributionType.setItems(transactionTypes)
+        binding.contributionType.setItems(transactionTypes) // Set transaction types in the input
 
+        // Set click listener for the icon container to show the icon picker dialog
         binding.iconContainer.setOnClickListener {
             showIconPickerDialog()
         }
 
+        // Set click listener for the submit button
         binding.submitButton.setOnClickListener {
-            setUpUserData()
+            if (token != null) {
+                updateCategory(token, user.id) // Call method to update the category
+            } else {
+                // Handle case where token is null (e.g., show error message)
+            }        }
+
+        binding.deleteButton.setOnClickListener {
+
+
+            // Check if the token is available before updating the category
+            if (token != null) {
+                showCustomDeleteDialog(token) // Call method to update the category
+            } else {
+                // Handle case where token is null (e.g., show error message)
+            }
         }
     }
 
-    private fun setUpUserData(){
-        val user = userManager.getUser()
-
-        val token = tokenManager.getToken()
-
-
-        if(token != null){
-            updateCategory(token, user.id)
-        } else {
-
-        }
-    }
-
+    // Updates the category information in the database using the provided token and user ID.
     private fun updateCategory(token: String, id: String) {
+        // Show a progress dialog to indicate that the category update is in progress.
         val progressDialog = timeOutDialog.showProgressDialog(requireContext())
 
+        // Retrieve the category name from the input field.
         val catName = binding.categoryNameEdittext.text.toString()
 
+        // Get the selected color and icon from their respective adapters.
         val selectedColor = colorAdapter.getSelectedItem()
         val selectedIcon = iconAdapter.getSelectedItem()
 
+        // Validate the category data; if invalid, dismiss the progress dialog and show an alert.
         if (!validateCategoryData(catName, binding.contributionType.selectedIndex, selectedColor, selectedIcon)) {
             progressDialog.dismiss()
             timeOutDialog.showAlertDialog(requireContext(), errorMessage)
@@ -260,8 +280,10 @@ class UpdateCategoryFragment : Fragment() {
             return
         }
 
+        // Determine the transaction type based on the selected index.
         val transactionType = transactionTypes[binding.contributionType.selectedIndex]
 
+        // Create a new Category object with the updated details.
         val updatedCategory = Category(
             id = "",
             name = catName,
@@ -271,36 +293,32 @@ class UpdateCategoryFragment : Fragment() {
             userid = id
         )
 
+        // Observe the status of the category update operation.
         categoryViewModel.status.observe(viewLifecycleOwner) { status ->
             if (status) {
-                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Category update successful!", hideProgressBar = true, )
+                // Show a success message and redirect to categories after a delay.
+                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Category update successful!", hideProgressBar = true)
 
-                // Dismiss the dialog after 2 seconds
+                // Dismiss the dialog after 2 seconds and redirect to the categories screen.
                 Handler(Looper.getMainLooper()).postDelayed({
-                    // Dismiss the dialog after the delay
                     progressDialog.dismiss()
-
-                    // Navigate to MainActivity
                     redirectToCategories()
                 }, 2000)
-
-                //Toast.makeText(requireContext(), "Category creation successful", Toast.LENGTH_LONG).show()
             } else {
+                // Show a failure message and dismiss the progress dialog after a delay.
                 timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Category update failed!", hideProgressBar = true)
 
-                // Dismiss the dialog after 2 seconds
                 Handler(Looper.getMainLooper()).postDelayed({
-                    // Dismiss the dialog after the delay
                     progressDialog.dismiss()
-
-
                 }, 2000)
             }
         }
 
-        categoryViewModel.message.observe(viewLifecycleOwner){ message ->
-            if(message == "timeout" || message.contains("Unable to resolve host")){
-                timeOutDialog.showTimeoutDialog(requireContext() ){
+        // Observe messages from the ViewModel for timeout or connection issues.
+        categoryViewModel.message.observe(viewLifecycleOwner) { message ->
+            if (message == "timeout" || message.contains("Unable to resolve host")) {
+                // Show a timeout dialog and retry updating the category.
+                timeOutDialog.showTimeoutDialog(requireContext()) {
                     progressDialog.dismiss()
                     timeOutDialog.showProgressDialog(requireContext())
                     timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Connecting...", hideProgressBar = false)
@@ -309,55 +327,145 @@ class UpdateCategoryFragment : Fragment() {
             }
         }
 
+        // Initiate the category update operation in the ViewModel.
         categoryViewModel.updateCategory(token, categoryId, updatedCategory)
     }
 
+    // Validates the category data to ensure that all required fields are filled out.
     private fun validateCategoryData(
         catName: String,
         transactionType: Int,
         selectedColor: Color?,
         selectedIcon: Int?
     ): Boolean {
-        var errors = 0
+        var errors = 0 // Counter for validation errors.
 
+        // Check if the category name is blank; if so, log an error message.
         if (catName.isBlank()) {
             errors += 1
             messages.add("Enter a category name")
             errorMessage += "• Enter a category name\n"
         }
 
+        // Check if a transaction type is selected; if not, log an error message.
         if (transactionType == -1) {
             messages.add("Select a transaction type")
             errorMessage += "• Select a transaction type\n"
             errors += 1
         }
 
+        // Check if a color is selected; if not, log an error message.
         if (selectedColor == null) {
-            errorMessage +="• Select an color\n"
+            errorMessage += "• Select a color\n"
             errors += 1
         }
 
+        // Check if an icon is selected; if not, log an error message.
         if (selectedIcon == null) {
             errorMessage += "• Select an icon"
             errors += 1
         }
 
-
+        // Log the category data for debugging purposes.
         val test = "Cat Name: $catName, transaction type: $transactionType, Color: ${selectedColor?.name}, icon: ${selectedIcon?.let { getIconName(it) }}"
         Log.d("Category", test)
 
+        // Return true if no errors were found; otherwise, return false.
         return errors == 0
     }
 
 
-    private fun redirectToCategories(){
+    // Updates the category information in the database using the provided token and user ID.
+    private fun deleteCategory(token: String) {
+        // Show a progress dialog to indicate that the category update is in progress.
+        val progressDialog = timeOutDialog.showProgressDialog(requireContext())
+
+        // Observe the status of the category update operation.
+        categoryViewModel.status.observe(viewLifecycleOwner) { status ->
+            if (status) {
+                // Show a success message and redirect to categories after a delay.
+                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Category deleted successful!", hideProgressBar = true)
+
+                // Dismiss the dialog after 2 seconds and redirect to the categories screen.
+                Handler(Looper.getMainLooper()).postDelayed({
+                    progressDialog.dismiss()
+                    redirectToCategories()
+                }, 2000)
+            } else {
+                // Show a failure message and dismiss the progress dialog after a delay.
+                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Category deletion failed!", hideProgressBar = true)
+
+                Handler(Looper.getMainLooper()).postDelayed({
+                    progressDialog.dismiss()
+                }, 2000)
+            }
+        }
+
+        // Observe messages from the ViewModel for timeout or connection issues.
+        categoryViewModel.message.observe(viewLifecycleOwner) { message ->
+            if (message == "timeout" || message.contains("Unable to resolve host")) {
+                // Show a timeout dialog and retry updating the category.
+                timeOutDialog.showTimeoutDialog(requireContext()) {
+                    progressDialog.dismiss()
+                    timeOutDialog.showProgressDialog(requireContext())
+                    timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Connecting...", hideProgressBar = false)
+                    categoryViewModel.deleteCategory(token, categoryId)
+                }
+            }
+        }
+
+        // Initiate the category update operation in the ViewModel.
+        categoryViewModel.deleteCategory(token, categoryId)
+    }
+
+    // Redirects to the CategoriesFragment, updating the UI to show the categories list.
+    private fun redirectToCategories() {
         val categoriesFragment = CategoriesFragment()
 
-
-        // Navigate to CategoryDetailsFragment
+        // Navigate to the CategoriesFragment and add this transaction to the back stack.
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.frame_layout, categoriesFragment)
             .addToBackStack(null)
             .commit()
+    }
+
+    private fun showCustomDeleteDialog(token: String) {
+        // Inflate the custom dialog view
+        val dialogView = layoutInflater.inflate(R.layout.delete_dialog, null)
+
+        // Create the AlertDialog using a custom view
+        val dialogBuilder = AlertDialog.Builder(requireContext())
+            .setView(dialogView)
+            .create()
+
+        // Find the dialog views
+        val confirmButton: LinearLayout  = dialogView.findViewById(R.id.confirmButton)
+        val cancelButton: LinearLayout = dialogView.findViewById(R.id.cancelButton)
+        val titleTextView: TextView = dialogView.findViewById(R.id.titleTextView)
+        val messageTextView: TextView = dialogView.findViewById(R.id.messageTextView)
+
+        // Optionally set a custom title or message if needed
+        titleTextView.text = "'${categoryName}'"
+        messageTextView.text = "Are you sure you want to delete \nthis category?"
+
+        // Set click listeners for the buttons
+        confirmButton.setOnClickListener {
+            // Confirm delete action
+            deleteCategory(token) // Call method to update the category
+        }
+
+        cancelButton.setOnClickListener {
+            // Just close the dialog without doing anything
+            dialogBuilder.dismiss()
+        }
+
+        // Show the dialog
+        dialogBuilder.show()
+    }
+
+    // Clean up binding object when the fragment is destroyed
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

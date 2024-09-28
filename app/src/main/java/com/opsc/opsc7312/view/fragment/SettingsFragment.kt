@@ -13,60 +13,75 @@ import com.opsc.opsc7312.model.data.offline.preferences.UserManager
 
 class SettingsFragment : Fragment() {
 
+    // Binding for the fragment's view to access UI elements
     private var _binding: FragmentSettingsBinding? = null
-    private val binding get() = _binding!!
+    private val binding get() = _binding!! // Non-nullable binding reference for easy access
 
+    // UserManager instance to manage user data
     private lateinit var userManager: UserManager
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        // Inflate the layout for this fragment using View Binding
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
 
+        // Initialize UserManager to access user-related data
         userManager = UserManager.getInstance(requireContext())
 
+        // Display the user's username and email in the respective TextViews
         binding.username.text = userManager.getUser().username
         binding.email.text = userManager.getUser().email
 
+        // Set up button click events
         buttonEvents()
 
+        // Return the root view of the binding
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Access the MainActivity and set the toolbar title
+        // Set the toolbar title for the activity to "Settings"
         (activity as? MainActivity)?.setToolbarTitle("Settings")
     }
 
-    private fun buttonEvents(){
+    // Function to set up click listeners for various sections in the settings
+    private fun buttonEvents() {
+        // Listener for the account section, switches to ProfileFragment
         binding.accountSection.setOnClickListener {
             changeCurrentFragment(ProfileFragment())
         }
 
+        // Listener for the language section, switches to LanguageFragment
         binding.languageSection.setOnClickListener {
             changeCurrentFragment(LanguageFragment())
         }
 
+        // Listener for the security section, switches to SecurityFragment
         binding.securitySection.setOnClickListener {
             changeCurrentFragment(SecurityFragment())
         }
 
+        // Listener for the appearance section, switches to ThemeFragment
         binding.appearanceSection.setOnClickListener {
             changeCurrentFragment(ThemeFragment())
         }
 
+        // Listener for the notifications section, switches to NotificationsFragment
         binding.notificationsSection.setOnClickListener {
             changeCurrentFragment(NotificationsFragment())
         }
     }
 
+    // Function to replace the current fragment with a new one and add it to the back stack
     private fun changeCurrentFragment(fragment: Fragment) {
         requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.frame_layout, fragment)
-            .addToBackStack(null)
-            .commit()
+            .replace(R.id.frame_layout, fragment) // Replace the content of the frame layout
+            .addToBackStack(null) // Add the transaction to the back stack
+            .commit() // Commit the transaction
     }
 }
+
