@@ -10,16 +10,35 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
+// Interface defining the API endpoints for managing user goals.
+// It provides methods to retrieve, create, update, and delete goals associated with a user.
 interface GoalService {
+
+    // Retrieves a list of goals for a specific user.
+    // This function sends a GET request to the "goal/{id}" endpoint.
+    // It requires an authorization token in the header and the user ID in the path.
+    // The response will be a Call object containing a list of Goal objects associated with the specified user.
     @GET("goal/{id}")
     fun getGoals(@Header("Authorization") token: String, @Path("id") userId: String): Call<List<Goal>>
 
+    // Creates a new goal based on the provided goal details.
+    // This function sends a POST request to the "goal/create" endpoint.
+    // An authorization token is required in the header.
+    // It takes a Goal object as the request body and returns a Call object containing the created Goal.
     @POST("goal/create")
     fun createGoal(@Header("Authorization") token: String, @Body goal: Goal): Call<Goal>
 
+    // Updates an existing goal identified by its ID.
+    // This function sends a PUT request to the "goal/{id}" endpoint.
+    // It requires an authorization token in the header, the goal ID in the path, and a Goal object in the request body.
+    // Returns a Call object containing the updated Goal.
     @PUT("goal/{id}")
     fun updateGoal(@Header("Authorization") token: String, @Path("id") id: String, @Body goal: Goal): Call<Goal>
 
+    // Deletes a goal identified by its ID.
+    // This function sends a DELETE request to the "goal/{id}" endpoint.
+    // It requires an authorization token in the header and the goal ID in the path.
+    // Returns a Call object with no content on successful deletion.
     @DELETE("goal/{id}")
     fun deleteGoal(@Header("Authorization") token: String, @Path("id") id: String): Call<Void>
 }

@@ -15,32 +15,46 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+// Object that holds constant values and utility functions for the application.
+// This object provides essential configuration settings, enumerations for transaction types,
+// and utility functions for date and amount formatting.
+
 object AppConstants {
 
+    // The base URL for the API endpoints used throughout the application.
+    // This URL is used as the prefix for all network requests.
     const val BASE_URL = "https://pennywise-1rw5.onrender.com/api/"
 
-    private val toastList = mutableListOf<View>()
-    private val toastHeight = 150 // Adjust based on your toast height
-    private var currentY = 150 // Keeps track of the current y position for new toasts
-
-
-    enum class TRANSACTIONTYPE{
+    // Enumeration defining the types of transactions available in the application.
+    // The types include INCOME and EXPENSE, allowing for categorization of financial transactions.
+    enum class TRANSACTIONTYPE {
         INCOME, EXPENSE
     }
 
-    enum class CONTRIBUTIONTYPE{
+    // Enumeration defining the types of contributions available for financial planning.
+    // This includes options for WEEKLY, BIWEEKLY, and MONTHLY contributions, helping users
+    // plan their savings or investments effectively.
+    enum class CONTRIBUTIONTYPE {
         WEEKLY, BIWEEKLY, MONTHLY
     }
 
-    enum class SORT_TYPE{
+    // Enumeration for the various sorting options available for displaying lists of data.
+    // The sorting options include ascending and descending order based on name or date,
+    // as well as sorting by the highest or lowest amount.
+    enum class SORT_TYPE {
         NAME_ASCENDING, NAME_DESCENDING, DATE_ASCENDING,
         DATE_DESCENDING, HIGHEST_AMOUNT, LOWEST_AMOUNT
     }
 
-    enum class Filter_TYPE{
+    // Enumeration for filtering options available for displaying transactions.
+    // The filter options include ALL, INCOME, and EXPENSE, allowing users to view
+    // specific subsets of their transaction history.
+    enum class Filter_TYPE {
         ALL, INCOME, EXPENSE,
     }
 
+    // A dictionary mapping color names to their corresponding color resource IDs.
+    // This is used throughout the application to facilitate color selection for various UI elements.
     val COLOR_DICTIONARY = mapOf(
         "Red" to R.color.red,
         "Blue" to R.color.blue,
@@ -48,7 +62,8 @@ object AppConstants {
         "Yellow" to R.color.yellow
     )
 
-    // Map of colors with their corresponding checkmark image resource IDs
+    // A dictionary mapping color names to their corresponding checkmark image resource IDs.
+    // This can be used to visually indicate selection of specific colors in the UI.
     val COLOR_IMAGE_DICTIONARY = mapOf(
         "Red" to R.drawable.baseline_check_red,
         "Blue" to R.drawable.baseline_check_blue,
@@ -56,11 +71,14 @@ object AppConstants {
         "Yellow" to R.drawable.baseline_check_yellow
     )
 
-    // List of color names
+    // A list of color names available for selection in the application.
+    // This list can be used to populate color picker UI elements.
     val COLOR_LIST = arrayListOf(
-        "Red" ,"Blue","Green","Yellow"
+        "Red", "Blue", "Green", "Yellow"
     )
 
+    // A dictionary mapping categories of expenses to their corresponding icon resource IDs.
+    // This allows the application to display relevant icons next to transaction categories for better UX.
     val ICONS = mapOf(
         "groceries" to R.drawable.baseline_shopping_cart_24,
         "dining out" to R.drawable.baseline_local_dining_24,
@@ -71,9 +89,6 @@ object AppConstants {
         "healthcare" to R.drawable.baseline_medical_services_24,
         "education" to R.drawable.baseline_school_24,
         "personal care" to R.drawable.baseline_location_on_24,
-//        "email" to R.drawable.baseline_email_24,
-//        "book" to R.drawable.baseline_menu_book_24,
-//        "settings" to R.drawable.baseline_settings_24,
         "gift" to R.drawable.baseline_card_giftcard_24,
         "travel" to R.drawable.baseline_airplanemode_active_24,
         "pets" to R.drawable.baseline_pets_24,
@@ -83,6 +98,8 @@ object AppConstants {
         "subscription" to R.drawable.baseline_loop_24
     )
 
+    // Converts a timestamp (in milliseconds) to a formatted date string (dd/MM/yyyy).
+    // This function is useful for displaying dates in a user-friendly format.
     fun convertLongToString(timestamp: Long): String {
         val sdf: SimpleDateFormat = SimpleDateFormat("dd/MM/yyyy")
         val date: Date = Date(timestamp)
@@ -90,65 +107,28 @@ object AppConstants {
         return formattedDate
     }
 
-
-
-    // Define at the class level
-
-    fun showFloatingToast(context: Context, message: String) {
-        val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        val inflater = LayoutInflater.from(context)
-        val layout: View = inflater.inflate(R.layout.custom_toast, null)
-
-        val text: TextView = layout.findViewById(R.id.toast_text)
-        text.text = message
-
-        val params = WindowManager.LayoutParams(
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
-            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-            PixelFormat.TRANSLUCENT
-        )
-
-        // Set the position of the new toast
-        params.gravity = Gravity.TOP or Gravity.END
-        params.x = 0
-        params.y = currentY
-
-        windowManager.addView(layout, params)
-        toastList.add(layout)
-
-        // Update currentY for next toast
-        currentY += toastHeight
-
-        // Remove the toast after a delay
-        layout.postDelayed({
-            windowManager.removeView(layout)
-            toastList.remove(layout)
-
-            // Adjust positions of remaining toasts
-            currentY -= toastHeight
-            for (i in toastList.indices) {
-                val updatedParams = toastList[i].layoutParams as WindowManager.LayoutParams
-                updatedParams.y = i * toastHeight // Adjust the offset as needed
-                windowManager.updateViewLayout(toastList[i], updatedParams)
-            }
-        }, 5000) // Duration of the toast
-    }
-
+    // Checks whether the token has expired based on the provided expiration time.
+    // Returns true if the current system time exceeds the expiration time, indicating
+    // that the token is no longer valid for authentication.
     fun isTokenExpired(expirationTime: Long): Boolean {
         return System.currentTimeMillis() > expirationTime
     }
 
-    fun tokenExpirationTime(): Long{
-        return System.currentTimeMillis() + (60 * 60 * 1000)
+    // Calculates the expiration time for a token, which is set to two days from the current time.
+    // This function can be used to set a validity period for authentication tokens.
+    fun tokenExpirationTime(): Long {
+        return System.currentTimeMillis() + (2 * 24 * 60 * 60 * 1000)
     }
 
+    // Formats a given amount as a string with two decimal places.
+    // This function is useful for displaying monetary values in a consistent format throughout the app.
     fun formatAmount(amount: Double): String {
-        return String.format(Locale.US,"%.2f", amount)
+        return String.format(Locale.US, "%.2f", amount)
     }
 
-    fun longToDate(timestamp: Long): String{
+    // Converts a timestamp (in milliseconds) to a formatted date string (dd/MM/yyyy).
+    // This function is similar to convertLongToString and can be used for date formatting tasks.
+    fun longToDate(timestamp: Long): String {
         val date = Date(timestamp)
         val sdf = SimpleDateFormat("dd/MM/yyyy")
         val formattedDate = sdf.format(date)

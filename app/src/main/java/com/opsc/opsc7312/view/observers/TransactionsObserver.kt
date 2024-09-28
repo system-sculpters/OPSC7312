@@ -9,18 +9,20 @@ import com.opsc.opsc7312.view.adapter.TransactionAdapter
 import com.opsc.opsc7312.view.custom.FilterBottomSheet
 import com.opsc.opsc7312.view.custom.SortBottomSheet
 
-class TransactionsObserver(
-    private val sortBottomSheet: SortBottomSheet,
-    private val filterBottomSheet: FilterBottomSheet,
-    private val adapter: TransactionAdapter?,
-    private val amount: TextView,) :
-    Observer<List<Transaction>> {
-    // This class was adapted from stackoverflow
-    // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
-    // Kevin Robatel
-    // https://stackoverflow.com/users/244702/kevin-robatel
+// This class was adapted from stackoverflow
+// https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+// Kevin Robatel
+// https://stackoverflow.com/users/244702/kevin-robatel
 
-    // Method called when the observed data changes
+///This class observes a list of Transaction objects and updates the UI components
+//when the list changes.
+class TransactionsObserver(
+    private val sortBottomSheet: SortBottomSheet,     // Reference to the SortBottomSheet for sorting transactions
+    private val filterBottomSheet: FilterBottomSheet,   // Reference to the FilterBottomSheet for filtering transactions
+    private val adapter: TransactionAdapter?,            // Adapter for displaying transactions in a RecyclerView
+    private val amount: TextView                         // TextView for displaying the total balance
+) : Observer<List<Transaction>> {
+
     override fun onChanged(value: List<Transaction>) {
         // Update the data in the CategoryListAdapter
         adapter?.updateTransactions(value)
@@ -32,20 +34,25 @@ class TransactionsObserver(
         Log.d("Transaction", "transactions retrieved: ${value.size}\n $value")
     }
 
-    private fun updateBalance(value: List<Transaction>){
-        var totalIncome = 0.0
-        var totalExpense = 0.0
+    private fun updateBalance(value: List<Transaction>) {
+        var totalIncome = 0.0  // Initialize total income
+        var totalExpense = 0.0  // Initialize total expense
 
-        for(transaction in value){
-            if(transaction.type == AppConstants.TRANSACTIONTYPE.INCOME.name){
+        // Iterate over each transaction to calculate total income and expenses
+        for (transaction in value) {
+            if (transaction.type == AppConstants.TRANSACTIONTYPE.INCOME.name) {
+                // Add to total income if the transaction type is income
                 totalIncome += transaction.amount
-            } else{
+            } else {
+                // Add to total expenses if the transaction type is expense
                 totalExpense += transaction.amount
             }
         }
 
+        // Calculate the total balance
         val totalBalance = totalIncome - totalExpense
 
+        // Update the amount TextView to display the formatted balance
         amount.text = "${AppConstants.formatAmount(totalBalance)} ZAR"
     }
 }

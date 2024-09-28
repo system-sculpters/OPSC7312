@@ -179,7 +179,7 @@
             android:id="@+id/submit_button"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:text="@string/create_text"
+            android:text="@string/update_text"
             android:textSize="30sp"
             android:textColor="@color/white"
             android:fontFamily="@font/inter_medium"

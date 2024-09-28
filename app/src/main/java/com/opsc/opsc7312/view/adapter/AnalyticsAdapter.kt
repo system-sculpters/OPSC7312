@@ -24,6 +24,13 @@ import com.opsc.opsc7312.model.data.model.AnalyticsResponse
 import com.opsc.opsc7312.model.data.model.CategoryExpense
 import com.opsc.opsc7312.model.data.model.Goal
 import com.opsc.opsc7312.model.data.model.IncomeExpense
+import com.opsc.opsc7312.view.custom.PercentValueFormatter
+
+
+// This class adapted from geeksforgeeks
+// https://www.geeksforgeeks.org/android-recyclerview/
+// BaibhavOjha
+// https://auth.geeksforgeeks.org/user/BaibhavOjha/articles?utm_source=geeksforgeeks&utm_medium=article_author&utm_campaign=auth_user
 
 class AnalyticsAdapter(
     private val context: Context,
@@ -37,63 +44,70 @@ class AnalyticsAdapter(
     private val progressBar: ProgressBar
 ) {
 
+    // Updates all charts and statistics displayed in the analytics section.
     fun updateGraph(value: AnalyticsResponse) {
-        setupPieChart(value.categoryStats)
-        setupIncomeExpenseChart(value.dailyTransactions)
-        updateIncomeChart("6 Months", value.transactionsByMonth)
-        setupGoals(value.goals)
+        setupPieChart(value.categoryStats) // Set up pie chart based on category statistics.
+        setupIncomeExpenseChart(value.dailyTransactions) // Set up income vs expense chart with daily transactions.
+        updateIncomeChart("6 Months", value.transactionsByMonth) // Update income chart for the last 6 months.
+        setupGoals(value.goals) // Set up the goal progress display based on the user's goals.
     }
 
-    fun updateIncomeExpenseChart(value: List<IncomeExpense>){
-        setupIncomeExpenseChart(value)
+    // Updates the income vs expense chart with the provided data.
+    fun updateIncomeExpenseChart(value: List<IncomeExpense>) {
+        setupIncomeExpenseChart(value) // Initialize the income vs expense chart with new data.
     }
 
-    fun updateIncomeChart(month: String, value: List<IncomeExpense>){
+    // Updates the income chart based on the selected month duration.
+    fun updateIncomeChart(month: String, value: List<IncomeExpense>) {
         var incomeList: List<IncomeExpense> = listOf()
 
         Log.d("this is the values", "List count: ${value.size}\nList: $value")
-        if(month == "3 Months"){
-            incomeList = value.take(3)
-        }
-        else if(month == "6 Months"){
-            incomeList =value.take(6)
-        }
-        else {
-            incomeList = value
+        if (month == "3 Months") {
+            incomeList = value.take(3) // Get data for the last 3 months.
+        } else if (month == "6 Months") {
+            incomeList = value.take(6) // Get data for the last 6 months.
+        } else {
+            incomeList = value // If no specific duration, use the entire list.
         }
 
         Log.d("this is the income list", "List count: ${incomeList.size}\nList: $incomeList")
-        setupIncome(incomeList)
+        setupIncome(incomeList) // Set up the income chart with the selected data.
     }
 
-    private fun setupGoals(goalsList: List<Goal>){
+    // Sets up the goal progress display based on the user's goals.
+    private fun setupGoals(goalsList: List<Goal>) {
         Log.d("this is the goals list", "List count: ${goalsList.size}\nList: $goalsList")
 
-        var totalTargetAmount = 0.0
-        var totalCurrentAmount = 0.0
+        var totalTargetAmount = 0.0 // Initialize the total target amount for all goals.
+        var totalCurrentAmount = 0.0 // Initialize the total current amount for all goals.
 
-        for (goal in goalsList){
-            totalCurrentAmount += goal.currentamount
-            totalTargetAmount += goal.targetamount
+        // Calculate total current and target amounts for each goal.
+        for (goal in goalsList) {
+            totalCurrentAmount += goal.currentamount // Sum the current amounts.
+            totalTargetAmount += goal.targetamount // Sum the target amounts.
         }
 
+        // Calculate the remaining amount needed to reach the target.
         val amountLeft = totalTargetAmount - totalCurrentAmount
 
+        // Update the displayed amounts for current and target.
         amount.text = "${AppConstants.formatAmount(totalCurrentAmount)}/${AppConstants.formatAmount(totalTargetAmount)} ZAR"
         remainingAmount.text = "${AppConstants.formatAmount(amountLeft)} ZAR remaining to achieve your goal"
 
+        // Calculate and set the progress for the progress bar.
         val progress = if (totalTargetAmount > 0) {
-            (totalCurrentAmount / totalTargetAmount * 100).toInt()
+            (totalCurrentAmount / totalTargetAmount * 100).toInt() // Calculate progress as a percentage.
         } else {
-            0
+            0 // No progress if target amount is zero.
         }
-        progressBar.progress = progress
+        progressBar.progress = progress // Update progress bar with calculated progress.
 
         Log.d("this is the goals list", "\n$amountLeft $totalTargetAmount $totalCurrentAmount" +
                 "${AppConstants.formatAmount(totalCurrentAmount)}/${AppConstants.formatAmount(totalTargetAmount)} ZAR\n" +
-                "\"${AppConstants.formatAmount(amountLeft)} ZAR remaining to achieve your goal")
+                "${AppConstants.formatAmount(amountLeft)} ZAR remaining to achieve your goal")
     }
 
+    // Sets up the pie chart to visualize category expenses.
     private fun setupPieChart(categoryList: List<CategoryExpense>) {
         val pieEntries = ArrayList<PieEntry>()
         val colors = ArrayList<Int>()
@@ -310,20 +324,29 @@ class AnalyticsAdapter(
         incomeChart.invalidate()
     }
 
-    private fun totalIncome(income: List<IncomeExpense>): String{
-        var total = 0.0
-        for (inc in income){
-            total+= inc.income
+    // Function to calculate the total income from a list of IncomeExpense objects
+    private fun totalIncome(income: List<IncomeExpense>): String {
+        var total = 0.0 // Initialize total income to 0.0
+
+        // Iterate through each IncomeExpense object in the income list
+        for (inc in income) {
+            total += inc.income // Add the income of the current object to the total
         }
+
+        // Return the total income formatted as a string with a "R" prefix
         return "R ${AppConstants.formatAmount(total)}"
     }
 
-    private fun getColor(color: String): Int {
-        return AppConstants.COLOR_DICTIONARY[color] ?: R.color.dark_grey // Return black if color not found
-    }
-    class PercentValueFormatter : ValueFormatter() {
-        override fun getPieLabel(value: Float, pieEntry: PieEntry?): String {
-            return String.format("%.1f%%", value) // Format to one decimal place
+
+    // Helper function to retrieve color resource based on category name.
+    private fun getColor(category: String): Int? {
+        return when (category) {
+            "Green" -> R.color.green
+            "Red" -> R.color.red
+            "Blue" -> R.color.blue
+            "Yellow" -> R.color.yellow
+            // Add more color mappings as needed.
+            else -> null // Return null if no color mapping found.
         }
     }
 }

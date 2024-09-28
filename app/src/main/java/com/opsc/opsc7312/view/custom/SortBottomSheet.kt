@@ -13,143 +13,135 @@ import com.opsc.opsc7312.model.data.model.Transaction
 import com.opsc.opsc7312.view.adapter.TransactionAdapter
 
 class SortBottomSheet : BottomSheetDialogFragment() {
+    // Binding instance for the bottom dialog layout
     private var _binding: SortTransactionBottomDialogBinding? = null
     private val binding get() = _binding!!
 
+    // Adapter for displaying transactions in a list
     private lateinit var adapter: TransactionAdapter
 
+    // List to hold transaction data
     private var transactions: MutableList<Transaction> = mutableListOf()
 
+    // Inflate the view for the bottom sheet dialog
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        // Inflate the layout for the bottom sheet dialog
         _binding = SortTransactionBottomDialogBinding.inflate(inflater, container, false)
 
+        // Set up click listeners for sorting options
+        binding.sortByNameAscending.setOnClickListener { onRadioButtonClicked(it) }
+        binding.sortByNameDescending.setOnClickListener { onRadioButtonClicked(it) }
+        binding.sortByDateAscending.setOnClickListener { onRadioButtonClicked(it) }
+        binding.sortByDateDescending.setOnClickListener { onRadioButtonClicked(it) }
+        binding.sortByHigehestAmount.setOnClickListener { onRadioButtonClicked(it) }
+        binding.sortByLowestAmount.setOnClickListener { onRadioButtonClicked(it) }
 
-
-        // Set up the onClick functionality (listener)
-        binding.sortByNameAscending.setOnClickListener{ onRadioButtonClicked(it)}
-        binding.sortByNameDescending.setOnClickListener{ onRadioButtonClicked(it)}
-        binding.sortByDateAscending.setOnClickListener{ onRadioButtonClicked(it)}
-        binding.sortByDateDescending.setOnClickListener{ onRadioButtonClicked(it)}
-        binding.sortByHigehestAmount.setOnClickListener{ onRadioButtonClicked(it)}
-        binding.sortByLowestAmount.setOnClickListener{ onRadioButtonClicked(it)}
-
+        // Return the root view of the binding
         return binding.root
     }
 
-    fun onRadioButtonClicked(view: View){
+    // Handle radio button clicks for sorting options
+    fun onRadioButtonClicked(view: View) {
+        // Check if the clicked radio button is selected
         val isSelected = (view as AppCompatRadioButton).isChecked
         when (view.id) {
             R.id.sortByNameAscending -> {
-                if(isSelected){
-
+                // Sort transactions by name in ascending order
+                if (isSelected) {
                     sortData(AppConstants.SORT_TYPE.NAME_ASCENDING)
-                    dismiss()
+                    dismiss() // Dismiss the bottom sheet
                 }
             }
             R.id.sortByNameDescending -> {
-                // Handle sort by date
-                if(isSelected){
-
+                // Sort transactions by name in descending order
+                if (isSelected) {
                     sortData(AppConstants.SORT_TYPE.NAME_DESCENDING)
                     dismiss()
                 }
             }
             R.id.sortByDateAscending -> {
-                // Handle sort by amount
-                if(isSelected){
+                // Sort transactions by date in ascending order
+                if (isSelected) {
                     sortData(AppConstants.SORT_TYPE.DATE_ASCENDING)
                     dismiss()
                 }
             }
-
             R.id.sortByDateDescending -> {
-                // Handle sort by amount
-                if(isSelected){
-
+                // Sort transactions by date in descending order
+                if (isSelected) {
                     sortData(AppConstants.SORT_TYPE.DATE_DESCENDING)
                     dismiss()
                 }
             }
             R.id.sortByHigehestAmount -> {
-                // Handle sort by amount
-                if(isSelected){
+                // Sort transactions by amount in descending order
+                if (isSelected) {
                     sortData(AppConstants.SORT_TYPE.HIGHEST_AMOUNT)
                     dismiss()
-
                 }
             }
-
             R.id.sortByLowestAmount -> {
-                // Handle sort by amount
-                if(isSelected){
+                // Sort transactions by amount in ascending order
+                if (isSelected) {
                     sortData(AppConstants.SORT_TYPE.LOWEST_AMOUNT)
                     dismiss()
                 }
-
             }
         }
     }
 
-
-
+    // Called after the view is created; can be overridden for additional setup
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
     }
 
+    // Clean up the binding when the view is destroyed
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
-    fun setAdapter(transactionAdapter: TransactionAdapter){
+    // Set the adapter for the transaction list
+    fun setAdapter(transactionAdapter: TransactionAdapter) {
         adapter = transactionAdapter
     }
 
-    fun updateTransactions(data: List<Transaction>){
-        transactions.clear()
-        transactions.addAll(data)
+    // Update the list of transactions
+    fun updateTransactions(data: List<Transaction>) {
+        transactions.clear() // Clear existing transactions
+        transactions.addAll(data) // Add new transaction data
     }
 
-    private fun sortData(sortBy: AppConstants.SORT_TYPE){
-
-        when(sortBy){
+    // Sort transactions based on the specified criteria
+    private fun sortData(sortBy: AppConstants.SORT_TYPE) {
+        when (sortBy) {
             AppConstants.SORT_TYPE.NAME_ASCENDING -> {
-                transactions.sortBy { it.name }
-                adapter.updateTransactions(transactions.toList())
+                transactions.sortBy { it.name } // Sort by name ascending
+                adapter.updateTransactions(transactions.toList()) // Update adapter with sorted data
             }
-
             AppConstants.SORT_TYPE.NAME_DESCENDING -> {
-                transactions.sortByDescending { it.name }
+                transactions.sortByDescending { it.name } // Sort by name descending
                 adapter.updateTransactions(transactions.toList())
             }
-
             AppConstants.SORT_TYPE.DATE_ASCENDING -> {
-                transactions.sortBy { it.date }
+                transactions.sortBy { it.date } // Sort by date ascending
                 adapter.updateTransactions(transactions.toList())
             }
-
             AppConstants.SORT_TYPE.DATE_DESCENDING -> {
-                transactions.sortByDescending { it.date }
+                transactions.sortByDescending { it.date } // Sort by date descending
                 adapter.updateTransactions(transactions.toList())
             }
-
             AppConstants.SORT_TYPE.HIGHEST_AMOUNT -> {
-                transactions.sortByDescending { it.amount }
+                transactions.sortByDescending { it.amount } // Sort by highest amount
                 adapter.updateTransactions(transactions.toList())
             }
-
             AppConstants.SORT_TYPE.LOWEST_AMOUNT -> {
-                transactions.sortBy { it.amount }
+                transactions.sortBy { it.amount } // Sort by lowest amount
                 adapter.updateTransactions(transactions.toList())
             }
-
-
         }
-
-
     }
 }

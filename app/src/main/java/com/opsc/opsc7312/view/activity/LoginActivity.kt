@@ -155,7 +155,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         auth.userData.observe(this){ user_data ->
-            val tokenExpirationTime = System.currentTimeMillis() + (2 * 24 * 60 * 60 * 1000) // Token expires in 2  hour
+            val tokenExpirationTime =  AppConstants.tokenExpirationTime() // Token expires in 2  hour
 
             tokenManager.saveToken(user_data.token, tokenExpirationTime)
 
@@ -330,7 +330,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         auth.userData.observe(this){ user_data ->
-            val tokenExpirationTime = System.currentTimeMillis() + (60 * 60 * 1000) // Token expires in 1 hour
+            val tokenExpirationTime = AppConstants.tokenExpirationTime() // Token expires in 1 hour
 
             tokenManager.saveToken(user_data.token, tokenExpirationTime)
 

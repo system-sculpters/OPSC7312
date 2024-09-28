@@ -11,7 +11,7 @@ class UserManager private constructor(context: Context){
 
 
 
-    // Save token
+    // Save user data
     fun saveUser(user: User) {
         val editor = sharedPreferences.edit()
         editor.putString("userid", user.id)
@@ -20,7 +20,7 @@ class UserManager private constructor(context: Context){
         editor.apply()
     }
 
-    // Retrieve token
+    // Retrieve user data
     fun getUser(): User {
         val userid = sharedPreferences.getString("userid", null)
         val username = sharedPreferences.getString("username", null)

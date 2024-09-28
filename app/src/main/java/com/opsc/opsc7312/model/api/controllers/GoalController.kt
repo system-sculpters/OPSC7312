@@ -4,127 +4,158 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.opsc.opsc7312.model.api.retrofitclients.GoalRetrofitClient
+import com.opsc.opsc7312.model.api.retrofitclients.RetrofitClient
+import com.opsc.opsc7312.model.api.services.AnalyticsService
+import com.opsc.opsc7312.model.api.services.GoalService
 import com.opsc.opsc7312.model.data.model.Goal
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+//ViewModel class to manage goal-related operations such as retrieving, creating,
+//updating, and deleting goals by making API calls using Retrofit.
 class GoalController : ViewModel() {
-    private var api = GoalRetrofitClient.apiService
+    // Instance of the API service to interact with backend endpoints
+    private var api: GoalService = RetrofitClient.createService<GoalService>()
 
+    // LiveData to track the status of operations (e.g., success or failure)
     val status: MutableLiveData<Boolean> = MutableLiveData()
+
+    // LiveData to store messages (e.g., success or error messages)
     val message: MutableLiveData<String> = MutableLiveData()
 
+    // LiveData that holds the list of goals fetched from the server
     val goalList: MutableLiveData<List<Goal>> = MutableLiveData()
 
-    fun getAllGoals(userToken: String, id: String){
-        val token = "Bearer $userToken"
-        val call = api.getGoals(token, id)
+    // Retrieves all goals for the specified user
+    fun getAllGoals(userToken: String, id: String) {
+        val token = "Bearer $userToken"  // Format the token for authorization
+        val call = api.getGoals(token, id)  // Make the API call to fetch goals
 
+        // Log the request URL for debugging
         val url = call.request().url.toString()
         Log.d("MainActivity", "Request URL: $url")
-        call.enqueue(object :
-            Callback<List<Goal>> {
+
+        // Execute the API call asynchronously
+        call.enqueue(object : Callback<List<Goal>> {
             override fun onResponse(call: Call<List<Goal>>, response: Response<List<Goal>>) {
+                // If the response is successful, update the goal list
                 if (response.isSuccessful) {
-                    val Goals = response.body()
-                    Goals?.let {
-                        goalList.postValue(it)
-                        status.postValue(true)
-                        message.postValue("Goals retrieved")
+                    val goals = response.body()
+                    goals?.let {
+                        goalList.postValue(it)  // Post the list of goals to the LiveData
+                        status.postValue(true)  // Mark the operation as successful
+                        message.postValue("Goals retrieved")  // Set a success message
                         Log.d("MainActivity", "Goals: $it")
                     }
                 } else {
+                    // Handle non-successful responses, like error codes
                     Log.e("MainActivity", "Request failed with code: ${response.code()}")
-                    goalList.postValue(listOf())
-                    status.postValue(false)
-                    message.postValue("Request failed with code: ${response.code()}")
+                    goalList.postValue(listOf())  // Empty the goal list on failure
+                    status.postValue(false)  // Mark the operation as failed
+                    message.postValue("Request failed with code: ${response.code()}")  // Set an error message
                 }
             }
 
             override fun onFailure(call: Call<List<Goal>>, t: Throwable) {
+                // Log the error if the request fails
                 Log.e("MainActivity", "Error: ${t.message}")
-                goalList.postValue(listOf())
-                status.postValue(false)
-                message.postValue(t.message)
+                goalList.postValue(listOf())  // Empty the goal list on failure
+                status.postValue(false)  // Mark the operation as failed
+                message.postValue(t.message)  // Set an error message
             }
         })
     }
 
-    fun createGoal(userToken: String, Goal: Goal){
-        val token = "Bearer $userToken"
-        api.createGoal(token, Goal).enqueue(object : Callback<Goal> {
+    // Sends a request to create a new goal for the user
+    fun createGoal(userToken: String, goal: Goal) {
+        val token = "Bearer $userToken"  // Format the token for authorization
+
+        // Make the API call to create a new goal
+        api.createGoal(token, goal).enqueue(object : Callback<Goal> {
             override fun onResponse(call: Call<Goal>, response: Response<Goal>) {
+                // If the response is successful, log and update the status
                 if (response.isSuccessful) {
                     val createdGoal = response.body()
                     createdGoal?.let {
-                        status.postValue(true)
-                        message.postValue("Request failed with code: ${it}")
+                        status.postValue(true)  // Mark the operation as successful
+                        message.postValue("Goal created: $it")  // Set a success message
                         Log.d("MainActivity", "Goal created: $it")
                     }
                 } else {
-                    status.postValue(false)
-                    message.postValue("Request failed with code: ${response.code()}")
+                    // Handle error scenarios
+                    status.postValue(false)  // Mark the operation as failed
+                    message.postValue("Request failed with code: ${response.code()}")  // Set an error message
                     Log.e("MainActivity", "Request failed with code: ${response.code()}")
                 }
             }
 
             override fun onFailure(call: Call<Goal>, t: Throwable) {
+                // Log the error if the request fails
                 Log.e("MainActivity", "Error: ${t.message}")
-                status.postValue(false)
-                message.postValue(t.message)
+                status.postValue(false)  // Mark the operation as failed
+                message.postValue(t.message)  // Set an error message
             }
         })
     }
 
-    fun updateGoal(userToken: String,id: String, Goal: Goal){
-        val token = "Bearer $userToken"
-        api.updateGoal(token, id, Goal).enqueue(object : Callback<Goal> {
+    // Updates an existing goal with new data
+    fun updateGoal(userToken: String, id: String, goal: Goal) {
+        val token = "Bearer $userToken"  // Format the token for authorization
+
+        // Make the API call to update an existing goal
+        api.updateGoal(token, id, goal).enqueue(object : Callback<Goal> {
             override fun onResponse(call: Call<Goal>, response: Response<Goal>) {
+                // If the response is successful, log and update the status
                 if (response.isSuccessful) {
-                    val createdGoal = response.body()
-                    createdGoal?.let {
-                        status.postValue(true)
-                        message.postValue("Request failed with code: ${it}")
+                    val updatedGoal = response.body()
+                    updatedGoal?.let {
+                        status.postValue(true)  // Mark the operation as successful
+                        message.postValue("Goal updated: $it")  // Set a success message
                         Log.d("MainActivity", "Goal updated: $it")
                     }
                 } else {
-                    status.postValue(false)
-                    message.postValue("Request failed with code: ${response.code()}")
+                    // Handle error scenarios
+                    status.postValue(false)  // Mark the operation as failed
+                    message.postValue("Request failed with code: ${response.code()}")  // Set an error message
                     Log.e("MainActivity", "Request failed with code: ${response.code()}")
                 }
             }
 
             override fun onFailure(call: Call<Goal>, t: Throwable) {
+                // Log the error if the request fails
                 Log.e("MainActivity", "Error: ${t.message}")
-                status.postValue(false)
-                message.postValue(t.message)
+                status.postValue(false)  // Mark the operation as failed
+                message.postValue(t.message)  // Set an error message
             }
         })
     }
 
+    // Deletes an existing goal by its ID
     fun deleteGoal(userToken: String, id: String) {
-        val token = "Bearer $userToken"
+        val token = "Bearer $userToken"  // Format the token for authorization
+
+        // Make the API call to delete the goal
         api.deleteGoal(token, id).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                // If the response is successful, log and update the status
                 if (response.isSuccessful) {
-                    // The Goal was successfully deleted
-                    status.postValue(true)
-                    message.postValue("Goal deleted successfully.")
+                    status.postValue(true)  // Mark the operation as successful
+                    message.postValue("Goal deleted successfully.")  // Set a success message
                     Log.d("MainActivity", "Goal deleted successfully.")
                 } else {
-                    // The request was not successful, handle the error
-                    status.postValue(false)
-                    message.postValue("Request failed with code: ${response.code()}")
+                    // Handle error scenarios
+                    status.postValue(false)  // Mark the operation as failed
+                    message.postValue("Request failed with code: ${response.code()}")  // Set an error message
                     Log.e("MainActivity", "Request failed with code: ${response.code()}")
                 }
             }
 
             override fun onFailure(call: Call<Void>, t: Throwable) {
-                // Handle failure scenario, like network issues
+                // Log the error if the request fails
                 Log.e("MainActivity", "Error: ${t.message}")
-                status.postValue(false)
-                message.postValue(t.message)
+                status.postValue(false)  // Mark the operation as failed
+                message.postValue(t.message)  // Set an error message
             }
         })
     }

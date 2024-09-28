@@ -10,12 +10,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.opsc.opsc7312.AppConstants
 import com.opsc.opsc7312.R
 
+// This class adapted from geeksforgeeks
+// https://www.geeksforgeeks.org/android-recyclerview/
+// BaibhavOjha
+// https://auth.geeksforgeeks.org/user/BaibhavOjha/articles?utm_source=geeksforgeeks&utm_medium=article_author&utm_campaign=auth_user
+
 class IconAdapter (private val iconList: ArrayList<Int>, private val onItemClick: (Int) -> Unit) :
     RecyclerView.Adapter<IconAdapter.IconViewHolder>() {
-    // This class adapted from geeksforgeeks
-    // https://www.geeksforgeeks.org/android-recyclerview/
-    // BaibhavOjha
-    // https://auth.geeksforgeeks.org/user/BaibhavOjha/articles?utm_source=geeksforgeeks&utm_medium=article_author&utm_campaign=auth_user
 
 
     // Adapter for displaying icons in a RecyclerView

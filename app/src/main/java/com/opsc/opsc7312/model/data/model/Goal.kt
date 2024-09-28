@@ -3,6 +3,12 @@ package com.opsc.opsc7312.model.data.model
 import android.os.Parcel
 import android.os.Parcelable
 
+// Data class representing a Goal entity
+
+// This class was adapted from medium
+//https://medium.com/androiddevelopers/data-classes-the-classy-way-to-hold-data-ab3b11ea4939
+//Florina Muntenescu
+//https://medium.com/@florina.muntenescu
 data class Goal(
     var id: String = "",
     var userid: String = "",
@@ -13,6 +19,14 @@ data class Goal(
     var contrubitiontype: String = "",
     var contributionamount: Double = 0.00
 ) : Parcelable {
+    // Implementing Parcelable for passing Category objects between components
+
+    // Constructor for creating Category objects from Parcel (used during parceling)
+
+    // This implementation of a parcelable data class was adapted from stackoverflow
+    // https://stackoverflow.com/questions/49249234/what-is-parcelable-in-android
+    // Rehan Khan
+    // https://stackoverflow.com/users/16812867/rehan-khan
     constructor(parcel: Parcel) : this(
         parcel.readString() ?: "",
         parcel.readString() ?: "",
