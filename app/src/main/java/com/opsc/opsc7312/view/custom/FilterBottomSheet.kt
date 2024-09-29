@@ -14,6 +14,10 @@ import com.opsc.opsc7312.model.data.model.Transaction
 import com.opsc.opsc7312.view.adapter.TransactionAdapter
 
 class FilterBottomSheet : BottomSheetDialogFragment() {
+    //This class was adapted from medium
+    //https://medium.com/@kosta.palash/using-bottomsheetdialogfragment-with-material-design-guideline-f9814c39b9fc
+    //Palash Kosta
+    //https://medium.com/@kosta.palash
     // Binding instance for the filter dialog layout
     private var _binding: FilterTransactionDialogBinding? = null
     private val binding get() = _binding!!

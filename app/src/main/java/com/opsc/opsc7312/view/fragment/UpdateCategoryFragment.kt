@@ -169,7 +169,7 @@ class UpdateCategoryFragment : Fragment() {
     // Set up the color list in the UI
     private fun setUpColors() {
         binding.colorList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.colorList.setHasFixedSize(true)
+        binding.colorList.setHasFixedSize(false)
 
         // Initialize color adapter with a click listener
         colorAdapter = ColorAdapter(dataList) { selectedCategory ->

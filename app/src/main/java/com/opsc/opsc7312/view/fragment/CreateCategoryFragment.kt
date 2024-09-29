@@ -151,7 +151,7 @@ class CreateCategoryFragment : Fragment() {
     // Sets up the color picker RecyclerView
     private fun setUpColors() {
         binding.colorList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.colorList.setHasFixedSize(true)
+        binding.colorList.setHasFixedSize(false)
 
         // Adapter to display available colors and handle color selection
         colorAdapter = ColorAdapter(dataList) { selectedCategory ->
