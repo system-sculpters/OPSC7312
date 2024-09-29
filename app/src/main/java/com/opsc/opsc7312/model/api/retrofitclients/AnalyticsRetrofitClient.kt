@@ -7,7 +7,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 // Object that provides a singleton Retrofit client for making API requests related to analytics.
 object AnalyticsRetrofitClient {
-
+    // This object was adapted from medium
+    // https://medium.com/quick-code/working-with-restful-apis-in-android-retrofit-volley-okhttp-eb8d3ec71e06
+    // Megha Verma
+    // https://medium.com/@meghaverma12
     // Base URL of the API, fetched from the application constants for consistency.
     private const val URL = AppConstants.BASE_URL
 

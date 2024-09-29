@@ -157,7 +157,6 @@
                 android:padding="8dp"
                 android:clickable="true"
                 android:focusable="true"
-                android:onClick="showDatePicker"
                 android:gravity="center"
                 android:layout_marginBottom="10dp">
 
