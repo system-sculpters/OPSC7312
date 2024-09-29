@@ -30,7 +30,10 @@ jobs:
           distribution: 'zulu' # See 'Supported distributions' for available options
           java-version: '17'
           cache: 'gradle'
-  
+
+      - name: Set permissions for gradlew
+        run: chmod +x ./gradlew
+        
       - name: Gradle Build
         run: ./gradlew build
   
