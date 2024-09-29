@@ -9,6 +9,11 @@ import retrofit2.http.POST
 // Interface defining authentication-related API endpoints for user management.
 // It outlines functions for user registration, login, logout, and reauthentication.
 interface AuthService {
+    // This interface was adapted from medium
+    // https://medium.com/quick-code/working-with-restful-apis-in-android-retrofit-volley-okhttp-eb8d3ec71e06
+    // Megha Verma
+    // https://medium.com/@meghaverma12
+
 
     // Registers a new user with the provided user details.
     // It sends a POST request to the "auth/signup" endpoint.

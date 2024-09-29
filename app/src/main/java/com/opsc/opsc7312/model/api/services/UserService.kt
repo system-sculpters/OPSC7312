@@ -11,6 +11,11 @@ import retrofit2.http.Path
 // Interface defining the API endpoints for managing user-related operations.
 // It includes methods to retrieve user information and update user email, username, and password.
 interface UserService {
+    // This interface was adapted from medium
+    // https://medium.com/quick-code/working-with-restful-apis-in-android-retrofit-volley-okhttp-eb8d3ec71e06
+    // Megha Verma
+    // https://medium.com/@meghaverma12
+
 
     // Retrieves the details of a user based on their unique user ID.
     // This method sends a GET request to the "user/{id}" endpoint.

@@ -13,6 +13,11 @@ import retrofit2.http.Path
 // Interface defining the API endpoints related to category management.
 // It provides functions to retrieve, create, update, and delete categories.
 interface CategoryService {
+    // This interface was adapted from medium
+    // https://medium.com/quick-code/working-with-restful-apis-in-android-retrofit-volley-okhttp-eb8d3ec71e06
+    // Megha Verma
+    // https://medium.com/@meghaverma12
+
 
     // Retrieves a list of categories associated with a specific user.
     // This function sends a GET request to the "category/{id}" endpoint.

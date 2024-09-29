@@ -33,6 +33,11 @@ class CategoryController: ViewModel() {
     // Fetches all categories associated with a specific user, identified by `id`.
     // Requires an authentication token and the user's ID.
     // Updates the `categoryList`, `status`, and `message` based on the response.
+
+    // This method was adapted from medium
+    // https://medium.com/quick-code/working-with-restful-apis-in-android-retrofit-volley-okhttp-eb8d3ec71e06
+    // Megha Verma
+    // https://medium.com/@meghaverma12
     fun getAllCategories(userToken: String, id: String) {
         val token = "Bearer $userToken"
         val call = api.getCategories(token, id)
@@ -76,6 +81,11 @@ class CategoryController: ViewModel() {
     // Sends a request to create a new category for the user.
     // Takes a user token for authentication and a Category object.
     // Updates the `status` and `message` based on the success of the request.
+
+    // This method was adapted from medium
+    // https://medium.com/quick-code/working-with-restful-apis-in-android-retrofit-volley-okhttp-eb8d3ec71e06
+    // Megha Verma
+    // https://medium.com/@meghaverma12
     fun createCategory(userToken: String, category: Category) {
         val token = "Bearer $userToken"
         api.createCategory(token, category).enqueue(object : Callback<Category> {
@@ -108,6 +118,11 @@ class CategoryController: ViewModel() {
     // Sends a request to update an existing category identified by `id`.
     // Takes a user token, category ID, and the updated Category object.
     // Updates the `status` and `message` based on the success of the request.
+
+    // This method was adapted from medium
+    // https://medium.com/quick-code/working-with-restful-apis-in-android-retrofit-volley-okhttp-eb8d3ec71e06
+    // Megha Verma
+    // https://medium.com/@meghaverma12
     fun updateCategory(userToken: String, id: String, category: Category) {
         val token = "Bearer $userToken"
         api.updateCategory(token, id, category).enqueue(object : Callback<Category> {
@@ -140,6 +155,11 @@ class CategoryController: ViewModel() {
     // Sends a request to delete a category identified by `id`.
     // Takes a user token and category ID.
     // Updates the `status` and `message` based on the success of the request.
+
+    // This method was adapted from medium
+    // https://medium.com/quick-code/working-with-restful-apis-in-android-retrofit-volley-okhttp-eb8d3ec71e06
+    // Megha Verma
+    // https://medium.com/@meghaverma12
     fun deleteCategory(userToken: String, id: String) {
         val token = "Bearer $userToken"
         api.deleteCategory(token, id).enqueue(object : Callback<Void> {

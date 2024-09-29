@@ -28,6 +28,11 @@ class AuthController : ViewModel() {
 
     // Function to handle user registration.
     // Takes a User object, makes a registration API call, and updates LiveData based on the response.
+
+    // This method was adapted from medium
+    // https://medium.com/quick-code/working-with-restful-apis-in-android-retrofit-volley-okhttp-eb8d3ec71e06
+    // Megha Verma
+    // https://medium.com/@meghaverma12
     fun register(user: User) {
         api.register(user).enqueue(object : Callback<User> {
 
@@ -61,6 +66,11 @@ class AuthController : ViewModel() {
 
     // Function to handle user login.
     // Takes a User object, makes a login API call, and updates LiveData based on the response.
+
+    // This method was adapted from medium
+    // https://medium.com/quick-code/working-with-restful-apis-in-android-retrofit-volley-okhttp-eb8d3ec71e06
+    // Megha Verma
+    // https://medium.com/@meghaverma12
     fun login(user: User) {
         api.login(user).enqueue(object : Callback<User> {
 
@@ -95,6 +105,11 @@ class AuthController : ViewModel() {
 
     // Function to handle Single Sign-On (SSO) registration.
     // Takes a User object, makes a registration API call with SSO, and updates LiveData based on the response.
+
+    // This method was adapted from medium
+    // https://medium.com/quick-code/working-with-restful-apis-in-android-retrofit-volley-okhttp-eb8d3ec71e06
+    // Megha Verma
+    // https://medium.com/@meghaverma12
     fun registerWithSSO(user: User) {
         api.registerWithSSO(user).enqueue(object : Callback<User> {
 
@@ -127,6 +142,11 @@ class AuthController : ViewModel() {
 
     // Function to handle Single Sign-On (SSO) login.
     // Takes a User object, makes a login API call with SSO, and updates LiveData based on the response.
+
+    // This method was adapted from medium
+    // https://medium.com/quick-code/working-with-restful-apis-in-android-retrofit-volley-okhttp-eb8d3ec71e06
+    // Megha Verma
+    // https://medium.com/@meghaverma12
     fun loginWithSSO(user: User) {
         api.loginWithSSO(user).enqueue(object : Callback<User> {
 

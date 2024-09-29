@@ -13,6 +13,11 @@ import retrofit2.http.Path
 // Interface defining the API endpoints for managing transactions.
 // It provides methods to retrieve, create, update, and delete transactions associated with a user.
 interface TransactionService {
+    // This interface was adapted from medium
+    // https://medium.com/quick-code/working-with-restful-apis-in-android-retrofit-volley-okhttp-eb8d3ec71e06
+    // Megha Verma
+    // https://medium.com/@meghaverma12
+
 
     // Retrieves a list of transactions for a specific user.
     // This method sends a GET request to the "transaction/{id}" endpoint.

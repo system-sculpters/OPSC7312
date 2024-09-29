@@ -94,7 +94,6 @@
                 android:id="@+id/icon_container"
                 android:clickable="true"
                 android:focusable="true"
-                android:onClick="showIconPickerDialog"
                 android:gravity="center_vertical"
                 >
                 <LinearLayout

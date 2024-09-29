@@ -13,6 +13,11 @@ import retrofit2.http.Path
 // Interface defining the API endpoints for managing user goals.
 // It provides methods to retrieve, create, update, and delete goals associated with a user.
 interface GoalService {
+    // This interface was adapted from medium
+    // https://medium.com/quick-code/working-with-restful-apis-in-android-retrofit-volley-okhttp-eb8d3ec71e06
+    // Megha Verma
+    // https://medium.com/@meghaverma12
+
 
     // Retrieves a list of goals for a specific user.
     // This function sends a GET request to the "goal/{id}" endpoint.

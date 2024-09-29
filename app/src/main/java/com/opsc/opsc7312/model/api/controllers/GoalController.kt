@@ -28,6 +28,11 @@ class GoalController : ViewModel() {
     val goalList: MutableLiveData<List<Goal>> = MutableLiveData()
 
     // Retrieves all goals for the specified user
+
+    // This method was adapted from medium
+    // https://medium.com/quick-code/working-with-restful-apis-in-android-retrofit-volley-okhttp-eb8d3ec71e06
+    // Megha Verma
+    // https://medium.com/@meghaverma12
     fun getAllGoals(userToken: String, id: String) {
         val token = "Bearer $userToken"  // Format the token for authorization
         val call = api.getGoals(token, id)  // Make the API call to fetch goals
@@ -68,6 +73,11 @@ class GoalController : ViewModel() {
     }
 
     // Sends a request to create a new goal for the user
+
+    // This method was adapted from medium
+    // https://medium.com/quick-code/working-with-restful-apis-in-android-retrofit-volley-okhttp-eb8d3ec71e06
+    // Megha Verma
+    // https://medium.com/@meghaverma12
     fun createGoal(userToken: String, goal: Goal) {
         val token = "Bearer $userToken"  // Format the token for authorization
 
@@ -100,6 +110,11 @@ class GoalController : ViewModel() {
     }
 
     // Updates an existing goal with new data
+
+    // This method was adapted from medium
+    // https://medium.com/quick-code/working-with-restful-apis-in-android-retrofit-volley-okhttp-eb8d3ec71e06
+    // Megha Verma
+    // https://medium.com/@meghaverma12
     fun updateGoal(userToken: String, id: String, goal: Goal) {
         val token = "Bearer $userToken"  // Format the token for authorization
 
@@ -132,6 +147,11 @@ class GoalController : ViewModel() {
     }
 
     // Deletes an existing goal by its ID
+
+    // This method was adapted from medium
+    // https://medium.com/quick-code/working-with-restful-apis-in-android-retrofit-volley-okhttp-eb8d3ec71e06
+    // Megha Verma
+    // https://medium.com/@meghaverma12
     fun deleteGoal(userToken: String, id: String) {
         val token = "Bearer $userToken"  // Format the token for authorization
 

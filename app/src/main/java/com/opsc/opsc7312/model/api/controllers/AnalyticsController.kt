@@ -30,6 +30,12 @@ class AnalyticsController: ViewModel() {
 
     // Function to fetch all analytics data using the provided user token and user ID.
     // Makes an API call to retrieve analytics data, and updates LiveData based on the response.
+
+    // This method was adapted from medium
+    // https://medium.com/quick-code/working-with-restful-apis-in-android-retrofit-volley-okhttp-eb8d3ec71e06
+    // Megha Verma
+    // https://medium.com/@meghaverma12
+
     fun fetchAllAnalytics(userToken: String, id: String) {
         // Create a Bearer token using the provided user token.
         val token = "Bearer $userToken"

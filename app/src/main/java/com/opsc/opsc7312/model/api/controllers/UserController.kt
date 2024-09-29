@@ -27,6 +27,11 @@ class UserController : ViewModel() {
     val user: MutableLiveData<User> = MutableLiveData()
 
     // Retrieves the user's data from the server based on a userToken (for authentication) and user ID
+
+    // This method was adapted from medium
+    // https://medium.com/quick-code/working-with-restful-apis-in-android-retrofit-volley-okhttp-eb8d3ec71e06
+    // Megha Verma
+    // https://medium.com/@meghaverma12
     fun getUser(userToken: String, id: String) {
         // Prepare the authorization token by appending "Bearer" prefix to the user's token
         val token = "Bearer $userToken"
@@ -66,6 +71,11 @@ class UserController : ViewModel() {
     }
 
     // Updates the user's email and username by sending a request to the server
+
+    // This method was adapted from medium
+    // https://medium.com/quick-code/working-with-restful-apis-in-android-retrofit-volley-okhttp-eb8d3ec71e06
+    // Megha Verma
+    // https://medium.com/@meghaverma12
     fun updateEmailAndUsername(userToken: String, id: String, user: User) {
         // Prepare the authorization token
         val token = "Bearer $userToken"
@@ -109,6 +119,11 @@ class UserController : ViewModel() {
     }
 
     // Updates the user's password by sending a request with the new password to the server
+
+    // This method was adapted from medium
+    // https://medium.com/quick-code/working-with-restful-apis-in-android-retrofit-volley-okhttp-eb8d3ec71e06
+    // Megha Verma
+    // https://medium.com/@meghaverma12
     fun updatePassword(userToken: String, id: String, password: String) {
         // Prepare the authorization token
         val token = "Bearer $userToken"
