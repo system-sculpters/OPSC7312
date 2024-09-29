@@ -139,7 +139,7 @@ class RegisterActivity : AppCompatActivity() {
             }
         }
 
-        // Attempt to register the user
+        // Call the register method to initiate the login process
         auth.register(user)
     }
 
@@ -267,7 +267,7 @@ class RegisterActivity : AppCompatActivity() {
             }
         }
 
-        // Attempt to register the user
+        // Call the registerWithSSO method to initiate the login process
         auth.registerWithSSO(user)
     }
 }
