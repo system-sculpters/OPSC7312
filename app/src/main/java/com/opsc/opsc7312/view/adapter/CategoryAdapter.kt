@@ -14,14 +14,14 @@ import com.opsc.opsc7312.AppConstants
 import com.opsc.opsc7312.R
 import com.opsc.opsc7312.model.data.model.Category
 
-// This class adapted from geeksforgeeks
-// https://www.geeksforgeeks.org/android-recyclerview/
-// BaibhavOjha
-// https://auth.geeksforgeeks.org/user/BaibhavOjha/articles?utm_source=geeksforgeeks&utm_medium=article_author&utm_campaign=auth_user
-
 
 class CategoryAdapter(private val onItemClick: (Category) -> Unit) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    // This class adapted from geeksforgeeks
+    // https://www.geeksforgeeks.org/android-recyclerview/
+    // BaibhavOjha
+    // https://auth.geeksforgeeks.org/user/BaibhavOjha/articles?utm_source=geeksforgeeks&utm_medium=article_author&utm_campaign=auth_user
 
     private var categories = mutableListOf<Category>() // List to hold category data
 

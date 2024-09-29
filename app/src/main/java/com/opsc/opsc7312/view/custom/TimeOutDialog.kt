@@ -84,7 +84,7 @@ class TimeOutDialog {
         // Manage the visibility of the checkmark based on whether the progress bar is hidden.
         if (hideProgressBar) {
             // Check for failure messages to decide on the icon and color.
-            if (message.contains("fail") || message.contains("unsuccessful")) {
+            if (message.lowercase().contains("fail") || message.lowercase().contains("unsuccessful")) {
                 checkmarkImageView.setImageResource(R.drawable.ic_close) // Show a cross for failure.
                 val color = ContextCompat.getColor(context, R.color.red) // Set color to red.
                 checkmarkImageView.setColorFilter(color)

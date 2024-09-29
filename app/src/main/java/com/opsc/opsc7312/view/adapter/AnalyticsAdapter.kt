@@ -27,11 +27,6 @@ import com.opsc.opsc7312.model.data.model.IncomeExpense
 import com.opsc.opsc7312.view.custom.PercentValueFormatter
 
 
-// This class adapted from geeksforgeeks
-// https://www.geeksforgeeks.org/android-recyclerview/
-// BaibhavOjha
-// https://auth.geeksforgeeks.org/user/BaibhavOjha/articles?utm_source=geeksforgeeks&utm_medium=article_author&utm_campaign=auth_user
-
 class AnalyticsAdapter(
     private val context: Context,
     private val pieChart: PieChart,
@@ -109,6 +104,11 @@ class AnalyticsAdapter(
 
     // Sets up the pie chart to visualize category expenses.
     private fun setupPieChart(categoryList: List<CategoryExpense>) {
+        // This method was adapted from YouTube
+        // https://youtu.be/sdKfUClMo0s?si=D7tovvmjcGXoC-N4
+        // Admin Grabs Media
+        // https://www.youtube.com/@AdminGrabsMedia
+
         val pieEntries = ArrayList<PieEntry>()
         val colors = ArrayList<Int>()
 
@@ -162,7 +162,7 @@ class AnalyticsAdapter(
 
         // Set the color of the center hole using the ?attr/colorItemLayoutBg attribute
         val typedValue = TypedValue()
-        val theme = context?.theme
+        val theme = context.theme
         theme?.resolveAttribute(R.attr.colorItemLayoutBg, typedValue, true)
         val holeColor = ContextCompat.getColor(context, typedValue.resourceId)
         pieChart.setHoleColor(holeColor)
@@ -172,6 +172,10 @@ class AnalyticsAdapter(
 
 
     private fun setupIncomeExpenseChart(incomeExpense: List<IncomeExpense>) {
+        // This method was adapted from YouTube
+        // https://youtu.be/-TGUV_LbcmE?si=VItXcDdnX_I8CsiE
+        // Admin Grabs Media
+        // https://www.youtube.com/@AdminGrabsMedia
         val reversedList = incomeExpense.reversed()
         val incomeEntries = ArrayList<BarEntry>()
         val expenseEntries = ArrayList<BarEntry>()
@@ -254,7 +258,10 @@ class AnalyticsAdapter(
     }
 
     private fun setupIncome(incomeExpense: List<IncomeExpense>) {
-
+        // This method was adapted from YouTube
+        // https://youtu.be/-TGUV_LbcmE?si=VItXcDdnX_I8CsiE
+        // Admin Grabs Media
+        // https://www.youtube.com/@AdminGrabsMedia
         val lastSixMonths = incomeExpense.reversed()
         Log.d("incomeExpense list", "this is the count: ${incomeExpense.size}")
         totalIncome.text = totalIncome(lastSixMonths)
@@ -300,6 +307,7 @@ class AnalyticsAdapter(
         xAxis.isGranularityEnabled = true
         xAxis.textColor = textColor
 
+        // if there are more than six entries
         if(incomeEntries.size > 6){
             xAxis.setLabelRotationAngle(45f)  // Rotate labels to avoid overlapping
             xAxis.spaceMin = 0.35f  // Adjust spacing to make room for labels

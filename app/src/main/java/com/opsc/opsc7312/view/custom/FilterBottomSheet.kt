@@ -37,6 +37,11 @@ class FilterBottomSheet : BottomSheetDialogFragment() {
         _binding = FilterTransactionDialogBinding.inflate(inflater, container, false)
 
         // Set up click listeners for filter options
+
+        // This radio button setOnClickListener was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/radiobutton-in-kotlin/
+        // bibeksah36
+        // https://www.geeksforgeeks.org/user/bibeksah36/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         binding.allFilter.setOnClickListener { onRadioButtonClicked(it) }
         binding.incomeFilter.setOnClickListener { onRadioButtonClicked(it) }
         binding.expenseFilter.setOnClickListener { onRadioButtonClicked(it) }
@@ -75,6 +80,11 @@ class FilterBottomSheet : BottomSheetDialogFragment() {
 
     // Handle radio button clicks for filtering options
     fun onRadioButtonClicked(view: View) {
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/radiobutton-in-kotlin/
+        // bibeksah36
+        // https://www.geeksforgeeks.org/user/bibeksah36/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
+
         // Check if the clicked radio button is selected
         val isSelected = (view as AppCompatRadioButton).isChecked
         when (view.id) {

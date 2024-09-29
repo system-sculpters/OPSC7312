@@ -13,6 +13,11 @@ import com.opsc.opsc7312.model.data.model.Transaction
 import com.opsc.opsc7312.view.adapter.TransactionAdapter
 
 class SortBottomSheet : BottomSheetDialogFragment() {
+    //This class was adapted from medium
+    //https://medium.com/@kosta.palash/using-bottomsheetdialogfragment-with-material-design-guideline-f9814c39b9fc
+    //Palash Kosta
+    //https://medium.com/@kosta.palash
+
     // Binding instance for the bottom dialog layout
     private var _binding: SortTransactionBottomDialogBinding? = null
     private val binding get() = _binding!!
@@ -32,6 +37,12 @@ class SortBottomSheet : BottomSheetDialogFragment() {
         _binding = SortTransactionBottomDialogBinding.inflate(inflater, container, false)
 
         // Set up click listeners for sorting options
+
+        // This radio button setOnClickListener was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/radiobutton-in-kotlin/
+        // bibeksah36
+        // https://www.geeksforgeeks.org/user/bibeksah36/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
+
         binding.sortByNameAscending.setOnClickListener { onRadioButtonClicked(it) }
         binding.sortByNameDescending.setOnClickListener { onRadioButtonClicked(it) }
         binding.sortByDateAscending.setOnClickListener { onRadioButtonClicked(it) }
@@ -45,6 +56,11 @@ class SortBottomSheet : BottomSheetDialogFragment() {
 
     // Handle radio button clicks for sorting options
     fun onRadioButtonClicked(view: View) {
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/radiobutton-in-kotlin/
+        // bibeksah36
+        // https://www.geeksforgeeks.org/user/bibeksah36/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
+
         // Check if the clicked radio button is selected
         val isSelected = (view as AppCompatRadioButton).isChecked
         when (view.id) {

@@ -117,7 +117,7 @@ class RegisterActivity : AppCompatActivity() {
                 }, 2000)
             } else {
                 // Update the progress dialog for unsuccessful registration
-                timeOutDialog.updateProgressDialog(this, progressDialog, "Registration unsuccessful!", hideProgressBar = true)
+                timeOutDialog.updateProgressDialog(this, progressDialog, "Failed: User already exists!", hideProgressBar = true)
 
                 // Dismiss the dialog after 2 seconds
                 Handler(Looper.getMainLooper()).postDelayed({

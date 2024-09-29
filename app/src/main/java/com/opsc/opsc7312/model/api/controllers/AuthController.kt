@@ -45,13 +45,13 @@ class AuthController : ViewModel() {
                         status.postValue(true)  // Update status to indicate success.
                         message.postValue("User registered successfully")  // Post success message.
                         userData.postValue(it)  // Post the created user data.
-                        //Log.d("MainActivity", "User created: $it")
+                        Log.d("MainActivity", "User created: $it")
                     }
                 } else {
                     // Handle failure when the response is not successful (e.g., non-2xx status code).
                     status.postValue(false)
                     message.postValue("Request failed with code: ${response.code()}: ${response.body()?.error}")
-                    //Log.e("MainActivity", "Request failed with code: ${response.code()}: ${response.body()?.error}")
+                    Log.e("MainActivity", "Request failed with code: ${response.code()}: ${response.body()}")
                 }
             }
 
@@ -89,7 +89,7 @@ class AuthController : ViewModel() {
                     // Handle failure when the response is not successful.
                     status.postValue(false)
                     message.postValue("Request failed with code: ${response.code()}")
-                    //Log.e("MainActivity", "Request failed with code: ${response.code()}: ${response.body()?.error}")
+                    Log.e("MainActivity", "Request failed with code: ${response.code()}: ${response.body()?.error}")
                 }
             }
 
