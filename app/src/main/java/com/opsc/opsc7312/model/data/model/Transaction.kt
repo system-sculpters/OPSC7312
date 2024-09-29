@@ -10,15 +10,15 @@ import android.os.Parcelable
 //Florina Muntenescu
 //https://medium.com/@florina.muntenescu
 data class Transaction(
-    var id: String = "",
-    var name: String = "",
-    var amount: Double = 0.00,
-    var date: Long = 0L,
-    var userid: String = "",
-    var isrecurring: Boolean = false,
-    var type: String = "", // Use String to match the provided data
-    var categoryId: String = "",
-    val category: Category = Category()
+    var id: String = "",                // Unique ID for the transaction
+    var name: String = "",              // Name or description of the transaction
+    var amount: Double = 0.00,          // Amount of money for the transaction
+    var date: Long = 0L,                // Transaction date in milliseconds (Epoch time)
+    var userid: String = "",            // User ID who made the transaction
+    var isrecurring: Boolean = false,   // Flag indicating if the transaction is recurring
+    var type: String = "",              // Type of transaction, such as "Income" or "Expense"
+    var categoryId: String = "",        // ID of the category associated with the transaction
+    val category: Category = Category() // Category object representing the category details of the transaction
 ) : Parcelable {
     // Implementing Parcelable for passing Transaction objects between components
 

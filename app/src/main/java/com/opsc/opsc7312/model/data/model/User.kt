@@ -7,13 +7,13 @@ package com.opsc.opsc7312.model.data.model
 //Florina Muntenescu
 //https://medium.com/@florina.muntenescu
 data class User(
-    var id: String = "",
-    var username: String = "",
-    var email: String = "",
-    var balance: Double = 0.0,
-    var password: String = "",
-    var token: String = "",
-    var error: String = ""
+    var id: String = "",               // Unique ID for the user
+    var username: String = "",          // The username for the user's account
+    var email: String = "",             // The user's email address
+    var balance: Double = 0.0,          // The current balance associated with the user's account
+    var password: String = "",          // The user's password (ideally stored securely, hashed)
+    var token: String = "",             // Authentication token used for API requests and sessions
+    var error: String = ""              // An error message, if applicable, for handling user-related errors
 ){
     // This secondary constructor is provided to initialize all properties with empty strings.
     constructor(): this("", "", "", 0.0, "", "", "")

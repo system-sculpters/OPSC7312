@@ -7,6 +7,6 @@ package com.opsc.opsc7312.model.data.model
 //Florina Muntenescu
 //https://medium.com/@florina.muntenescu
 data class Color(
-    var Id: String,
-    var name: String
+    var Id: String,   // Unique ID for the color (could be a hex code or database ID)
+    var name: String  // Name of the color (e.g., "Red", "Green")
 )

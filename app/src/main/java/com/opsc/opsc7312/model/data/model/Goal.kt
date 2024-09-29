@@ -10,14 +10,14 @@ import android.os.Parcelable
 //Florina Muntenescu
 //https://medium.com/@florina.muntenescu
 data class Goal(
-    var id: String = "",
-    var userid: String = "",
-    var name: String = "",
-    var targetamount: Double = 0.00,
-    var currentamount: Double = 0.00,
-    var deadline: Long = 0L,
-    var contrubitiontype: String = "",
-    var contributionamount: Double = 0.00
+    var id: String = "",                // Unique ID for the goal
+    var userid: String = "",            // User ID associated with the goal
+    var name: String = "",              // Name of the goal (e.g., "Vacation savings")
+    var targetamount: Double = 0.00,    // Target savings amount
+    var currentamount: Double = 0.00,   // Current savings amount
+    var deadline: Long = 0L,            // Deadline for the goal (in Unix timestamp format)
+    var contrubitiontype: String = "",  // Type of contribution (e.g., "monthly", "weekly")
+    var contributionamount: Double = 0.00  // Amount contributed regularly towards the goal
 ) : Parcelable {
     // Implementing Parcelable for passing Category objects between components
 
