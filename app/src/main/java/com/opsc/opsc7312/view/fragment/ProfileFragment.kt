@@ -152,6 +152,11 @@ class ProfileFragment : Fragment() {
 
         // Observe the status of the update operation from the UserViewModel
         userViewModel.status.observe(viewLifecycleOwner) { status ->
+            // Check for timeout or inability to resolve host
+            // This observer implementation was adapted from stackoverflow
+            // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+            // Kevin Robatel
+            // https://stackoverflow.com/users/244702/kevin-robatel
             if (status) {
                 // If the update is successful, save the updated user information
                 userManager.saveUser(updatedUser)
@@ -188,6 +193,11 @@ class ProfileFragment : Fragment() {
 
         // Observe any messages from the ViewModel, particularly for timeout or connection issues
         userViewModel.message.observe(viewLifecycleOwner) { message ->
+            // Check for timeout or inability to resolve host
+            // This observer implementation was adapted from stackoverflow
+            // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+            // Kevin Robatel
+            // https://stackoverflow.com/users/244702/kevin-robatel
             if (message == "timeout" || message.contains("Unable to resolve host")) {
                 // Show a timeout dialog and attempt to reconnect
                 timeOutDialog.showTimeoutDialog(requireContext()) {
@@ -210,6 +220,10 @@ class ProfileFragment : Fragment() {
     }
 
     private fun showChangePasswordDialog() {
+        // This method was adapted from eeksforgeeks
+        // https://www.geeksforgeeks.org/how-to-create-an-alert-dialog-box-in-android/
+        // naved_alam
+        // https://www.geeksforgeeks.org/user/naved_alam/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
 
         // Retrieve the currently logged-in user and token for authentication
         val user = userManager.getUser()
@@ -243,9 +257,7 @@ class ProfileFragment : Fragment() {
             } else {
 
             }
-
         }
-
         // Show the dialog to the user
         dialog.show()
     }
@@ -266,6 +278,11 @@ class ProfileFragment : Fragment() {
 
         // Observe the status of the password update operation from the UserViewModel
         userViewModel.status.observe(viewLifecycleOwner) { status ->
+            // Check for timeout or inability to resolve host
+            // This observer implementation was adapted from stackoverflow
+            // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+            // Kevin Robatel
+            // https://stackoverflow.com/users/244702/kevin-robatel
             if (status) {
                 // If the update is successful, save the new password
                 userManager.savePassword(newPassword)
@@ -299,6 +316,11 @@ class ProfileFragment : Fragment() {
 
         // Observe any messages from the ViewModel, particularly for timeout or connection issues
         userViewModel.message.observe(viewLifecycleOwner) { message ->
+            // Check for timeout or inability to resolve host
+            // This observer implementation was adapted from stackoverflow
+            // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+            // Kevin Robatel
+            // https://stackoverflow.com/users/244702/kevin-robatel
             if (message == "timeout" || message.contains("Unable to resolve host")) {
                 // Show a timeout dialog and attempt to reconnect
                 timeOutDialog.showTimeoutDialog(requireContext()) {
@@ -325,5 +347,4 @@ class ProfileFragment : Fragment() {
         // Replace each character in the password with '*' for security
         return "*".repeat(password.length)
     }
-
 }

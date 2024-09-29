@@ -116,6 +116,10 @@ class GoalsFragment : Fragment() {
 
     // Changes the current displayed fragment in the activity.
     private fun changeCurrentFragment(fragment: Fragment) {
+        // This method was adapted from stackoverflow
+        // https://stackoverflow.com/questions/52318195/how-to-change-fragment-kotlin
+        // Marcos Maliki
+        // https://stackoverflow.com/users/8108169/marcos-maliki
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.frame_layout, fragment) // Replace the current fragment
             .addToBackStack(null) // Add the transaction to the back stack
@@ -139,6 +143,12 @@ class GoalsFragment : Fragment() {
 
         // Observe the status LiveData from the ViewModel
         goalViewModel.status.observe(viewLifecycleOwner) { status ->
+            // Check for timeout or inability to resolve host
+            // This observer implementation was adapted from stackoverflow
+            // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+            // Kevin Robatel
+            // https://stackoverflow.com/users/244702/kevin-robatel
+
             // Handle changes in the status of goal retrieval (success or failure)
             if (status) {
                 // If the status indicates success, dismiss the progress dialog
@@ -151,6 +161,12 @@ class GoalsFragment : Fragment() {
 
         // Observe the message LiveData from the ViewModel
         goalViewModel.message.observe(viewLifecycleOwner) { message ->
+            // Check for timeout or inability to resolve host
+            // This observer implementation was adapted from stackoverflow
+            // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+            // Kevin Robatel
+            // https://stackoverflow.com/users/244702/kevin-robatel
+
             // Check if the message indicates a timeout error
             if (message == "timeout" || message.contains("Unable to resolve host")) {
                 // Show a timeout dialog to the user
@@ -168,6 +184,12 @@ class GoalsFragment : Fragment() {
         }
 
         // Observe the goalList LiveData from the ViewModel with a custom observer
+
+        // Check for timeout or inability to resolve host
+        // This observer implementation was adapted from stackoverflow
+        // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+        // Kevin Robatel
+        // https://stackoverflow.com/users/244702/kevin-robatel
         goalViewModel.goalList.observe(viewLifecycleOwner, GoalObserver(goalAdapter, binding.amount))
 
         // Make an initial API call to retrieve all goals for the user

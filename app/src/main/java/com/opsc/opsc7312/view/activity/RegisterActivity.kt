@@ -39,6 +39,11 @@ class RegisterActivity : AppCompatActivity() {
     private val RC_SIGN_IN = 9001
 
     // Firebase Authentication instance
+
+    // These variable were adapted from YouTube
+    // https://youtu.be/suVgcrPwYKQ?si=2FCFY8EXmnnaZuh0
+    // Easy Tuto
+    // https://www.youtube.com/@EasyTuto1
     private val firebaseAuth = FirebaseAuth.getInstance()
     // Google Sign-In client for managing Google sign-in
     private lateinit var googleSignInClient: GoogleSignInClient
@@ -57,6 +62,11 @@ class RegisterActivity : AppCompatActivity() {
         auth = ViewModelProvider(this).get(AuthController::class.java)
 
         // Configure Google Sign-In options
+
+        // These variable were adapted from YouTube
+        // https://youtu.be/suVgcrPwYKQ?si=2FCFY8EXmnnaZuh0
+        // Easy Tuto
+        // https://www.youtube.com/@EasyTuto1
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id)) // Token for Firebase
             .requestEmail() // Request the user's email
@@ -171,6 +181,11 @@ class RegisterActivity : AppCompatActivity() {
 
     // Method to initiate Google sign-in process
     fun signInWithGoogle() {
+        // Theis method were adapted from YouTube
+        // https://youtu.be/suVgcrPwYKQ?si=2FCFY8EXmnnaZuh0
+        // Easy Tuto
+        // https://www.youtube.com/@EasyTuto1
+
         firebaseAuth.signOut() // Sign out of Firebase to ensure a clean login
 
         // Sign out from Google account
@@ -184,6 +199,11 @@ class RegisterActivity : AppCompatActivity() {
     // Handle the result from the Google sign-in activity
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data) // Call the superclass method
+        // Theis method were adapted from YouTube
+        // https://youtu.be/suVgcrPwYKQ?si=2FCFY8EXmnnaZuh0
+        // Easy Tuto
+        // https://www.youtube.com/@EasyTuto1
+
         if (requestCode == RC_SIGN_IN) {
             // Get the sign-in task result
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
@@ -193,6 +213,11 @@ class RegisterActivity : AppCompatActivity() {
 
     // Process the result of Google sign-in
     private fun handleSignInResult(task: Task<GoogleSignInAccount>) {
+        // Theis method were adapted from YouTube
+        // https://youtu.be/suVgcrPwYKQ?si=2FCFY8EXmnnaZuh0
+        // Easy Tuto
+        // https://www.youtube.com/@EasyTuto1
+
         try {
             // Get the signed-in account details
             val account = task.getResult(ApiException::class.java)
@@ -206,6 +231,11 @@ class RegisterActivity : AppCompatActivity() {
 
     // Authenticate with Firebase using Google credentials
     private fun firebaseAuthWithGoogle(idToken: String) {
+        // Theis method were adapted from YouTube
+        // https://youtu.be/suVgcrPwYKQ?si=2FCFY8EXmnnaZuh0
+        // Easy Tuto
+        // https://www.youtube.com/@EasyTuto1
+
         val credential = GoogleAuthProvider.getCredential(idToken, null) // Get Google credentials
         firebaseAuth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
@@ -234,6 +264,11 @@ class RegisterActivity : AppCompatActivity() {
 
         // Observe the authentication status for success or failure
         auth.status.observe(this) { status ->
+            // This observer implementation was adapted from stackoverflow
+            // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+            // Kevin Robatel
+            // https://stackoverflow.com/users/244702/kevin-robatel
+
             if (status) {
                 // Update the progress dialog for successful registration
                 timeOutDialog.updateProgressDialog(this, progressDialog, "Registration successful!", hideProgressBar = true)
@@ -256,6 +291,11 @@ class RegisterActivity : AppCompatActivity() {
 
         // Observe error messages related to sending the token
         auth.message.observe(this) { message ->
+            // This observer implementation was adapted from stackoverflow
+            // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+            // Kevin Robatel
+            // https://stackoverflow.com/users/244702/kevin-robatel
+
             // Handle error messages and show timeout dialog if necessary
             if (message == "timeout" || message.contains("Unable to resolve host")) {
                 progressDialog.dismiss() // Dismiss the dialog on error

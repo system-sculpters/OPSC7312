@@ -144,6 +144,10 @@ class UpdateGoalFragment : Fragment() {
 
     // Show a date picker dialog to allow the user to select a date
     private fun showDatePickerDialog() {
+        // This method was adapted from stackoverflow
+        // https://stackoverflow.com/questions/45842167/how-to-use-datepickerdialog-in-kotlin
+        // Derek
+        // https://stackoverflow.com/users/8195525/derek
         try {
             val calendar = Calendar.getInstance() // Create a calendar instance
             val year = calendar.get(Calendar.YEAR) // Get the current year
@@ -225,6 +229,11 @@ class UpdateGoalFragment : Fragment() {
 
         // Observe the status of the goal update operation
         goalViewModel.status.observe(viewLifecycleOwner) { status ->
+            // Check for timeout or inability to resolve host
+            // This observer implementation was adapted from stackoverflow
+            // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+            // Kevin Robatel
+            // https://stackoverflow.com/users/244702/kevin-robatel
             if (status) {
                 // Update progress dialog to show success message
                 timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Goal creation successful!", hideProgressBar = true)
@@ -248,6 +257,11 @@ class UpdateGoalFragment : Fragment() {
 
         // Observe messages from the ViewModel for handling timeouts or errors
         goalViewModel.message.observe(viewLifecycleOwner) { message ->
+            // Check for timeout or inability to resolve host
+            // This observer implementation was adapted from stackoverflow
+            // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+            // Kevin Robatel
+            // https://stackoverflow.com/users/244702/kevin-robatel
             if (message == "timeout" || message.contains("Unable to resolve host")) {
                 timeOutDialog.showTimeoutDialog(requireContext()) {
                     progressDialog.dismiss()
@@ -296,6 +310,10 @@ class UpdateGoalFragment : Fragment() {
 
     // Changes the current displayed fragment to the specified fragment
     private fun changeCurrentFragment(fragment: Fragment) {
+        // This method was adapted from stackoverflow
+        // https://stackoverflow.com/questions/52318195/how-to-change-fragment-kotlin
+        // Marcos Maliki
+        // https://stackoverflow.com/users/8108169/marcos-maliki
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.frame_layout, fragment) // Replace the current fragment
             .addToBackStack(null) // Add the transaction to the back stack
@@ -304,6 +322,11 @@ class UpdateGoalFragment : Fragment() {
 
     private fun showCustomDeleteDialog(token: String) {
         // Inflate the custom dialog view
+
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/how-to-create-an-alert-dialog-box-in-android/
+        // naved_alam
+        // https://www.geeksforgeeks.org/user/naved_alam/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         val dialogView = layoutInflater.inflate(R.layout.delete_dialog, null)
 
         // Create the AlertDialog using a custom view

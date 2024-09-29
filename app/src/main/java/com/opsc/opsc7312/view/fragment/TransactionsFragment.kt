@@ -158,6 +158,12 @@ class TransactionsFragment : Fragment() {
         // Observe the status of the transaction fetching operation
         transactionViewModel.status.observe(viewLifecycleOwner) { status ->
             // Handle changes in the status (indicates success or failure)
+
+            // Check for timeout or inability to resolve host
+            // This observer implementation was adapted from stackoverflow
+            // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+            // Kevin Robatel
+            // https://stackoverflow.com/users/244702/kevin-robatel
             if (status) {
                 // Success: Dismiss the progress dialog
                 progressDialog.dismiss()
@@ -170,12 +176,19 @@ class TransactionsFragment : Fragment() {
 
         // Observe any messages from the ViewModel
         transactionViewModel.message.observe(viewLifecycleOwner) { message ->
+            // Check for timeout or inability to resolve host
+            // This observer implementation was adapted from stackoverflow
+            // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+            // Kevin Robatel
+            // https://stackoverflow.com/users/244702/kevin-robatel
+
             // Log the message for debugging purposes
             Log.d("Transactions message", message)
 
             // Check for specific messages that indicate a timeout or network issue
             if (message == "timeout" || message.contains("Unable to resolve host")) {
                 // Show a timeout dialog and attempt to reconnect
+
                 timeOutDialog.showTimeoutDialog(requireContext()) {
                     // Dismiss the progress dialog when the timeout dialog is confirmed
                     progressDialog.dismiss()
@@ -193,6 +206,11 @@ class TransactionsFragment : Fragment() {
         }
 
         // Observe the transaction list and set up a custom observer to handle changes
+        // Check for timeout or inability to resolve host
+        // This observer implementation was adapted from stackoverflow
+        // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+        // Kevin Robatel
+        // https://stackoverflow.com/users/244702/kevin-robatel
         transactionViewModel.transactionList.observe(viewLifecycleOwner,
             TransactionsObserver(sortBottomSheet, filterBottomSheet, transactionAdapter, binding.amount)
         )
@@ -203,6 +221,11 @@ class TransactionsFragment : Fragment() {
 
     // Method to change the current fragment displayed in the UI
     private fun changeCurrentFragment(fragment: Fragment) {
+        // This method was adapted from stackoverflow
+        // https://stackoverflow.com/questions/52318195/how-to-change-fragment-kotlin
+        // Marcos Maliki
+        // https://stackoverflow.com/users/8108169/marcos-maliki
+
         // Start a new fragment transaction
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.frame_layout, fragment) // Replace the current fragment with the new one

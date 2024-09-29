@@ -60,11 +60,23 @@ class SecurityFragment : Fragment() {
 
     // Retrieve the saved biometric preference, default to false if not set
     private fun getBiometricPreference(): Boolean {
+        // This method was adapted from stackoverflow
+        // https://stackoverflow.com/questions/3624280/how-to-use-sharedpreferences-in-android-to-store-fetch-and-edit-values
+        // Harneet Kaur
+        // https://stackoverflow.com/users/1444525/harneet-kaur
+        // Ziem
+        // https://stackoverflow.com/posts/11027631/revisions
         return sharedPreferences.getBoolean("biometric_enabled", true)
     }
 
     // Save the biometric preference to SharedPreferences
     private fun saveBiometricPreference(isChecked: Boolean) {
+        // This method was adapted from stackoverflow
+        // https://stackoverflow.com/questions/3624280/how-to-use-sharedpreferences-in-android-to-store-fetch-and-edit-values
+        // Harneet Kaur
+        // https://stackoverflow.com/users/1444525/harneet-kaur
+        // Ziem
+        // https://stackoverflow.com/posts/11027631/revisions
         with(sharedPreferences.edit()) {
             putBoolean("biometric_enabled", isChecked) // Save the preference
             apply() // Apply changes asynchronously
@@ -73,6 +85,10 @@ class SecurityFragment : Fragment() {
 
     // Update the colors of the switch based on its checked state
     private fun updateSwitchColors(isChecked: Boolean, biometricsSwitch: Switch) {
+        // This radio button setOnClickListener was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/radiobutton-in-kotlin/
+        // bibeksah36
+        // https://www.geeksforgeeks.org/user/bibeksah36/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         if (isChecked) {
             // Set colors for the switch when it is checked
             biometricsSwitch.thumbTintList =

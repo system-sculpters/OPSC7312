@@ -69,6 +69,11 @@ class LanguageFragment : Fragment() {
 
     //Saves the selected language preference to SharedPreferences.
     private fun saveLanguagePreference(language: String) {
+        // This method was adapted from stackoverflow
+        // https://stackoverflow.com/questions/3624280/how-to-use-sharedpreferences-in-android-to-store-fetch-and-edit-values
+        // Harneet Kaur
+        // https://stackoverflow.com/users/1444525/harneet-kaur
+        // Ziem
         with(sharedPreferences.edit()) {
             putString("selectedLanguage", language) // Store the selected language
             apply() // Apply changes asynchronously
@@ -77,6 +82,11 @@ class LanguageFragment : Fragment() {
 
     //Sets the application locale based on the selected language
     private fun setLocale(language: String) {
+        // This method was adapted from stackoverflow
+        // https://stackoverflow.com/questions/3624280/how-to-use-sharedpreferences-in-android-to-store-fetch-and-edit-values
+        // Harneet Kaur
+        // https://stackoverflow.com/users/1444525/harneet-kaur
+        // Ziem
         // Determine the locale code based on the selected language
         val localeCode = when (language) {
             "Afrikaans" -> "af" // Afrikaans language code
@@ -97,6 +107,10 @@ class LanguageFragment : Fragment() {
     ///Refreshes the user interface by detaching and re-attaching the fragment.
 
     private fun refreshUI() {
+        // This method was adapted from stackoverflow
+        // https://stackoverflow.com/questions/52318195/how-to-change-fragment-kotlin
+        // Marcos Maliki
+        // https://stackoverflow.com/users/8108169/marcos-maliki
         parentFragmentManager.beginTransaction().detach(this).attach(this).commit() // Restart the fragment to refresh the UI
     }
 

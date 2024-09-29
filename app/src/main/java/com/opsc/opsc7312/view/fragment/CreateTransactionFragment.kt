@@ -198,6 +198,10 @@ class CreateTransactionFragment : Fragment() {
 
     // Sets up the toggle button for selecting whether the transaction is recurring
     private fun toggleButton() {
+        // This radio button setOnClickListener was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/radiobutton-in-kotlin/
+        // bibeksah36
+        // https://www.geeksforgeeks.org/user/bibeksah36/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         binding.isRecurring.addOnButtonCheckedListener { group, checkedId, isChecked ->
             // Check which button is selected and update the recurring status and UI accordingly
             when (checkedId) {
@@ -259,6 +263,10 @@ class CreateTransactionFragment : Fragment() {
 
         // Observe the status of the transaction creation process
         transactionViewModel.status.observe(viewLifecycleOwner) { status ->
+            // This observer implementation was adapted from stackoverflow
+            // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+            // Kevin Robatel
+            // https://stackoverflow.com/users/244702/kevin-robatel
             if (status) {
                 // Show success message if transaction creation is successful
                 timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Transaction creation successful!", hideProgressBar = true)
@@ -282,6 +290,10 @@ class CreateTransactionFragment : Fragment() {
         // Observe the 'message' LiveData from the transactionViewModel to handle different message responses
         transactionViewModel.message.observe(viewLifecycleOwner) { message ->
             // Check if the message indicates a timeout or if the host could not be resolved
+            // This observer implementation was adapted from stackoverflow
+            // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+            // Kevin Robatel
+            // https://stackoverflow.com/users/244702/kevin-robatel
             if (message == "timeout" || message.contains("Unable to resolve host")) {
                 // Show a timeout dialog to inform the user about the connection issue
                 timeOutDialog.showTimeoutDialog(requireContext()) {
@@ -340,6 +352,10 @@ class CreateTransactionFragment : Fragment() {
         // Observe the status of the category retrieval
         categoryViewModel.status.observe(viewLifecycleOwner) { status ->
             // Handle status changes (success or failure)
+            // This observer implementation was adapted from stackoverflow
+            // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+            // Kevin Robatel
+            // https://stackoverflow.com/users/244702/kevin-robatel
             if (status) {
                 // Success case
                 timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Categories retrieved successfully!", hideProgressBar = true)
@@ -361,6 +377,10 @@ class CreateTransactionFragment : Fragment() {
         // Observe messages for timeout or connection issues
         categoryViewModel.message.observe(viewLifecycleOwner) { message ->
             // Check for timeout or inability to resolve host
+            // This observer implementation was adapted from stackoverflow
+            // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+            // Kevin Robatel
+            // https://stackoverflow.com/users/244702/kevin-robatel
             if (message == "timeout" || message.contains("Unable to resolve host")) {
                 progressDialog.dismiss()  // Dismiss the current progress dialog
                 timeOutDialog.showTimeoutDialog(requireContext()) {
@@ -382,6 +402,10 @@ class CreateTransactionFragment : Fragment() {
 
 
     private fun redirectToTransactions(){
+        // This method was adapted from stackoverflow
+        // https://stackoverflow.com/questions/52318195/how-to-change-fragment-kotlin
+        // Marcos Maliki
+        // https://stackoverflow.com/users/8108169/marcos-maliki
         val transactionsFragment = TransactionsFragment()
 
         // Navigate to CategoryDetailsFragment

@@ -5,9 +5,16 @@ import org.junit.Test
 import java.text.SimpleDateFormat
 
 class AppConstantsTest {
-
+    // This class was adapted from YouTube
+    // https://youtu.be/ssF_YPvLRR8?si=OCxgobZF6XAIF5Z-
+    // CodingWithPuneet
+    // https://www.youtube.com/@codingwithpuneet
     @Test
     fun testConvertLongToString() {
+        // This method was adapted from YouTube
+        // https://youtu.be/ssF_YPvLRR8?si=OCxgobZF6XAIF5Z-
+        // CodingWithPuneet
+        // https://www.youtube.com/@codingwithpuneet
         // Given a timestamp (10 May 2022)
         val timestamp: Long = 1652150400000 // Corresponds to "10/05/2022"
         val expectedDate = "10/05/2022"
@@ -21,6 +28,10 @@ class AppConstantsTest {
 
     @Test
     fun testFormatAmount() {
+        // This method was adapted from YouTube
+        // https://youtu.be/ssF_YPvLRR8?si=OCxgobZF6XAIF5Z-
+        // CodingWithPuneet
+        // https://www.youtube.com/@codingwithpuneet
         // Given a double amount
         val amount = 1234.56789
         val expectedFormattedAmount = "1234.57"
@@ -34,6 +45,10 @@ class AppConstantsTest {
 
     @Test
     fun testIsTokenExpired() {
+        // This method was adapted from YouTube
+        // https://youtu.be/ssF_YPvLRR8?si=OCxgobZF6XAIF5Z-
+        // CodingWithPuneet
+        // https://www.youtube.com/@codingwithpuneet
         // Given an expiration time 1 minute from now
         val expirationTime = System.currentTimeMillis() + 60000
 
@@ -46,6 +61,10 @@ class AppConstantsTest {
 
     @Test
     fun testTokenExpirationTime() {
+        // This method was adapted from YouTube
+        // https://youtu.be/ssF_YPvLRR8?si=OCxgobZF6XAIF5Z-
+        // CodingWithPuneet
+        // https://www.youtube.com/@codingwithpuneet
         // When calculating token expiration time (2 days from now)
         val actualExpirationTime = AppConstants.tokenExpirationTime()
 
@@ -58,6 +77,10 @@ class AppConstantsTest {
 
     @Test
     fun testConvertStringToLong() {
+        // This method was adapted from YouTube
+        // https://youtu.be/ssF_YPvLRR8?si=OCxgobZF6XAIF5Z-
+        // CodingWithPuneet
+        // https://www.youtube.com/@codingwithpuneet
         // Given a date string
         val dateString = "10/05/2022"
         val expectedTimestamp = SimpleDateFormat("dd/MM/yyyy").parse(dateString)?.time ?: 0L

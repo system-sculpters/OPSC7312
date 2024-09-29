@@ -52,6 +52,12 @@ class LoginActivity : AppCompatActivity() {
     // Request code for Google Sign-In
     private val RC_SIGN_IN = 123
 
+
+    // These variables were adapted from YouTube
+    // https://youtu.be/suVgcrPwYKQ?si=2FCFY8EXmnnaZuh0
+    // Easy Tuto
+    // https://www.youtube.com/@EasyTuto1
+
     // Firebase authentication instance for handling Firebase auth operations
     private val firebaseAuth = FirebaseAuth.getInstance()
 
@@ -80,6 +86,11 @@ class LoginActivity : AppCompatActivity() {
         userManager = UserManager.getInstance(this)
 
         // Configure Google Sign-In options
+        // These variables were adapted from YouTube
+        // https://youtu.be/suVgcrPwYKQ?si=2FCFY8EXmnnaZuh0
+        // Easy Tuto
+        // https://www.youtube.com/@EasyTuto1
+
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id)) // Token for Firebase
             .requestEmail() // Request email address
@@ -147,6 +158,11 @@ class LoginActivity : AppCompatActivity() {
 
         // Observe the authentication status
         auth.status.observe(this) { status ->
+            // This observer implementation was adapted from stackoverflow
+            // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+            // Kevin Robatel
+            // https://stackoverflow.com/users/244702/kevin-robatel
+
             // Handle status changes (success or failure)
             if (status) {
                 // Update the progress dialog to indicate success
@@ -172,6 +188,11 @@ class LoginActivity : AppCompatActivity() {
 
         // Observe authentication messages, such as connection issues or timeouts
         auth.message.observe(this) { message ->
+            // This observer implementation was adapted from stackoverflow
+            // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+            // Kevin Robatel
+            // https://stackoverflow.com/users/244702/kevin-robatel
+
             // Check for timeout or inability to connect
             if (message == "timeout" || message.contains("Unable to resolve host")) {
                 progressDialog.dismiss() // Dismiss the current dialog
@@ -259,6 +280,11 @@ class LoginActivity : AppCompatActivity() {
 
     // Function to initiate sign-in with Google
     fun signInWithGoogle() {
+        // Theis method were adapted from YouTube
+        // https://youtu.be/suVgcrPwYKQ?si=2FCFY8EXmnnaZuh0
+        // Easy Tuto
+        // https://www.youtube.com/@EasyTuto1
+
         // Sign out from Firebase Auth to ensure a fresh sign-in
         firebaseAuth.signOut()
 
@@ -274,6 +300,11 @@ class LoginActivity : AppCompatActivity() {
     // Override to handle the result from the sign-in activity
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        // Theis method were adapted from YouTube
+        // https://youtu.be/suVgcrPwYKQ?si=2FCFY8EXmnnaZuh0
+        // Easy Tuto
+        // https://www.youtube.com/@EasyTuto1
+
         // Check if the request code matches the sign-in request
         if (requestCode == RC_SIGN_IN) {
             // Retrieve the sign-in account information from the result
@@ -285,6 +316,11 @@ class LoginActivity : AppCompatActivity() {
 
     // Function to handle the sign-in result from Google Sign-In
     private fun handleSignInResult(task: Task<GoogleSignInAccount>) {
+        // Theis method were adapted from YouTube
+        // https://youtu.be/suVgcrPwYKQ?si=2FCFY8EXmnnaZuh0
+        // Easy Tuto
+        // https://www.youtube.com/@EasyTuto1
+
         try {
             // Retrieve the signed-in account information
             val account = task.getResult(ApiException::class.java)
@@ -307,6 +343,11 @@ class LoginActivity : AppCompatActivity() {
 
     // Function to authenticate with Firebase using the Google account's ID token
     private fun firebaseAuthWithGoogle(idToken: String) {
+        // Theis method were adapted from YouTube
+        // https://youtu.be/suVgcrPwYKQ?si=2FCFY8EXmnnaZuh0
+        // Easy Tuto
+        // https://www.youtube.com/@EasyTuto1
+
         // Create a credential using the Google ID token
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         // Sign in with the credential and add a listener to handle the result
@@ -342,6 +383,11 @@ class LoginActivity : AppCompatActivity() {
 
         // Observe the authentication status to handle success or failure
         auth.status.observe(this) { status ->
+            // This observer implementation was adapted from stackoverflow
+            // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+            // Kevin Robatel
+            // https://stackoverflow.com/users/244702/kevin-robatel
+
             // Handle status changes (success or failure)
             if (status) {
                 // Update the progress dialog to indicate success
@@ -372,6 +418,11 @@ class LoginActivity : AppCompatActivity() {
 
         // Observe messages from the authentication process
         auth.message.observe(this) { message ->
+            // This observer implementation was adapted from stackoverflow
+            // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+            // Kevin Robatel
+            // https://stackoverflow.com/users/244702/kevin-robatel
+
             // Show message to the user if a timeout or network error occurs
             if (message == "timeout" || message.contains("Unable to resolve host")) {
                 // Show a timeout dialog and attempt to reconnect
@@ -388,6 +439,10 @@ class LoginActivity : AppCompatActivity() {
 
         // Observe user data after successful login
         auth.userData.observe(this) { user_data ->
+            // This observer implementation was adapted from stackoverflow
+            // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+            // Kevin Robatel
+            // https://stackoverflow.com/users/244702/kevin-robatel
             // Get the token expiration time from constants (e.g., 1 hour)
             val tokenExpirationTime = AppConstants.tokenExpirationTime()
 

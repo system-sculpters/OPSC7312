@@ -41,6 +41,10 @@ class NotificationsFragment : Fragment() {
         sharedPreferences = requireActivity().getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
 
         // Initialize switches
+        // This radio button setOnClickListener was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/radiobutton-in-kotlin/
+        // bibeksah36
+        // https://www.geeksforgeeks.org/user/bibeksah36/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         switchNotifications = view.findViewById(R.id.switch_notifications)
         switchNotifyPurchase = view.findViewById(R.id.switch_notify_purchase)
         switchNotifyGoalProgress = view.findViewById(R.id.switch_notify_goal_progress)
@@ -72,6 +76,12 @@ class NotificationsFragment : Fragment() {
     //Applies custom styles to the switches by creating ColorStateLists for thumb and track tint.
     private fun applySwitchStyles() {
         // Create ColorStateList for thumb tint
+        // This method was adapted from stackoverflow
+        // https://stackoverflow.com/questions/3624280/how-to-use-sharedpreferences-in-android-to-store-fetch-and-edit-values
+        // Harneet Kaur
+        // https://stackoverflow.com/users/1444525/harneet-kaur
+        // Ziem
+
         val thumbColorStateList = ColorStateList(
             arrayOf(
                 intArrayOf(android.R.attr.state_checked),  // Checked state
@@ -96,6 +106,10 @@ class NotificationsFragment : Fragment() {
         )
 
         // Apply thumb and track tint to each switch
+        // This radio button setOnClickListener was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/radiobutton-in-kotlin/
+        // bibeksah36
+        // https://www.geeksforgeeks.org/user/bibeksah36/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         switchNotifications.apply {
             thumbTintList = thumbColorStateList
             trackTintList = trackColorStateList
@@ -127,31 +141,61 @@ class NotificationsFragment : Fragment() {
     private fun setupListeners() {
         switchNotifications.setOnCheckedChangeListener { _, isChecked ->
             // Save preference for notification enabled state
+            // This method was adapted from stackoverflow
+            // https://stackoverflow.com/questions/3624280/how-to-use-sharedpreferences-in-android-to-store-fetch-and-edit-values
+            // Harneet Kaur
+            // https://stackoverflow.com/users/1444525/harneet-kaur
+            // Ziem
             sharedPreferences.edit().putBoolean("notifications_enabled", isChecked).apply()
         }
 
         switchNotifyPurchase.setOnCheckedChangeListener { _, isChecked ->
             // Save preference for purchase notifications
+            // This method was adapted from stackoverflow
+            // https://stackoverflow.com/questions/3624280/how-to-use-sharedpreferences-in-android-to-store-fetch-and-edit-values
+            // Harneet Kaur
+            // https://stackoverflow.com/users/1444525/harneet-kaur
+            // Ziem
             sharedPreferences.edit().putBoolean("notify_purchase", isChecked).apply()
         }
 
         switchNotifyGoalProgress.setOnCheckedChangeListener { _, isChecked ->
             // Save preference for goal progress notifications
+            // This method was adapted from stackoverflow
+            // https://stackoverflow.com/questions/3624280/how-to-use-sharedpreferences-in-android-to-store-fetch-and-edit-values
+            // Harneet Kaur
+            // https://stackoverflow.com/users/1444525/harneet-kaur
+            // Ziem
             sharedPreferences.edit().putBoolean("notify_goal_progress", isChecked).apply()
         }
 
         switchAlertGoalReached.setOnCheckedChangeListener { _, isChecked ->
             // Save preference for goal reached alerts
+            // This method was adapted from stackoverflow
+            // https://stackoverflow.com/questions/3624280/how-to-use-sharedpreferences-in-android-to-store-fetch-and-edit-values
+            // Harneet Kaur
+            // https://stackoverflow.com/users/1444525/harneet-kaur
+            // Ziem
             sharedPreferences.edit().putBoolean("alert_goal_reached", isChecked).apply()
         }
 
         switchNotifyProfileUpdated.setOnCheckedChangeListener { _, isChecked ->
             // Save preference for profile update notifications
+            // This method was adapted from stackoverflow
+            // https://stackoverflow.com/questions/3624280/how-to-use-sharedpreferences-in-android-to-store-fetch-and-edit-values
+            // Harneet Kaur
+            // https://stackoverflow.com/users/1444525/harneet-kaur
+            // Ziem
             sharedPreferences.edit().putBoolean("notify_profile_updated", isChecked).apply()
         }
 
         switchAlertNewLogins.setOnCheckedChangeListener { _, isChecked ->
             // Save preference for new login alerts
+            // This method was adapted from stackoverflow
+            // https://stackoverflow.com/questions/3624280/how-to-use-sharedpreferences-in-android-to-store-fetch-and-edit-values
+            // Harneet Kaur
+            // https://stackoverflow.com/users/1444525/harneet-kaur
+            // Ziem
             sharedPreferences.edit().putBoolean("alert_new_logins", isChecked).apply()
         }
     }
@@ -159,6 +203,10 @@ class NotificationsFragment : Fragment() {
     //Loads preferences from SharedPreferences and sets the state of each switch accordingly.
     private fun loadPreferences() {
         // Load preferences from SharedPreferences and set the switch states
+        // This radio button setOnClickListener was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/radiobutton-in-kotlin/
+        // bibeksah36
+        // https://www.geeksforgeeks.org/user/bibeksah36/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         switchNotifications.isChecked = sharedPreferences.getBoolean("notifications_enabled", true)
         switchNotifyPurchase.isChecked = sharedPreferences.getBoolean("notify_purchase", true)
         switchNotifyGoalProgress.isChecked = sharedPreferences.getBoolean("notify_goal_progress", true)

@@ -71,6 +71,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(binding.root)
 
         // Determine if the device is in dark mode to tint icons accordingly
+        // https://medium.com/naukri-engineering/implement-dark-theme-support-for-android-application-using-kotlin-665060d269b6
+        // Nitin Berwal
+        // https://medium.com/@nitinberwal89
+        // This dark mode implementation was adapted from mdeium
         val isDarkMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
         tintIconForDarkMode(findViewById(R.id.back_button), isDarkMode)
         tintIconForDarkMode(findViewById(R.id.nav_drawer_opener), isDarkMode)
@@ -111,6 +115,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     // Loads the theme preference from SharedPreferences and applies it
     private fun loadAndApplyTheme() {
+        // This method was adapted from stackoverflow
+        // https://stackoverflow.com/questions/3624280/how-to-use-sharedpreferences-in-android-to-store-fetch-and-edit-values
+        // Harneet Kaur
+        // https://stackoverflow.com/users/1444525/harneet-kaur
+        // Ziem
+        // https://stackoverflow.com/posts/11027631/revisions
+
         // Initialize SharedPreferences
         sharedPreferences = android.preference.PreferenceManager.getDefaultSharedPreferences(this)
 
@@ -144,6 +155,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     // Changes the current displayed fragment and updates the toolbar title
     private fun changeCurrentFragment(fragment: Fragment, title: String) {
+        // This method was adapted from stackoverflow
+        // https://stackoverflow.com/questions/52318195/how-to-change-fragment-kotlin
+        // Marcos Maliki
+        // https://stackoverflow.com/users/8108169/marcos-maliki
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.frame_layout, fragment) // Replace the current fragment
             commit() // Commit the transaction

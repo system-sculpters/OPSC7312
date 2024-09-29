@@ -207,6 +207,10 @@ class UpdateTransactionFragment : Fragment() {
     // Handle toggle button selection for recurring transactions
     private fun toggleButton(){
         binding.isRecurring.addOnButtonCheckedListener { group, checkedId, isChecked ->
+            // This radio button setOnClickListener was adapted from geeksforgeeks
+            // https://www.geeksforgeeks.org/radiobutton-in-kotlin/
+            // bibeksah36
+            // https://www.geeksforgeeks.org/user/bibeksah36/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
             when (checkedId) {
                 R.id.toggleYes -> if (isChecked) {
                     isRecurring = true
@@ -261,6 +265,11 @@ class UpdateTransactionFragment : Fragment() {
 
         // Observe the status of the transaction update
         transactionViewModel.status.observe(viewLifecycleOwner) { status ->
+            // Check for timeout or inability to resolve host
+            // This observer implementation was adapted from stackoverflow
+            // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+            // Kevin Robatel
+            // https://stackoverflow.com/users/244702/kevin-robatel
             if (status) {
                 // Show a success message and dismiss the dialog after 2 seconds
                 timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Transaction update successful!", hideProgressBar = true)
@@ -281,6 +290,11 @@ class UpdateTransactionFragment : Fragment() {
 
         // Observe messages for timeouts or connectivity issues
         transactionViewModel.message.observe(viewLifecycleOwner) { message ->
+            // Check for timeout or inability to resolve host
+            // This observer implementation was adapted from stackoverflow
+            // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+            // Kevin Robatel
+            // https://stackoverflow.com/users/244702/kevin-robatel
             if (message == "timeout" || message.contains("Unable to resolve host")) {
                 timeOutDialog.showTimeoutDialog(requireContext()) {
                     progressDialog.dismiss() // Dismiss the previous dialog
@@ -332,6 +346,11 @@ class UpdateTransactionFragment : Fragment() {
 
         // Observe the status of the category retrieval
         categoryViewModel.status.observe(viewLifecycleOwner) { status ->
+            // Check for timeout or inability to resolve host
+            // This observer implementation was adapted from stackoverflow
+            // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+            // Kevin Robatel
+            // https://stackoverflow.com/users/244702/kevin-robatel
             if (status) {
                 // Show a success message when categories are retrieved
                 timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Categories retrieved successfully!", hideProgressBar = true)
@@ -351,6 +370,11 @@ class UpdateTransactionFragment : Fragment() {
 
         // Observe messages for timeouts or connectivity issues
         categoryViewModel.message.observe(viewLifecycleOwner) { message ->
+            // Check for timeout or inability to resolve host
+            // This observer implementation was adapted from stackoverflow
+            // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+            // Kevin Robatel
+            // https://stackoverflow.com/users/244702/kevin-robatel
             if (message == "timeout" || message.contains("Unable to resolve host")) {
                 timeOutDialog.showTimeoutDialog(requireContext()) {
                     progressDialog.dismiss() // Dismiss the previous dialog
@@ -362,6 +386,11 @@ class UpdateTransactionFragment : Fragment() {
         }
 
         // Observe the category list and set it to the adapter
+        // Check for timeout or inability to resolve host
+        // This observer implementation was adapted from stackoverflow
+        // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+        // Kevin Robatel
+        // https://stackoverflow.com/users/244702/kevin-robatel
         categoryViewModel.categoryList.observe(viewLifecycleOwner, CategoriesObserver(null, adapter))
 
         // Example API call to fetch categories
@@ -420,13 +449,15 @@ class UpdateTransactionFragment : Fragment() {
             // Set the text color of the category name to the retrieved color
             binding.categoryName.setTextColor(color)
         }
-
-
-
     }
 
     private fun showCustomDeleteDialog(token: String) {
         // Inflate the custom dialog view
+
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/how-to-create-an-alert-dialog-box-in-android/
+        // naved_alam
+        // https://www.geeksforgeeks.org/user/naved_alam/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         val dialogView = layoutInflater.inflate(R.layout.delete_dialog, null)
 
         // Create the AlertDialog using a custom view
@@ -467,6 +498,11 @@ class UpdateTransactionFragment : Fragment() {
 
         // Observe the status of the category update operation.
         transactionViewModel.status.observe(viewLifecycleOwner) { status ->
+            // Check for timeout or inability to resolve host
+            // This observer implementation was adapted from stackoverflow
+            // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+            // Kevin Robatel
+            // https://stackoverflow.com/users/244702/kevin-robatel
             if (status) {
                 // Show a success message and redirect to categories after a delay.
                 timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Transaction deleted successful!", hideProgressBar = true)
@@ -488,6 +524,11 @@ class UpdateTransactionFragment : Fragment() {
 
         // Observe messages from the ViewModel for timeout or connection issues.
         transactionViewModel.message.observe(viewLifecycleOwner) { message ->
+            // Check for timeout or inability to resolve host
+            // This observer implementation was adapted from stackoverflow
+            // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+            // Kevin Robatel
+            // https://stackoverflow.com/users/244702/kevin-robatel
             if (message == "timeout" || message.contains("Unable to resolve host")) {
                 // Show a timeout dialog and retry updating the category.
                 timeOutDialog.showTimeoutDialog(requireContext()) {
@@ -504,6 +545,11 @@ class UpdateTransactionFragment : Fragment() {
     }
 
     private fun redirectToTransactions() {
+        // This method was adapted from stackoverflow
+        // https://stackoverflow.com/questions/52318195/how-to-change-fragment-kotlin
+        // Marcos Maliki
+        // https://stackoverflow.com/users/8108169/marcos-maliki
+
         // Create a new instance of the TransactionsFragment
         val transactionsFragment = TransactionsFragment()
 

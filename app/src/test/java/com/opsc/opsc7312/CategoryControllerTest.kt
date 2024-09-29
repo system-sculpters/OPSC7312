@@ -20,6 +20,10 @@ import retrofit2.Response
 @RunWith(MockitoJUnitRunner::class)
 class CategoryControllerTest {
 
+    // This method was adapted from YouTube
+    // https://youtu.be/ssF_YPvLRR8?si=OCxgobZF6XAIF5Z-
+    // CodingWithPuneet
+    // https://www.youtube.com/@codingwithpuneet
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
@@ -29,16 +33,23 @@ class CategoryControllerTest {
 
     @Before
     fun setUp() {
+        // This method was adapted from YouTube
+        // https://youtu.be/ssF_YPvLRR8?si=OCxgobZF6XAIF5Z-
+        // CodingWithPuneet
+        // https://www.youtube.com/@codingwithpuneet
         mockApi = mock(CategoryService::class.java)
         categoryController = CategoryController().apply {
-            // Inject mock API if you have a way to do that, e.g., a setter or constructor
-            // api = mockApi
         }
         mockCall = mock(Call::class.java) as Call<List<Category>>
     }
 
     @Test
     fun testGetAllCategoriesSuccess() {
+        // This method was adapted from YouTube
+        // https://youtu.be/ssF_YPvLRR8?si=OCxgobZF6XAIF5Z-
+        // CodingWithPuneet
+        // https://www.youtube.com/@codingwithpuneet
+
         // Given
         val userToken = "validToken"
         val userId = "userId123"
@@ -84,6 +95,10 @@ class CategoryControllerTest {
 
     @Test
     fun testFetchAllCategories_Failure() {
+        // This method was adapted from YouTube
+        // https://youtu.be/ssF_YPvLRR8?si=OCxgobZF6XAIF5Z-
+        // CodingWithPuneet
+        // https://www.youtube.com/@codingwithpuneet
         // Arrange
         //val mockCall = Mockito.mock(Call::class.java) as Call<List<Category>>
 

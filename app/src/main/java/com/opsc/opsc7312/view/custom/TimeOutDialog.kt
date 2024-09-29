@@ -21,6 +21,11 @@ class TimeOutDialog {
     // Provides options to either retry the connection or cancel the operation.
     fun showTimeoutDialog(context: Context, onRetry: () -> Unit) {
         // Build the alert dialog using the provided context.
+
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/how-to-create-an-alert-dialog-box-in-android/
+        // naved_alam
+        // https://www.geeksforgeeks.org/user/naved_alam/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         val dialogBuilder = AlertDialog.Builder(context)
 
         // Set the message and configure the buttons for the dialog.
@@ -47,6 +52,11 @@ class TimeOutDialog {
     // Returns the created AlertDialog instance for further manipulation if needed.
     fun showProgressDialog(context: Context): AlertDialog {
         // Inflate a custom layout for the progress dialog, which includes a progress bar.
+
+        // This method was adapted from eeksforgeeks
+        // https://www.geeksforgeeks.org/how-to-create-an-alert-dialog-box-in-android/
+        // naved_alam
+        // https://www.geeksforgeeks.org/user/naved_alam/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         val dialogView = LayoutInflater.from(context).inflate(R.layout.timeout_popup_dialog, null)
 
         // Create the AlertDialog using the custom layout.
@@ -67,6 +77,11 @@ class TimeOutDialog {
     // the status indicator (checkmark or cross) based on the success or failure of the operation.
     fun updateProgressDialog(context: Context, dialog: AlertDialog, message: String, hideProgressBar: Boolean) {
         // Access UI elements from the dialog layout.
+
+        // This method was adapted from eeksforgeeks
+        // https://www.geeksforgeeks.org/how-to-create-an-alert-dialog-box-in-android/
+        // naved_alam
+        // https://www.geeksforgeeks.org/user/naved_alam/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         val progressBar = dialog.findViewById<ProgressBar>(R.id.progressBar)
         val checkmarkImageView = dialog.findViewById<ImageView>(R.id.checkmarkImageView)
         val statusTextView = dialog.findViewById<TextView>(R.id.statusTextView)
@@ -106,6 +121,10 @@ class TimeOutDialog {
     // The dialog can be dismissed by the user.
     fun showAlertDialog(context: Context, errorMessage: String) {
         // Inflate a custom layout for the error dialog.
+        // This method was adapted from eeksforgeeks
+        // https://www.geeksforgeeks.org/how-to-create-an-alert-dialog-box-in-android/
+        // naved_alam
+        // https://www.geeksforgeeks.org/user/naved_alam/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         val dialogView = LayoutInflater.from(context).inflate(R.layout.input_error_dialog, null)
 
         // Access the message and dismiss button from the dialog layout.

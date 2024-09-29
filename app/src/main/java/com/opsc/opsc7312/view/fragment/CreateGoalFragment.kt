@@ -110,6 +110,10 @@ class CreateGoalFragment : Fragment() {
 
     // Displays a date picker dialog to select a deadline
     private fun showDatePickerDialog() {
+        // This method was adapted from stackoverflow
+        // https://stackoverflow.com/questions/45842167/how-to-use-datepickerdialog-in-kotlin
+        // Derek
+        // https://stackoverflow.com/users/8195525/derek
         try {
             val calendar = Calendar.getInstance()
             val year = calendar.get(Calendar.YEAR)
@@ -198,6 +202,10 @@ class CreateGoalFragment : Fragment() {
         // Observe the status of goal creation from the ViewModel
         goalViewModel.status.observe(viewLifecycleOwner) { status ->
             // If goal creation is successful, update the progress dialog and redirect
+            // This observer implementation was adapted from stackoverflow
+            // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+            // Kevin Robatel
+            // https://stackoverflow.com/users/244702/kevin-robatel
             if (status) {
                 timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Goal creation successful!", hideProgressBar = true)
 
@@ -220,6 +228,10 @@ class CreateGoalFragment : Fragment() {
         // Observe messages from the ViewModel for timeout or connectivity issues
         goalViewModel.message.observe(viewLifecycleOwner) { message ->
             // Handle timeout or inability to resolve host
+            // This observer implementation was adapted from stackoverflow
+            // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+            // Kevin Robatel
+            // https://stackoverflow.com/users/244702/kevin-robatel
             if (message == "timeout" || message.contains("Unable to resolve host")) {
                 timeOutDialog.showTimeoutDialog(requireContext()) {
                     progressDialog.dismiss()
@@ -277,6 +289,10 @@ class CreateGoalFragment : Fragment() {
 
     // Changes the current fragment to the specified fragment
     private fun changeCurrentFragment(fragment: Fragment) {
+        // This method was adapted from stackoverflow
+        // https://stackoverflow.com/questions/52318195/how-to-change-fragment-kotlin
+        // Marcos Maliki
+        // https://stackoverflow.com/users/8108169/marcos-maliki
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.frame_layout, fragment)
             .addToBackStack(null)

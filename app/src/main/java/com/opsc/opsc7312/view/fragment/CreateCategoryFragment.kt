@@ -257,6 +257,10 @@ class CreateCategoryFragment : Fragment() {
 
         // Observe ViewModel status for success or failure
         categoryViewModel.status.observe(viewLifecycleOwner) { status ->
+            // This observer implementation was adapted from stackoverflow
+            // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+            // Kevin Robatel
+            // https://stackoverflow.com/users/244702/kevin-robatel
             if (status) {
                 // Update and dismiss the progress dialog on success
                 timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Category created successfully!", hideProgressBar = true)
@@ -275,6 +279,10 @@ class CreateCategoryFragment : Fragment() {
 
         // Observe ViewModel for timeout messages
         categoryViewModel.message.observe(viewLifecycleOwner) { message ->
+            // This observer implementation was adapted from stackoverflow
+            // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+            // Kevin Robatel
+            // https://stackoverflow.com/users/244702/kevin-robatel
             if (message == "timeout" || message.contains("Unable to resolve host")) {
                 timeOutDialog.showTimeoutDialog(requireContext()) {
                     progressDialog.dismiss()
@@ -332,8 +340,11 @@ class CreateCategoryFragment : Fragment() {
 
     // Redirects the user to the category list fragment after successful creation
     private fun redirectToCategories(){
+        // This method was adapted from stackoverflow
+        // https://stackoverflow.com/questions/52318195/how-to-change-fragment-kotlin
+        // Marcos Maliki
+        // https://stackoverflow.com/users/8108169/marcos-maliki
         val categoriesFragment = CategoriesFragment()
-
 
         // Navigate to CategoryDetailsFragment
         requireActivity().supportFragmentManager.beginTransaction()

@@ -78,6 +78,10 @@ class SettingsFragment : Fragment() {
 
     // Function to replace the current fragment with a new one and add it to the back stack
     private fun changeCurrentFragment(fragment: Fragment) {
+        // This method was adapted from stackoverflow
+        // https://stackoverflow.com/questions/52318195/how-to-change-fragment-kotlin
+        // Marcos Maliki
+        // https://stackoverflow.com/users/8108169/marcos-maliki
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.frame_layout, fragment) // Replace the content of the frame layout
             .addToBackStack(null) // Add the transaction to the back stack

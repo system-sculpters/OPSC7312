@@ -69,12 +69,24 @@ class ThemeFragment : Fragment() {
 
     // Function to save the selected theme and apply it
     private fun selectTheme(theme: String) {
+        // This method was adapted from stackoverflow
+        // https://stackoverflow.com/questions/3624280/how-to-use-sharedpreferences-in-android-to-store-fetch-and-edit-values
+        // Harneet Kaur
+        // https://stackoverflow.com/users/1444525/harneet-kaur
+        // Ziem
+        // https://stackoverflow.com/posts/11027631/revisions
         saveThemePreference(theme) // Save the selected theme preference
         applyTheme(theme) // Apply the selected theme
     }
 
     // Function to apply the selected theme using AppCompatDelegate
     private fun applyTheme(theme: String) {
+        // This method was adapted from stackoverflow
+        // https://stackoverflow.com/questions/3624280/how-to-use-sharedpreferences-in-android-to-store-fetch-and-edit-values
+        // Harneet Kaur
+        // https://stackoverflow.com/users/1444525/harneet-kaur
+        // Ziem
+        // https://stackoverflow.com/posts/11027631/revisions
         when (theme) {
             "Light" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO) // Set light mode
             "Dark" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES) // Set dark mode
@@ -86,6 +98,13 @@ class ThemeFragment : Fragment() {
 
     // Function to load the saved theme preference and update the UI accordingly
     private fun loadSavedTheme() {
+        // This method was adapted from stackoverflow
+        // https://stackoverflow.com/questions/3624280/how-to-use-sharedpreferences-in-android-to-store-fetch-and-edit-values
+        // Harneet Kaur
+        // https://stackoverflow.com/users/1444525/harneet-kaur
+        // Ziem
+        // https://stackoverflow.com/posts/11027631/revisions
+
         // Fetch the saved theme preference, defaulting to "Light" if not set
         val savedTheme = sharedPreferences.getString("theme_preference", "Light") ?: "Light"
 

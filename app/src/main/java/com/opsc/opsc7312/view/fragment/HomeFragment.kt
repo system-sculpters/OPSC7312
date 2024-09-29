@@ -127,6 +127,12 @@ class HomeFragment : Fragment() {
         // Observe the status of transaction retrieval from the ViewModel
         transactionViewModel.status.observe(viewLifecycleOwner) { status ->
             // Handle status changes to determine success or failure of the transaction retrieval
+
+            // Check for timeout or inability to resolve host
+            // This observer implementation was adapted from stackoverflow
+            // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+            // Kevin Robatel
+            // https://stackoverflow.com/users/244702/kevin-robatel
             if (status) {
                 // If successful, update the progress dialog message
                 timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Transaction retrieval successful!", hideProgressBar = true)
@@ -145,6 +151,12 @@ class HomeFragment : Fragment() {
         // Observe messages from the ViewModel
         transactionViewModel.message.observe(viewLifecycleOwner) { message ->
             // Check if the message indicates a timeout scenario
+
+            // Check for timeout or inability to resolve host
+            // This observer implementation was adapted from stackoverflow
+            // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+            // Kevin Robatel
+            // https://stackoverflow.com/users/244702/kevin-robatel
             if (message == "timeout" || message.contains("Unable to resolve host")) {
                 // Show a timeout dialog to inform the user
                 timeOutDialog.showTimeoutDialog(requireContext()) {
@@ -160,6 +172,12 @@ class HomeFragment : Fragment() {
         }
 
         // Observe the list of transactions and update the UI accordingly
+
+        // Check for timeout or inability to resolve host
+        // This observer implementation was adapted from stackoverflow
+        // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+        // Kevin Robatel
+        // https://stackoverflow.com/users/244702/kevin-robatel
         transactionViewModel.transactionList.observe(viewLifecycleOwner, HomeTransactionsObserver(transactionAdapter, binding.amount, binding.incomeAmount, binding.expenseAmount))
 
         // Initiate the API call to fetch all transactions for the user
@@ -193,6 +211,10 @@ class HomeFragment : Fragment() {
     }
 
     private fun changeCurrentFragment(fragment: Fragment) {
+        // This method was adapted from stackoverflow
+        // https://stackoverflow.com/questions/52318195/how-to-change-fragment-kotlin
+        // Marcos Maliki
+        // https://stackoverflow.com/users/8108169/marcos-maliki
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.frame_layout, fragment)
             .addToBackStack(null)

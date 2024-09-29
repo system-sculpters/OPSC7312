@@ -18,7 +18,10 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class AuthControllerTest {
-
+    // This class was adapted from YouTube
+    // https://youtu.be/ssF_YPvLRR8?si=OCxgobZF6XAIF5Z-
+    // CodingWithPuneet
+    // https://www.youtube.com/@codingwithpuneet
     @get:Rule
     val rule = InstantTaskExecutorRule() // Allow LiveData to execute synchronously.
 
@@ -38,6 +41,10 @@ class AuthControllerTest {
 
     @Before
     fun setUp() {
+        // This method was adapted from YouTube
+        // https://youtu.be/ssF_YPvLRR8?si=OCxgobZF6XAIF5Z-
+        // CodingWithPuneet
+        // https://www.youtube.com/@codingwithpuneet
         MockitoAnnotations.openMocks(this)
         authController = AuthController()
         // Set the mocked API service
@@ -51,6 +58,10 @@ class AuthControllerTest {
 
     @Test
     fun testLoginSuccess() {
+        // This method was adapted from YouTube
+        // https://youtu.be/ssF_YPvLRR8?si=OCxgobZF6XAIF5Z-
+        // CodingWithPuneet
+        // https://www.youtube.com/@codingwithpuneet
         val user = User(email = "user@gmail.com", password = "user123")
         val mockCall = mock(Call::class.java) as Call<User>
 
@@ -88,6 +99,10 @@ class AuthControllerTest {
 
     @Test
     fun testLoginFailure() {
+        // This method was adapted from YouTube
+        // https://youtu.be/ssF_YPvLRR8?si=OCxgobZF6XAIF5Z-
+        // CodingWithPuneet
+        // https://www.youtube.com/@codingwithpuneet
         val user = User("test@example.com", "wrongpassword")
         val mockCall = mock(Call::class.java) as Call<User>
 
@@ -122,6 +137,10 @@ class AuthControllerTest {
 
     @Test
     fun testLoginNetworkError() {
+        // This method was adapted from YouTube
+        // https://youtu.be/ssF_YPvLRR8?si=OCxgobZF6XAIF5Z-
+        // CodingWithPuneet
+        // https://www.youtube.com/@codingwithpuneet
         val user = User("test@example.com", "password123")
         val mockCall = mock(Call::class.java) as Call<User>
 

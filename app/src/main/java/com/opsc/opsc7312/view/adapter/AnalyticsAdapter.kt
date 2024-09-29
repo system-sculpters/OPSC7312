@@ -38,6 +38,10 @@ class AnalyticsAdapter(
     private val remainingAmount: TextView,
     private val progressBar: ProgressBar
 ) {
+    // This class was adapted from YouTube
+    // https://youtu.be/-TGUV_LbcmE?si=VItXcDdnX_I8CsiE
+    // Admin Grabs Media
+    // https://www.youtube.com/@AdminGrabsMedia
 
     // Updates all charts and statistics displayed in the analytics section.
     fun updateGraph(value: AnalyticsResponse) {

@@ -104,6 +104,10 @@ object AppConstants {
     // Converts a timestamp (in milliseconds) to a formatted date string (dd/MM/yyyy).
     // This function is useful for displaying dates in a user-friendly format.
     fun convertLongToString(timestamp: Long): String {
+        // This method was adapted from stackoverflow
+        // https://stackoverflow.com/questions/57402045/how-to-format-in-kotlin-date-in-string-or-timestamp-to-my-preferred-format
+        // https://stackoverflow.com/users/11555903/ben-shmuel
+        // Ben Shmuel
         val sdf: SimpleDateFormat = SimpleDateFormat("dd/MM/yyyy")
         val date: Date = Date(timestamp)
         val formattedDate: String = sdf.format(date)
@@ -132,6 +136,10 @@ object AppConstants {
     // Converts a timestamp (in milliseconds) to a formatted date string (dd/MM/yyyy).
     // This function is similar to convertLongToString and can be used for date formatting tasks.
     fun longToDate(timestamp: Long): String {
+        // This method was adapted from stackoverflow
+        // https://stackoverflow.com/questions/57402045/how-to-format-in-kotlin-date-in-string-or-timestamp-to-my-preferred-format
+        // https://stackoverflow.com/users/11555903/ben-shmuel
+        // Ben Shmuel
         val date = Date(timestamp)
         val sdf = SimpleDateFormat("dd/MM/yyyy")
         val formattedDate = sdf.format(date)
@@ -140,6 +148,11 @@ object AppConstants {
 
     // Converts a date string in "dd/MM/yyyy" format to a Long timestamp
     fun convertStringToLong(dateString: String): Long {
+        // This method was adapted from stackoverflow
+        // https://stackoverflow.com/questions/57402045/how-to-format-in-kotlin-date-in-string-or-timestamp-to-my-preferred-format
+        // https://stackoverflow.com/users/11555903/ben-shmuel
+        // Ben Shmuel
+
         // Create a date format object for parsing the date string
         val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 

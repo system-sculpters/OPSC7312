@@ -11,6 +11,10 @@ class CheckableLinearLayout @JvmOverloads constructor(
     defStyleAttr: Int = 0 // Default style attribute
 ) : LinearLayout(context, attrs, defStyleAttr), Checkable { // Inherits from LinearLayout and implements Checkable interface
 
+    // This class was adapted from stackoverflow
+    // https://tutorial.eyehunts.com/android/android-linearlayout-tutorial-example-android-kotlin/
+    // Rohit
+    // https://tutorial.eyehunts.com/author/rohit/
     // Variable to hold the checked state of the layout
     private var isChecked = false
 

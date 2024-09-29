@@ -100,6 +100,10 @@ class AnalyticsFragment : Fragment() {
         setUpUserDetails()
 
         // Set click listeners for the radio buttons to handle filtering by week or month
+        // This radio button setOnClickListener was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/radiobutton-in-kotlin/
+        // bibeksah36
+        // https://www.geeksforgeeks.org/user/bibeksah36/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         radioButtonWeek.setOnClickListener { onRadioButtonClicked(it) }
         radioButtonMonth.setOnClickListener { onRadioButtonClicked(it) }
 
@@ -123,6 +127,10 @@ class AnalyticsFragment : Fragment() {
 
     // Handles the click event for the radio buttons (week/month filters)
     private fun onRadioButtonClicked(view: View) {
+        // This radio button  was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/radiobutton-in-kotlin/
+        // bibeksah36
+        // https://www.geeksforgeeks.org/user/bibeksah36/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         val isSelected = (view as AppCompatRadioButton).isChecked
         when (view.id) {
             R.id.month -> {
@@ -179,6 +187,11 @@ class AnalyticsFragment : Fragment() {
 
         // Observe changes in status (success/failure of data fetching)
         analyticsViewModel.status.observe(viewLifecycleOwner) { status ->
+            // This observer implementation was adapted from stackoverflow
+            // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+            // Kevin Robatel
+            // https://stackoverflow.com/users/244702/kevin-robatel
+
             if (status) {
                 timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Analytics update successful!", hideProgressBar = true)
                 progressDialog.dismiss()
@@ -194,6 +207,11 @@ class AnalyticsFragment : Fragment() {
 
         // Observe messages from ViewModel, such as errors like timeouts
         analyticsViewModel.message.observe(viewLifecycleOwner) { message ->
+            // This observer implementation was adapted from stackoverflow
+            // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+            // Kevin Robatel
+            // https://stackoverflow.com/users/244702/kevin-robatel
+
             Log.d("Transactions message", message)
 
             // Handle timeout or network issues by retrying data fetch
@@ -226,6 +244,10 @@ class AnalyticsFragment : Fragment() {
 
     // Replaces the current fragment with another one, adding to the backstack
     private fun changeCurrentFragment(fragment: Fragment) {
+        // This method was adapted from stackoverflow
+        // https://stackoverflow.com/questions/52318195/how-to-change-fragment-kotlin
+        // Marcos Maliki
+        // https://stackoverflow.com/users/8108169/marcos-maliki
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.frame_layout, fragment)
             .addToBackStack(null)

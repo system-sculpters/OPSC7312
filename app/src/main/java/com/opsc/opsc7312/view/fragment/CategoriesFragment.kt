@@ -133,6 +133,11 @@ class CategoriesFragment : Fragment() {
 
         // Observe the status of the category data API call (success or failure).
         categoryViewModel.status.observe(viewLifecycleOwner) { status ->
+            // This observer implementation was adapted from stackoverflow
+            // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+            // Kevin Robatel
+            // https://stackoverflow.com/users/244702/kevin-robatel
+
             // Handle the result of the API call and dismiss the progress dialog accordingly.
             if (status) {
                 progressDialog.dismiss() // Success
@@ -144,6 +149,11 @@ class CategoriesFragment : Fragment() {
         // Observe the message LiveData to display any important information to the user.
         categoryViewModel.message.observe(viewLifecycleOwner) { message ->
             // Handle timeout errors or other issues related to network connectivity.
+            // This observer implementation was adapted from stackoverflow
+            // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+            // Kevin Robatel
+            // https://stackoverflow.com/users/244702/kevin-robatel
+
             if (message == "timeout" || message.contains("Unable to resolve host")) {
                 timeOutDialog.showTimeoutDialog(requireContext()) {
                     // Dismiss the current progress dialog and show a new one for retrying.
@@ -158,6 +168,10 @@ class CategoriesFragment : Fragment() {
         }
 
         // Observe the category list and update the UI accordingly.
+        // This observer implementation was adapted from stackoverflow
+        // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+        // Kevin Robatel
+        // https://stackoverflow.com/users/244702/kevin-robatel
         categoryViewModel.categoryList.observe(viewLifecycleOwner, CategoriesObserver(categoryAdapter, null))
 
         // Initial API call to fetch all categories from the server.
@@ -187,6 +201,10 @@ class CategoriesFragment : Fragment() {
 
     // Helper function to change the current fragment in the activity.
     private fun changeCurrentFragment(fragment: Fragment) {
+        // This method was adapted from stackoverflow
+        // https://stackoverflow.com/questions/52318195/how-to-change-fragment-kotlin
+        // Marcos Maliki
+        // https://stackoverflow.com/users/8108169/marcos-maliki
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.frame_layout, fragment)
             .addToBackStack(null)

@@ -19,7 +19,10 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class AnalyticsControllerTest {
-
+    // This class was adapted from YouTube
+    // https://youtu.be/ssF_YPvLRR8?si=OCxgobZF6XAIF5Z-
+    // CodingWithPuneet
+    // https://www.youtube.com/@codingwithpuneet
     var userid = "0AqZwpqX2seecn6855llTwlnr9J2"
     var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiIwQXFad3BxWDJzZWVjbjY4NTVsbFR3bG5yOUoyIiwiZW1haWwiOiJ1c2VyQGdtYWlsLmNvbSIsImlhdCI6MTcyNzU2NTQzMiwiZXhwIjoxNzM2MjA1NDMyfQ.kRS7sAtT1PYpG8M9wCC65yqbAvR5yeBpgfsdxGU4cR4"
 
@@ -31,6 +34,11 @@ class AnalyticsControllerTest {
 
     @Before
     fun setup() {
+        // This method was adapted from YouTube
+        // https://youtu.be/ssF_YPvLRR8?si=OCxgobZF6XAIF5Z-
+        // CodingWithPuneet
+        // https://www.youtube.com/@codingwithpuneet
+        //
         // Initialize the controller with the mocked service
         analyticsController = AnalyticsController()
         analyticsController.api = analyticsService
@@ -38,6 +46,10 @@ class AnalyticsControllerTest {
 
     @Test
     fun testFetchAllAnalytics_Success() {
+        // This method was adapted from YouTube
+        // https://youtu.be/ssF_YPvLRR8?si=OCxgobZF6XAIF5Z-
+        // CodingWithPuneet
+        // https://www.youtube.com/@codingwithpuneet
         // Arrange
         val mockResponse = createMockAnalyticsResponse()
         val call: Call<AnalyticsResponse> = Mockito.mock(Call::class.java) as Call<AnalyticsResponse>
@@ -66,6 +78,10 @@ class AnalyticsControllerTest {
 
     @Test
     fun testFetchAllAnalytics_Failure() {
+        // This method was adapted from YouTube
+        // https://youtu.be/ssF_YPvLRR8?si=OCxgobZF6XAIF5Z-
+        // CodingWithPuneet
+        // https://www.youtube.com/@codingwithpuneet
         // Arrange
         val call: Call<AnalyticsResponse> = Mockito.mock(Call::class.java) as Call<AnalyticsResponse>
 

@@ -295,6 +295,11 @@ class UpdateCategoryFragment : Fragment() {
 
         // Observe the status of the category update operation.
         categoryViewModel.status.observe(viewLifecycleOwner) { status ->
+            // Check for timeout or inability to resolve host
+            // This observer implementation was adapted from stackoverflow
+            // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+            // Kevin Robatel
+            // https://stackoverflow.com/users/244702/kevin-robatel
             if (status) {
                 // Show a success message and redirect to categories after a delay.
                 timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Category update successful!", hideProgressBar = true)
@@ -316,6 +321,11 @@ class UpdateCategoryFragment : Fragment() {
 
         // Observe messages from the ViewModel for timeout or connection issues.
         categoryViewModel.message.observe(viewLifecycleOwner) { message ->
+            // Check for timeout or inability to resolve host
+            // This observer implementation was adapted from stackoverflow
+            // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+            // Kevin Robatel
+            // https://stackoverflow.com/users/244702/kevin-robatel
             if (message == "timeout" || message.contains("Unable to resolve host")) {
                 // Show a timeout dialog and retry updating the category.
                 timeOutDialog.showTimeoutDialog(requireContext()) {
@@ -382,6 +392,11 @@ class UpdateCategoryFragment : Fragment() {
 
         // Observe the status of the category update operation.
         categoryViewModel.status.observe(viewLifecycleOwner) { status ->
+            // Check for timeout or inability to resolve host
+            // This observer implementation was adapted from stackoverflow
+            // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+            // Kevin Robatel
+            // https://stackoverflow.com/users/244702/kevin-robatel
             if (status) {
                 // Show a success message and redirect to categories after a delay.
                 timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Category deleted successful!", hideProgressBar = true)
@@ -403,6 +418,11 @@ class UpdateCategoryFragment : Fragment() {
 
         // Observe messages from the ViewModel for timeout or connection issues.
         categoryViewModel.message.observe(viewLifecycleOwner) { message ->
+            // Check for timeout or inability to resolve host
+            // This observer implementation was adapted from stackoverflow
+            // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+            // Kevin Robatel
+            // https://stackoverflow.com/users/244702/kevin-robatel
             if (message == "timeout" || message.contains("Unable to resolve host")) {
                 // Show a timeout dialog and retry updating the category.
                 timeOutDialog.showTimeoutDialog(requireContext()) {
@@ -423,6 +443,10 @@ class UpdateCategoryFragment : Fragment() {
         val categoriesFragment = CategoriesFragment()
 
         // Navigate to the CategoriesFragment and add this transaction to the back stack.
+        // This method was adapted from stackoverflow
+        // https://stackoverflow.com/questions/52318195/how-to-change-fragment-kotlin
+        // Marcos Maliki
+        // https://stackoverflow.com/users/8108169/marcos-maliki
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.frame_layout, categoriesFragment)
             .addToBackStack(null)
@@ -430,6 +454,11 @@ class UpdateCategoryFragment : Fragment() {
     }
 
     private fun showCustomDeleteDialog(token: String) {
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/how-to-create-an-alert-dialog-box-in-android/
+        // naved_alam
+        // https://www.geeksforgeeks.org/user/naved_alam/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
+
         // Inflate the custom dialog view
         val dialogView = layoutInflater.inflate(R.layout.delete_dialog, null)
 
