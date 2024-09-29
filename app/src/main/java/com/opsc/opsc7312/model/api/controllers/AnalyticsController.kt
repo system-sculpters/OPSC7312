@@ -17,7 +17,7 @@ import retrofit2.Response
 class AnalyticsController: ViewModel() {
 
     // api: Retrofit client for making API requests to retrieve analytics data.
-    private var api: AnalyticsService = RetrofitClient.createService<AnalyticsService>()
+    var api: AnalyticsService = RetrofitClient.createService<AnalyticsService>()
 
     // status: LiveData that holds the status of the API request (true for success, false for failure).
     val status: MutableLiveData<Boolean> = MutableLiveData()
@@ -62,11 +62,11 @@ class AnalyticsController: ViewModel() {
                         message.postValue("Goals retrieved")
 
                         // Log example: Print the first month's income and label.
-                        Log.d("api response", "Month: ${transactionsByMonth[0].label}, Income: ${transactionsByMonth[0].income}")
+                        //Log.d("api response", "Month: ${transactionsByMonth[0].label}, Income: ${transactionsByMonth[0].income}")
                     }
                 } else {
                     // If the response failed (e.g., non-2xx status code), log and handle the error.
-                    Log.e("MainActivity", "Request failed with code: ${response.code()}")
+                    //Log.e("MainActivity", "Request failed with code: ${response.code()}")
 
                     // Post 'false' to status LiveData to indicate failure.
                     status.postValue(false)
@@ -75,14 +75,14 @@ class AnalyticsController: ViewModel() {
                     message.postValue("Request failed with code: ${response.code()}")
 
                     // Log the error response code.
-                    Log.d("analytics error", "Error: ${response.code()}")
+                    //Log.d("analytics error", "Error: ${response.code()}")
                 }
             }
 
             // Called when the API call fails due to network issues or other reasons.
             override fun onFailure(call: Call<AnalyticsResponse>, t: Throwable) {
                 // Log the failure reason.
-                Log.d("AnalyticsController onFailure", "API call failed: ${t.message}")
+                //Log.d("AnalyticsController onFailure", "API call failed: ${t.message}")
 
                 // Post 'false' to status LiveData to indicate failure.
                 status.postValue(false)

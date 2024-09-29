@@ -262,12 +262,12 @@ class RegisterActivity : AppCompatActivity() {
                 timeOutDialog.showTimeoutDialog(this) {
                     timeOutDialog.showProgressDialog(this) // Show progress dialog again
                     timeOutDialog.updateProgressDialog(this, progressDialog, "Connecting...", hideProgressBar = false) // Update progress dialog
-                    auth.register(user) // Attempt to register the user again
+                    auth.registerWithSSO(user) // Attempt to register the user again
                 }
             }
         }
 
         // Attempt to register the user
-        auth.register(user)
+        auth.registerWithSSO(user)
     }
 }

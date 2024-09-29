@@ -39,7 +39,7 @@ class CategoryController: ViewModel() {
 
         // Logging the request URL for debugging purposes
         val url = call.request().url.toString()
-        Log.d("MainActivity", "Request URL: $url")
+        //Log.d("MainActivity", "Request URL: $url")
 
         // Asynchronously executes the API call to retrieve categories
         call.enqueue(object : Callback<List<Category>> {
@@ -52,12 +52,12 @@ class CategoryController: ViewModel() {
                         categoryList.postValue(it)
                         status.postValue(true)
                         message.postValue("Categories retrieved")
-                        Log.d("MainActivity", "Categories: $it")
+                        //Log.d("MainActivity", "Categories: $it")
                     }
                 } else {
                     // Handle unsuccessful responses, e.g., a 4xx or 5xx status code
                     categoryList.postValue(listOf())
-                    Log.e("MainActivity", "Request failed with code: ${response.code()}")
+                    //Log.e("MainActivity", "Request failed with code: ${response.code()}")
                     status.postValue(false)
                     message.postValue("Request failed with code: ${response.code()}")
                 }
@@ -66,7 +66,7 @@ class CategoryController: ViewModel() {
             // Called when the API call fails, e.g., due to network issues
             override fun onFailure(call: Call<List<Category>>, t: Throwable) {
                 categoryList.postValue(listOf())
-                Log.e("MainActivity", "Error: ${t.message}")
+                //Log.e("MainActivity", "Error: ${t.message}")
                 status.postValue(false)
                 message.postValue(t.message)
             }

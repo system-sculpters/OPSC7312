@@ -15,7 +15,7 @@ import retrofit2.Response
 class AuthController : ViewModel() {
 
     // api: Retrofit client for making API requests related to authentication.
-    private var api: AuthService = RetrofitClient.createService<AuthService>()
+    var api: AuthService = RetrofitClient.createService<AuthService>()
 
     // status: LiveData that holds the status of API requests (true for success, false for failure).
     val status: MutableLiveData<Boolean> = MutableLiveData()
@@ -40,13 +40,13 @@ class AuthController : ViewModel() {
                         status.postValue(true)  // Update status to indicate success.
                         message.postValue("User registered successfully")  // Post success message.
                         userData.postValue(it)  // Post the created user data.
-                        Log.d("MainActivity", "User created: $it")
+                        //Log.d("MainActivity", "User created: $it")
                     }
                 } else {
                     // Handle failure when the response is not successful (e.g., non-2xx status code).
                     status.postValue(false)
                     message.postValue("Request failed with code: ${response.code()}: ${response.body()?.error}")
-                    Log.e("MainActivity", "Request failed with code: ${response.code()}: ${response.body()?.error}")
+                    //Log.e("MainActivity", "Request failed with code: ${response.code()}: ${response.body()?.error}")
                 }
             }
 
@@ -79,48 +79,19 @@ class AuthController : ViewModel() {
                     // Handle failure when the response is not successful.
                     status.postValue(false)
                     message.postValue("Request failed with code: ${response.code()}")
-                    Log.e("MainActivity", "Request failed with code: ${response.code()}: ${response.body()?.error}")
+                    //Log.e("MainActivity", "Request failed with code: ${response.code()}: ${response.body()?.error}")
                 }
             }
 
             // Called when the API call fails due to network issues or other errors.
             override fun onFailure(call: Call<User>, t: Throwable) {
-                Log.e("MainActivity", "Error: ${t.message}")
+                //Log.e("MainActivity", "Error: ${t.message}")
                 status.postValue(false)  // Update status to indicate failure.
                 message.postValue(t.message)  // Post failure message.
             }
         })
     }
 
-    // Function to handle user logout.
-    // Takes a user token, makes a logout API call, and updates LiveData based on the response.
-    fun logout(userToken: String) {
-        val token = "Bearer $userToken"
-        api.logout(token).enqueue(object : Callback<Void> {
-
-            // Called when the API call receives a response.
-            override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                if (response.isSuccessful) {
-                    Log.d("Logout", "Logout successful")
-                    status.postValue(true)  // Update status to indicate success.
-                    message.postValue("User logged out successfully")  // Post success message.
-                } else {
-                    // Handle failure during logout.
-                    val errorBody = response.errorBody()?.string()
-                    Log.e("Logout", "Logout failed with code: ${response.code()} - $errorBody")
-                    status.postValue(false)
-                    message.postValue("Logout failed with code: ${response.code()} - $errorBody")
-                }
-            }
-
-            // Called when the API call fails due to network issues or other errors.
-            override fun onFailure(call: Call<Void>, t: Throwable) {
-                Log.e("Logout", "Network error: ${t.message}")
-                status.postValue(false)  // Update status to indicate failure.
-                message.postValue("Network error: ${t.message}")  // Post failure message.
-            }
-        })
-    }
 
     // Function to handle Single Sign-On (SSO) registration.
     // Takes a User object, makes a registration API call with SSO, and updates LiveData based on the response.
