@@ -10,6 +10,10 @@
 - App Code repo - https://github.com/system-sculpters/OPSC7312
 - Rest Api Repo - https://github.com/system-sculpters/OPSC-API.git
 
+# DEMONSTRATION VIDEOS
+- https://youtu.be/pBUQPnlj7P8
+- https://youtu.be/yBVMhzyZwGQ
+
 # Recommended System requirements
 - windows 8-11
 - minimum of 8 GB of free hard disk space
