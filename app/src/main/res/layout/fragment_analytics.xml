@@ -36,7 +36,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Goals"
+                        android:text="@string/goals"
                         android:textSize="20sp"
                         android:textAlignment="textEnd"
                         android:fontFamily="@font/inter_medium"
@@ -184,7 +184,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/inter_medium"
-                    android:text="Expenses"
+                    android:text="@string/expenses"
                     android:textAlignment="textEnd"
                     android:textSize="16sp" />
 

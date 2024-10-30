@@ -15,7 +15,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Username"
+        android:text="@string/username"
         android:fontFamily="@font/inter_medium"
         android:textSize="20sp"
         android:layout_marginTop="24dp"/>
@@ -26,7 +26,7 @@
         android:layout_height="60dp"
         android:inputType="text"
         android:layout_marginTop="8dp"
-        android:hint="Enter username"
+        android:hint="@string/enter_username"
         android:paddingHorizontal="12dp"
         android:paddingVertical="4dp"
         android:background="@drawable/edittext_background"
@@ -37,7 +37,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Email"
+        android:text="@string/email"
         android:fontFamily="@font/inter_medium"
         android:textSize="20sp"
         android:layout_marginTop="15dp"/>
@@ -48,7 +48,7 @@
         android:layout_height="60dp"
         android:inputType="text"
         android:layout_marginTop="8dp"
-        android:hint="Enter email"
+        android:hint="@string/enter_email"
         android:paddingHorizontal="12dp"
         android:paddingVertical="4dp"
         android:background="@drawable/edittext_background"
@@ -59,7 +59,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Password"
+        android:text="@string/password"
         android:fontFamily="@font/inter_medium"
         android:textSize="20sp"
         android:layout_marginTop="15dp"/>
@@ -106,7 +106,7 @@
         android:layout_height="60dp"
         android:layout_marginTop="60dp"
         android:background="@drawable/add_button_background"
-        android:text="Save"
+        android:text="@string/save"
         android:fontFamily="@font/inter_medium"
         android:textColor="@color/white"
         android:textSize="24sp"/>

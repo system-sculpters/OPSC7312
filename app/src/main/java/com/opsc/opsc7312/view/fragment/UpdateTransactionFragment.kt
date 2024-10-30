@@ -62,7 +62,7 @@ class UpdateTransactionFragment : Fragment() {
     private var isRecurring = true
 
     // Variables to hold selected category information
-    private var selectedIconName: String = "Select a category"
+    private var selectedIconName: String = getString(R.string.icon_selection)
     private var selectedCategoryId: String = ""
 
     // Dialog for timeout handling
@@ -119,7 +119,7 @@ class UpdateTransactionFragment : Fragment() {
     // Set toolbar title when view is created
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as? MainActivity)?.setToolbarTitle("Details")
+        (activity as? MainActivity)?.setToolbarTitle(getString(R.string.details))
     }
 
     // Load transaction details from arguments
@@ -272,7 +272,7 @@ class UpdateTransactionFragment : Fragment() {
             // https://stackoverflow.com/users/244702/kevin-robatel
             if (status) {
                 // Show a success message and dismiss the dialog after 2 seconds
-                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Transaction update successful!", hideProgressBar = true)
+                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, getString(R.string.update_transaction_successful), hideProgressBar = true)
 
                 Handler(Looper.getMainLooper()).postDelayed({
                     progressDialog.dismiss() // Dismiss the progress dialog
@@ -280,7 +280,7 @@ class UpdateTransactionFragment : Fragment() {
                 }, 2000)
             } else {
                 // Show a failure message and dismiss the dialog after 2 seconds
-                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Transaction update failed!", hideProgressBar = true)
+                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, getString(R.string.update_transaction_fail), hideProgressBar = true)
 
                 Handler(Looper.getMainLooper()).postDelayed({
                     progressDialog.dismiss() // Dismiss the progress dialog
@@ -299,7 +299,7 @@ class UpdateTransactionFragment : Fragment() {
                 timeOutDialog.showTimeoutDialog(requireContext()) {
                     progressDialog.dismiss() // Dismiss the previous dialog
                     timeOutDialog.showProgressDialog(requireContext()) // Show a new progress dialog
-                    timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Connecting...", hideProgressBar = false)
+                    timeOutDialog.updateProgressDialog(requireContext(), progressDialog, getString(R.string.connecting), hideProgressBar = false)
                     transactionViewModel.updateTransaction(token, transactionId, updatedTransaction) // Retry updating the transaction
                 }
             }
@@ -309,34 +309,36 @@ class UpdateTransactionFragment : Fragment() {
         transactionViewModel.updateTransaction(token, transactionId, updatedTransaction)
     }
 
+
+    // Verifies the user input data before creating a transaction
     private fun verifyData(transactionName: String, amount: String, selectedCategory: String, transactionType: Int): Boolean {
-        var errors = 0 // Counter for error messages
+        var errors = 0
 
-        // Validate the transaction name
+        // Check if the transaction name is empty or blank
         if (transactionName.isBlank()) {
-            errorMessage += "• Enter a transaction name\n"
-            errors += 1
+            errorMessage += "${getString(R.string.enter_transaction_name)}\n"  // Append error message for empty transaction name
+            errors += 1  // Increment error count
         }
 
-        // Validate the transaction amount
+        // Check if the amount is empty or blank
         if (amount.isBlank()) {
-            errorMessage += "• Enter a transaction amount\n"
-            errors += 1
+            errorMessage += "${getString(R.string.enter_transaction_amount)}\n"  // Append error message for empty amount
+            errors += 1  // Increment error count
         }
 
-        // Validate the selected category
+        // Check if a category has been selected
         if (selectedCategory.isBlank()) {
-            errorMessage += "• Select a category\n"
-            errors += 1
+            errorMessage += "${getString(R.string.enter_category)}\n"  // Append error message for no category selection
+            errors += 1  // Increment error count
         }
 
-        // Validate the transaction type
+        // Check if the transaction type is valid (not selected)
         if (transactionType == -1) {
-            errorMessage += "• Select a transaction type"
-            errors += 1
+            errorMessage += getString(R.string.enter_transaction_type)  // Append error message for no transaction type selected
+            errors += 1  // Increment error count
         }
 
-        // Return true if no errors were found, otherwise false
+        // Return true if no errors were found; otherwise, return false
         return errors == 0
     }
 

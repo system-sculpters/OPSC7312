@@ -15,6 +15,7 @@ import com.opsc.opsc7312.R
 import com.opsc.opsc7312.databinding.FragmentCategoriesBinding
 import com.opsc.opsc7312.model.api.controllers.CategoryController
 import com.opsc.opsc7312.model.data.model.Category
+import com.opsc.opsc7312.model.data.offline.dbhelpers.CategoryDatabaseHelper
 import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
 import com.opsc.opsc7312.model.data.offline.preferences.UserManager
 import com.opsc.opsc7312.view.adapter.CategoryAdapter
@@ -47,6 +48,8 @@ class CategoriesFragment : Fragment() {
     // Custom dialog for handling timeout errors or showing progress during API calls.
     private lateinit var timeOutDialog: TimeOutDialog
 
+    private lateinit var dbHelper: CategoryDatabaseHelper
+
     // Inflates the fragment's view and sets up initial values and components.
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,6 +67,8 @@ class CategoriesFragment : Fragment() {
 
         // Get the CategoryController ViewModel for interacting with category data.
         categoryViewModel = ViewModelProvider(this).get(CategoryController::class.java)
+
+        dbHelper = CategoryDatabaseHelper(requireContext())
 
         // Initialize a custom dialog for showing progress or handling timeouts.
         timeOutDialog = TimeOutDialog()
@@ -84,7 +89,9 @@ class CategoriesFragment : Fragment() {
         setUpRecyclerView()
 
         // Load and display the categories from the ViewModel.
-        setUpCategoriesDetails()
+        //setUpCategoriesDetails()
+
+        getCategories()
 
         // Return the root view for the fragment.
         return binding.root
@@ -95,7 +102,7 @@ class CategoriesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Set the toolbar title for the fragment to "Categories".
-        (activity as? MainActivity)?.setToolbarTitle("Categories")
+        (activity as? MainActivity)?.setToolbarTitle(getString(R.string.categories))
     }
 
     // Configures the RecyclerView with a grid layout and assigns the category adapter.
@@ -124,6 +131,12 @@ class CategoriesFragment : Fragment() {
         } else {
             // Handle the scenario where the token is null (e.g., log an error or show a message).
         }
+    }
+
+    private fun getCategories(){
+        val categories = dbHelper.getAllCategories()
+        categoryAdapter.updateCategories(categories)
+
     }
 
     // Observes the ViewModel for changes in category data and handles API responses.
@@ -159,7 +172,7 @@ class CategoriesFragment : Fragment() {
                     // Dismiss the current progress dialog and show a new one for retrying.
                     progressDialog.dismiss()
                     timeOutDialog.showProgressDialog(requireContext())
-                    timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "fetching categories...", hideProgressBar = false)
+                    timeOutDialog.updateProgressDialog(requireContext(), progressDialog, getString(R.string.fetch_categories), hideProgressBar = false)
 
                     // Retry the API call to fetch categories.
                     categoryViewModel.getAllCategories(token, id)

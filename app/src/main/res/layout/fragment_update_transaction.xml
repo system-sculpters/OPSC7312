@@ -39,7 +39,7 @@
                 android:paddingVertical="4dp"
                 android:background="@drawable/edittext_background"
                 android:fontFamily="@font/inter_medium"
-                android:hint="Enter tranaction name"
+                android:hint="@string/enter_tranaction_name"
                 />
 
             <TextView
@@ -57,7 +57,7 @@
                 android:layout_marginTop="12dp"
                 android:background="@drawable/edittext_background"
                 android:foreground="?attr/selectableItemBackground"
-                android:hint="Select a type"
+                android:hint="@string/select_a_type"
                 android:padding="10dp"
                 android:textColor="?attr/themeBgBorder"
                 android:textColorHint="@color/light_grey"
@@ -152,7 +152,7 @@
                 android:paddingVertical="4dp"
                 android:background="@drawable/edittext_background"
                 android:fontFamily="@font/inter_medium"
-                android:hint="Enter amount"
+                android:hint="@string/enter_amount"
                 />
 
             <LinearLayout
@@ -184,7 +184,7 @@
                         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Yes"
+                        android:text="@string/yes"
                         android:checked="true"
                         app:cornerRadius="16dp"
                         android:textColor="?attr/colorItemLayoutBg"
@@ -195,7 +195,7 @@
                         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="No"
+                        android:text="@string/no"
                         app:cornerRadius="16dp"
                         android:textColor="@color/primary"
                         app:backgroundTint="?attr/colorItemLayoutBg"

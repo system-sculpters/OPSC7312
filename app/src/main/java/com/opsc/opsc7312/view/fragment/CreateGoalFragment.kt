@@ -18,9 +18,13 @@ import com.opsc.opsc7312.databinding.FragmentCreateGoalBinding
 import com.opsc.opsc7312.model.api.controllers.CategoryController
 import com.opsc.opsc7312.model.api.controllers.GoalController
 import com.opsc.opsc7312.model.api.retrofitclients.GoalRetrofitClient
+import com.opsc.opsc7312.model.data.model.Category
 import com.opsc.opsc7312.model.data.model.Goal
+import com.opsc.opsc7312.model.data.offline.dbhelpers.CategoryDatabaseHelper
+import com.opsc.opsc7312.model.data.offline.dbhelpers.GoalDatabaseHelper
 import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
 import com.opsc.opsc7312.model.data.offline.preferences.UserManager
+import com.opsc.opsc7312.view.custom.NotificationHandler
 import com.opsc.opsc7312.view.custom.TimeOutDialog
 import retrofit2.Call
 import retrofit2.Callback
@@ -29,6 +33,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import java.util.UUID
 
 
 class CreateGoalFragment : Fragment() {
@@ -54,6 +59,9 @@ class CreateGoalFragment : Fragment() {
     // Variable to hold error messages for validation purposes
     private var errorMessage = ""
 
+    private lateinit var notificationHandler: NotificationHandler
+    private lateinit var dbHelper: GoalDatabaseHelper
+
     // Inflates the layout and initializes components when the view is created
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -74,6 +82,10 @@ class CreateGoalFragment : Fragment() {
         // Initialize ViewModel for goal-related operations
         goalViewModel = ViewModelProvider(this).get(GoalController::class.java)
 
+        notificationHandler = NotificationHandler(requireContext())
+
+        dbHelper = GoalDatabaseHelper(requireContext())
+
         // Initialize the dialog for timeout handling
         timeOutDialog = TimeOutDialog()
 
@@ -89,7 +101,7 @@ class CreateGoalFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Access the MainActivity and set the toolbar title to "Create"
-        (activity as? MainActivity)?.setToolbarTitle("Create")
+        (activity as? MainActivity)?.setToolbarTitle(getString(R.string.create_text))
     }
 
     // Set up input fields for the goal creation
@@ -104,7 +116,8 @@ class CreateGoalFragment : Fragment() {
 
         // Set a click listener for the submit button to proceed with goal creation
         binding.submitButton.setOnClickListener {
-            setUpCategoriesDetails()
+            //setUpCategoriesDetails()
+            addGoal()
         }
     }
 
@@ -156,6 +169,83 @@ class CreateGoalFragment : Fragment() {
         }
     }
 
+    // Prepares to set up category details for the goal
+    private fun addGoal() {
+        // Retrieve the current user from UserManager
+        val user = userManager.getUser()
+
+        // Retrieve the current authentication token
+        val token = tokenManager.getToken()
+
+        // If the token is available, proceed to add the goal
+        addNewGoal(user.id)
+    }
+
+    private fun addNewGoal(id: String){
+        // Show a progress dialog while the goal is being created
+        val progressDialog = timeOutDialog.showProgressDialog(requireContext())
+
+        // Collect goal details from input fields
+        val name = binding.goalName.text.toString()
+        val targetAmount = binding.targetAmount.text.toString()
+        var currentAmount = binding.currentAmount.text.toString()
+        val deadlineText = binding.selectedDateText.text.toString()
+        val contributionType = binding.contributionType
+        val contributionAmount = binding.contributionAmount.text.toString()
+
+        // Convert the deadline from string to long if not blank
+        var deadline = 0L
+        if (deadlineText.isNotBlank()) {
+            deadline = AppConstants.convertStringToLong(deadlineText)
+        }
+
+        // Set current amount to 0 if it is blank
+        if (currentAmount.isBlank()) {
+            currentAmount = "0"
+        }
+
+        // Validate the input data before proceeding
+        if (!validateData(name, targetAmount, contributionType.selectedIndex, contributionAmount)) {
+            progressDialog.dismiss()
+            timeOutDialog.showAlertDialog(requireContext(), errorMessage)
+            errorMessage = ""
+            return
+        }
+
+        progressDialog.dismiss()
+
+        val uniqueID = UUID.randomUUID().toString()
+
+        // Create a new Goal object with the provided details
+        val newGoal = Goal(
+            id= uniqueID,
+            userid = id,
+            name = name,
+            targetamount = targetAmount.toDouble(),
+            currentamount = currentAmount.toDouble(),
+            deadline = deadline,
+            contributionamount = contributionAmount.toDouble(),
+            contributiontype = contributionTypes[contributionType.selectedIndex]
+        )
+
+        dbHelper.insertGoal(newGoal)
+
+        val notificationTitle = getString(R.string.goal_created)
+        val notificationMessage = "Your Goal '${newGoal.name}' has been created successfully."
+        notificationHandler.createNotificationChannel()
+        notificationHandler.showNotification(notificationTitle, notificationMessage)
+        getAllGoals()
+    }
+
+    fun getAllGoals(){
+        val goals = dbHelper.getAllGoals()
+        Log.d("DB TEST", "categories: ${goals.size}")
+
+        goals.forEach {
+            Log.d("DB TEST", "categories: ${it}")
+        }
+    }
+
     // Initiates the process of adding a goal with provided details
     private fun addGoal(token: String, id: String) {
         // Show a progress dialog while the goal is being created
@@ -188,6 +278,7 @@ class CreateGoalFragment : Fragment() {
             return
         }
 
+
         // Create a new Goal object with the provided details
         val newGoal = Goal(
             userid = id,
@@ -196,7 +287,7 @@ class CreateGoalFragment : Fragment() {
             currentamount = currentAmount.toDouble(),
             deadline = deadline,
             contributionamount = contributionAmount.toDouble(),
-            contrubitiontype = contributionTypes[contributionType.selectedIndex]
+            contributiontype = contributionTypes[contributionType.selectedIndex]
         )
 
         // Observe the status of goal creation from the ViewModel
@@ -253,24 +344,24 @@ class CreateGoalFragment : Fragment() {
         // Check if the goal name is blank
         if (name.isBlank()) {
             errors += 1
-            errorMessage += "• Enter a goal name\n"
+            errorMessage += "${getString(R.string.enter_goal_name)}\n"
         }
 
         // Check if the target amount is blank
         if (targetAmount.isBlank()) {
-            errorMessage += "• Enter a target amount\n"
+            errorMessage += "${getString(R.string.enter_target_amount)}\n"
             errors += 1
         }
 
         // Check if a contribution type has been selected
         if (selectedIndex == -1) {
-            errorMessage += "• Select a contribution type\n"
+            errorMessage += "${getString(R.string.contribution_type)}\n"
             errors += 1
         }
 
         // Check if the contribution amount is blank
         if (contributionAmount.isBlank()) {
-            errorMessage += "• Enter a contribution amount"
+            errorMessage += getString(R.string.contribution_amount)
             errors += 1
         }
 

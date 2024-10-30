@@ -1,0 +1,189 @@
+<resources>
+    <string name="app_name">PennyWise</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="expense">Izindleko</string>
+    <string name="income">Imali engenayo</string>
+    <string name="more">Bona Okuningi</string>
+    <string name="recent">Izintengiselwano Zakamuva</string>
+    <string name="name">Igama</string>
+    <string name="create_text">Dala</string>
+    <string name="target_amount">Inani Ehlosiwe</string>
+    <string name="current_amount">Inani lamanje (uyazikhethela)</string>
+    <string name="contribution_amount">Inani Lomnikelo</string>
+    <string name="contribution_type">Uhlobo Lomnikelo</string>
+    <string name="deadline">Usuku Lokuphela (uyazikhethela)</string>
+    <string name="edit_goals">Hlela Izinhloso</string>
+    <string name="log_out">Phuma</string>
+    <string name="category">Izigaba</string>
+    <string name="investment">Izimali Zokutshalwa Kwezimali</string>
+    <string name="account">I-akhawunti</string>
+    <string name="general">Okuvamile</string>
+    <string name="language">Ulimi</string>
+    <string name="goals">Izinhloso</string>
+    <string name="system">Uhlelo</string>
+    <string name="dark">Mnyama</string>
+    <string name="light">Khanya</string>
+    <string name="tagline">Ukubala Izimali Okukhaliphile Kulula</string>
+    <string name="fingerprint_icon"/>
+
+    <string name="signup_redirect">
+    <font>Awunayo i-akhawunti? </font>
+    <font color="#007BFF">bhalisa</font>
+</string>
+
+    <string name="signin_redirect">
+    <font>Unayo i-akhawunti? </font>
+    <font color="#007BFF">ngena ngemvume</font>
+</string>
+
+    <string name="biometric">Ngena ngemvume nge-fingerprint</string>
+
+    <string name="welcome">
+    <font>Siyakwamukela ku- </font>
+    <font color="#007BFF">PennyWise</font>
+</string>
+    <string name="color_label">Umbala</string>
+    <string name="icon_label">Isithonjana</string>
+    <string name="icon_selection">Khetha isithonjana</string>
+    <string name="type">Uhlobo Lokuthengiselana</string>
+    <string name="recurring">Phindaphinda?</string>
+    <string name="amount">Inani</string>
+    <string name="category_label">Isigaba</string>
+    <string name="category_selection">Khetha isigaba</string>
+    <string name="error_icon">isithombe somlayezo</string>
+    <string name="week">iviki</string>
+    <string name="monthly">inyanga</string>
+    <string name="google">Ngena ngemvume nge-Google</string>
+    <string name="update_text">Buyekeza</string>
+    <string name="selected_language">Ulimi olukhethiwe</string>
+    <string name="show_results">Bonisa imiphumela</string>
+    <string name="default_web_client_id">577849445889-0bk53jvg92vut6tiqn0tkgomueu67bg3.apps.googleusercontent.com</string>
+    <string name="password">Iphasiwedi</string>
+    <string name="delete_text">Susa</string>
+    <string name="cancel_text">Khansela</string>
+    <string name="notification">Izaziso</string>
+
+
+    <string name="home">Ikhaya</string>
+    <string name="analytics">Izinhlaziya</string>
+    <string name="categories">Izigaba</string>
+    <string name="security">Ezokuphepha</string>
+    <string name="settings">Izilungiselelo</string>
+    <string name="theme">Itimu</string>
+    <string name="transactions">Ukuthengiselana</string>
+    <string name="profile">Iphrofayela</string>
+
+    <string name="connecting">Uxhumana...</string>
+
+    <string name="goal_created">Umgomo Omusha Udalwe</string>
+    <string name="transaction_created">Ukuthengiselana Okusha Kudaliwe</string>
+
+
+    <string name="category_created">Isigaba esisha sakhiwe</string>
+    <string name="enter_category_name">• Faka igama lesigaba</string>
+    <string name="enter_transaction_type">• Khetha uhlobo lokuthengiselana</string>
+    <string name="enter_category_color">• Khetha umbala wesigaba</string>
+    <string name="icon_selection1">• Khetha isithonjana sesigaba</string>
+
+    <string name="enter_goal_name">• Faka igama lezinhloso</string>
+    <string name="enter_target_amount">• Faka isamba esihlosiwe</string>
+    <string name="enter_contribution_type">• Khetha uhlobo lomnikelo</string>
+    <string name="enter_contribution_amount">• Faka isamba somnikelo</string>
+
+    <string name="enter_transaction_name">• Faka igama lokuthengiselana</string>
+    <string name="enter_transaction_amount">• Faka isamba sokuthengiselana</string>
+    <string name="enter_category">• Khetha isigaba</string>
+
+    <string name="already_in_use">Ikheli le-imeyili selisetshenziswa enye i-akhawunti!</string>
+    <string name="profile_update_successful">Ukubuyekezwa kwephrofayela kuphumelele!</string>
+    <string name="password_update_successful">Ukubuyekezwa kwephasiwedi kuphumelele!</string>
+    <string name="password_update_failed">Ukubuyekezwa kwephasiwedi kuhlulekile!</string>
+    <string name="confirm_password_not_match">Iphasiwedi entsha ayihambisani</string>
+    <string name="fetch_analytics">Ukulanda izinhlaziya...</string>
+    <string name="analytics_update_successful">Ukubuyekezwa kwezinhlaziya kuphumelele!</string>
+    <string name="analytics_update_fail">Ukubuyekezwa kwezinhlaziya kuhlulekile!</string>
+    <string name="fetch_categories">Ukulanda izigaba...</string>
+
+    <string name="create_category_fail">Ukudala isigaba kuhlulekile!</string>
+    <string name="create_category_successful">Isigaba sidalwe ngempumelelo!</string>
+
+    <string name="create_transaction_fail">Ukudala ukuthengiselana kuhlulekile!</string>
+    <string name="create_transaction_successful">Ukudala ukuthengiselana kuphumelele!</string>
+
+    <string name="create_goal_fail">Ukudala izinhloso kuhlulekile!</string>
+    <string name="create_goal_successful">Izinhloso zidaliwe ngempumelelo!</string>
+
+    <string name="update_category_fail">Ukubuyekezwa kwesigaba kuhlulekile!</string>
+    <string name="update_category_successful">Isigaba sibuyekezwe ngempumelelo!</string>
+
+    <string name="update_transaction_fail">Ukubuyekezwa kokuthengiselana kuhlulekile!</string>
+    <string name="update_transaction_successful">Ukuthengiselana kubuyekezwe ngempumelelo!</string>
+
+    <string name="update_goal_fail">Ukubuyekezwa kwezinhloso kuhlulekile!</string>
+    <string name="update_goal_successful">Izinhloso zibuyekezwe ngempumelelo!</string>
+
+    <string name="category_retrieval_successful">Izigaba zitholwe ngempumelelo!</string>
+    <string name="category_retrieval_fail">Ukutholwa kwezizigaba kuhlulekile!</string>
+    <string name="creating_category">Kudala isigaba...</string>
+    <string name="details">Imininingwane</string>
+
+
+    <string name="welcome_back">Siyakwamukela Emuva</string>
+    <string name="email">Imeyili</string>
+    <string name="sign_in">Ngena ngemvume</string>
+    <string name="sign_up">Bhalisa</string>
+    <string name="create_a_new_account">Dala i-akhawunti entsha</string>
+    <string name="username">Igama lomsebenzisi</string>
+    <string name="change_password">Shintsha iphasiwedi</string>
+    <string name="enter_password">Faka iphasiwedi</string>
+    <string name="confirm_password">Qinisekisa iphasiwedi</string>
+    <string name="save">Londoloza</string>
+    <string name="are_you_sure_you_want_to_delete_nthis_item">Uqinisekile ukuthi ufuna ukususa lento?</string>
+    <string name="all">Konke</string>
+    <string name="expenses">Izindleko</string>
+    <string name="enter_category_name1">Faka igama lesigaba</string>
+    <string name="select_a_question">Khetha umbuzo</string>
+    <string name="enter_transaction_type1">Khetha uhlobo lokuthengiselana</string>
+    <string name="enter_goal_name1">Faka igama lezinhloso</string>
+    <string name="enter_target_amount1">Faka isamba esihlosiwe</string>
+    <string name="enter_current_amount1">Faka isamba samanje</string>
+    <string name="enter_contribution_amount1">Faka isamba somnikelo</string>
+    <string name="enter_tranaction_name">Faka igama lokuthengiselana</string>
+    <string name="select_a_type">Khetha uhlobo</string>
+    <string name="enter_amount">Faka isamba</string>
+    <string name="yes">Yebo</string>
+    <string name="no">Cha</string>
+    <string name="total_goal_amount">Isamba sezinhloso</string>
+    <string name="net_balance">Ibhalansi Yonke</string>
+    <string name="select_a_language">Khetha ulimi</string>
+    <string name="transaction">Ukuthengiselana</string>
+    <string name="notify_after_every_purchase">Yazisa emva kokuthenga ngakunye</string>
+    <string name="notify_at_25_50_and_75_progress">Yazisa ngo-25%, 50%, kanye no-75% inqubekelaphambili</string>
+    <string name="alert_when_goal_is_reached">Yazisa uma izinhloso seziphumelele</string>
+    <string name="notify_when_profile_is_updated">Yazisa uma iphrofayela ibuyekezwa</string>
+    <string name="alert_for_new_logins_or_failed_attempts">Yazisa ngezingena ezintsha noma imizamo ehlulekile</string>
+    <string name="enter_username">Faka igama lomsebenzisi</string>
+    <string name="enter_email">Faka i-imeyili</string>
+    <string name="fingerprint">Izithupha</string>
+    <string name="theme_appearance">Itimu/Ukubukeka</string>
+    <string name="total_balance">Ibhalansi Yonke</string>
+    <string name="name_a_to_z">Igama (A kuye ku-Z)</string>
+    <string name="name_z_to_a">Igama (Z kuye ku-A)</string>
+    <string name="date_ascending">Idethi (ikhuphuka)</string>
+    <string name="date_descending">Idethi (iyehla)</string>
+    <string name="amount_high_to_low">Isamba: EsiPhezulu kuye phansi</string>
+    <string name="amount_low_to_high">Isamba: Ephansi kuye phezulu</string>
+
+
+    <string name="something_went_wrong">Kukhona okungahambi kahle...</string>
+    <string name="login_successful">Ukungena kuqedile!</string>
+    <string name="login_fail">Ukungena akwaphumelelanga!</string>
+    <string name="empty_email">• I-imeyili ayikwazi ukuba ayinanto.</string>
+    <string name="invalid_email_format">• Ifomethi ye-imeyili ayilungile.</string>
+    <string name="blank_password">• Iphasiwedi ayikwazi ukuba ayinanto.</string>
+    <string name="empty_username">• Igama lomsebenzisi alikwazi ukuba ayinanto.</string>
+    <string name="registration_failed">Ukubhaliswa akwaphumelelanga!</string>
+    <string name="registration_successful">Ukubhaliswa kuphumelele!</string>
+    <string name="user_exists">Umsebenzisi usukhona!</string>
+
+</resources>

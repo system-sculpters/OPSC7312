@@ -30,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:text="Notifications"
+                android:text="@string/notification"
                 android:thumbTint="@color/white"
                 android:trackTint="@color/black"
                 android:textSize="15sp"
@@ -43,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Transaction"
+            android:text="@string/transaction"
             android:fontFamily="@font/inter_bold"
             android:textSize="24sp" />
 
@@ -64,7 +64,7 @@
                 android:layout_gravity="center_vertical"
                 android:thumbTint="@color/white"
                 android:trackTint="@color/black"
-                android:text="Notify after every purchase"
+                android:text="@string/notify_after_every_purchase"
                 android:textSize="15sp"
                 />
 
@@ -76,7 +76,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Goal"
+            android:text="@string/goals"
             android:fontFamily="@font/inter_bold"
             android:textSize="24sp" />
 
@@ -97,7 +97,7 @@
                 android:layout_gravity="center_vertical"
                 android:thumbTint="@color/white"
                 android:trackTint="@color/black"
-                android:text="Notify at 25%, 50%, and 75% progress"
+                android:text="@string/notify_at_25_50_and_75_progress"
                 android:textSize="15sp"
                 />
 
@@ -121,7 +121,7 @@
                 android:layout_gravity="center_vertical"
                 android:thumbTint="@color/white"
                 android:trackTint="@color/black"
-                android:text="Alert when goal is reached"
+                android:text="@string/alert_when_goal_is_reached"
                 android:textSize="15sp"
                 />
 
@@ -132,7 +132,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="General"
+            android:text="@string/general"
             android:fontFamily="@font/inter_bold"
             android:textSize="24sp" />
 
@@ -155,7 +155,7 @@
                 android:layout_gravity="center_vertical"
                 android:thumbTint="@color/white"
                 android:trackTint="@color/black"
-                android:text="Notify when profile is updated"
+                android:text="@string/notify_when_profile_is_updated"
                 android:textSize="15sp"
                 android:fontFamily="@font/inter_medium"
                 />
@@ -180,7 +180,7 @@
                 android:layout_gravity="center_vertical"
                 android:thumbTint="@color/white"
                 android:trackTint="@color/black"
-                android:text="Alert for new logins or failed attempts"
+                android:text="@string/alert_for_new_logins_or_failed_attempts"
                 android:textSize="15sp"
                 android:fontFamily="@font/inter_medium"
                 />

@@ -122,7 +122,7 @@ class AnalyticsFragment : Fragment() {
     // Called after the view is created. Sets the toolbar title in MainActivity
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as? MainActivity)?.setToolbarTitle("Analytics")
+        (activity as? MainActivity)?.setToolbarTitle(getString(R.string.analytics))
     }
 
     // Handles the click event for the radio buttons (week/month filters)
@@ -193,10 +193,10 @@ class AnalyticsFragment : Fragment() {
             // https://stackoverflow.com/users/244702/kevin-robatel
 
             if (status) {
-                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Analytics update successful!", hideProgressBar = true)
+                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, getString(R.string.analytics_update_successful), hideProgressBar = true)
                 progressDialog.dismiss()
             } else {
-                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Analytics update failed!", hideProgressBar = true)
+                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, getString(R.string.analytics_update_fail), hideProgressBar = true)
 
                 // Dismiss dialog after 2 seconds if there's a failure
                 Handler(Looper.getMainLooper()).postDelayed({
@@ -219,7 +219,7 @@ class AnalyticsFragment : Fragment() {
                 timeOutDialog.showTimeoutDialog(requireContext()) {
                     progressDialog.dismiss()
                     timeOutDialog.showProgressDialog(requireContext())
-                    timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Fetching analytics...", hideProgressBar = false)
+                    timeOutDialog.updateProgressDialog(requireContext(), progressDialog, getString(R.string.fetch_analytics), hideProgressBar = false)
                     analyticsViewModel.fetchAllAnalytics(token, userId)
                 }
             }

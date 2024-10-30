@@ -55,7 +55,7 @@ class SecurityFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as? MainActivity)?.setToolbarTitle("Security")
+        (activity as? MainActivity)?.setToolbarTitle(getString(R.string.security))
     }
 
     // Retrieve the saved biometric preference, default to false if not set
@@ -102,5 +102,11 @@ class SecurityFragment : Fragment() {
             biometricsSwitch.trackTintList =
                 ContextCompat.getColorStateList(requireContext(), R.color.darkBackgroundColor)
         }
+    }
+
+    // Clean up binding object when the fragment is destroyed
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

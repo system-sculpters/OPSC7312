@@ -118,7 +118,7 @@ class RegisterActivity : AppCompatActivity() {
             // Handle registration status changes (success or failure)
             if (status) {
                 // Update the progress dialog for successful registration
-                timeOutDialog.updateProgressDialog(this, progressDialog, "Registration successful!", hideProgressBar = true)
+                timeOutDialog.updateProgressDialog(this, progressDialog, getString(R.string.registration_successful), hideProgressBar = true)
 
                 // Dismiss the dialog after 2 seconds and redirect to the login screen
                 Handler(Looper.getMainLooper()).postDelayed({
@@ -127,7 +127,7 @@ class RegisterActivity : AppCompatActivity() {
                 }, 2000)
             } else {
                 // Update the progress dialog for unsuccessful registration
-                timeOutDialog.updateProgressDialog(this, progressDialog, "Failed: User already exists!", hideProgressBar = true)
+                timeOutDialog.updateProgressDialog(this, progressDialog, getString(R.string.user_exists), hideProgressBar = true)
 
                 // Dismiss the dialog after 2 seconds
                 Handler(Looper.getMainLooper()).postDelayed({
@@ -143,7 +143,7 @@ class RegisterActivity : AppCompatActivity() {
                 progressDialog.dismiss() // Dismiss the dialog on error
                 timeOutDialog.showTimeoutDialog(this) {
                     timeOutDialog.showProgressDialog(this) // Show progress dialog again
-                    timeOutDialog.updateProgressDialog(this, progressDialog, "Connecting...", hideProgressBar = false) // Update progress dialog
+                    timeOutDialog.updateProgressDialog(this, progressDialog, getString(R.string.connecting), hideProgressBar = false) // Update progress dialog
                     auth.register(user) // Attempt to register the user again
                 }
             }
@@ -156,17 +156,17 @@ class RegisterActivity : AppCompatActivity() {
     // Method to validate user input before registration
     private fun validateInput(username: String, email: String, password: String): Boolean {
         if (username.isBlank()) {
-            errorMessage += "• Username cannot be empty.\n" // Error if username is empty
+            errorMessage += "${getString(R.string.empty_username)}\n" // Error if username is empty
         }
 
         if (email.isEmpty()) {
-            errorMessage += "• Email cannot be empty.\n" // Error if email is empty
+            errorMessage += "${getString(R.string.empty_email)}\n"
         } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            errorMessage += "• Invalid email format.\n" // Error if email format is invalid
+            errorMessage += "${getString(R.string.invalid_email_format)}\n"
         }
 
-        if (password.isBlank()) {
-            errorMessage += "• Password cannot be empty.\n" // Error if password is empty
+        if (password.isBlank()){
+            errorMessage += "${getString(R.string.blank_password)}\n"
         }
 
         // Return true if there are no errors, otherwise false
@@ -271,7 +271,7 @@ class RegisterActivity : AppCompatActivity() {
 
             if (status) {
                 // Update the progress dialog for successful registration
-                timeOutDialog.updateProgressDialog(this, progressDialog, "Registration successful!", hideProgressBar = true)
+                timeOutDialog.updateProgressDialog(this, progressDialog, getString(R.string.registration_successful), hideProgressBar = true)
 
                 // Dismiss the dialog after 2 seconds and redirect to login
                 Handler(Looper.getMainLooper()).postDelayed({
@@ -280,7 +280,7 @@ class RegisterActivity : AppCompatActivity() {
                 }, 2000)
             } else {
                 // Update the progress dialog for unsuccessful registration
-                timeOutDialog.updateProgressDialog(this, progressDialog, "Registration unsuccessful!", hideProgressBar = true)
+                timeOutDialog.updateProgressDialog(this, progressDialog, getString(R.string.registration_failed), hideProgressBar = true)
 
                 // Dismiss the dialog after 2 seconds
                 Handler(Looper.getMainLooper()).postDelayed({
@@ -301,7 +301,7 @@ class RegisterActivity : AppCompatActivity() {
                 progressDialog.dismiss() // Dismiss the dialog on error
                 timeOutDialog.showTimeoutDialog(this) {
                     timeOutDialog.showProgressDialog(this) // Show progress dialog again
-                    timeOutDialog.updateProgressDialog(this, progressDialog, "Connecting...", hideProgressBar = false) // Update progress dialog
+                    timeOutDialog.updateProgressDialog(this, progressDialog, getString(R.string.connecting), hideProgressBar = false) // Update progress dialog
                     auth.registerWithSSO(user) // Attempt to register the user again
                 }
             }

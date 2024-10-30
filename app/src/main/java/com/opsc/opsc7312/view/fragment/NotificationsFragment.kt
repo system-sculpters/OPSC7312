@@ -70,7 +70,7 @@ class NotificationsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Access the MainActivity and set the toolbar title
-        (activity as? MainActivity)?.setToolbarTitle("Notifications")
+        (activity as? MainActivity)?.setToolbarTitle(getString(R.string.notification))
     }
 
     //Applies custom styles to the switches by creating ColorStateLists for thumb and track tint.

@@ -1,35 +1,48 @@
 package com.opsc.opsc7312
 
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.content.res.Configuration
+import android.net.ConnectivityManager
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.opsc.opsc7312.databinding.ActivityMainBinding
 import com.opsc.opsc7312.model.api.controllers.AuthController
-import com.opsc.opsc7312.model.data.model.User
 import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
 import com.opsc.opsc7312.model.data.offline.preferences.UserManager
+import com.opsc.opsc7312.model.data.offline.syncworker.GoalSyncWorker
 import com.opsc.opsc7312.view.activity.WelcomeActivity
+import com.opsc.opsc7312.view.custom.BiometricAuth
+import com.opsc.opsc7312.view.custom.ConnectivityReceiver
+import com.opsc.opsc7312.view.custom.NetworkChangeReceiver
+import com.opsc.opsc7312.model.data.offline.syncworker.SyncWorker
 import com.opsc.opsc7312.view.fragment.AnalyticsFragment
 import com.opsc.opsc7312.view.fragment.CategoriesFragment
 import com.opsc.opsc7312.view.fragment.CreateTransactionFragment
 import com.opsc.opsc7312.view.fragment.GoalsFragment
 import com.opsc.opsc7312.view.fragment.HomeFragment
+import com.opsc.opsc7312.view.fragment.NotificationListFragment
 import com.opsc.opsc7312.view.fragment.SettingsFragment
 import com.opsc.opsc7312.view.fragment.TransactionsFragment
+import java.util.Locale
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -57,12 +70,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     // FirebaseAuth instance for Firebase authentication
     private val firebaseAuth = FirebaseAuth.getInstance()
 
+    private lateinit var networkChangeReceiver: NetworkChangeReceiver
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         // Load the selected theme before setting the content view
         loadAndApplyTheme()
 
         // Set the app theme
         setTheme(R.style.Theme_OPSC7312)
+
+        // Retrieve the saved language from SharedPreferences
+        val sharedPreferences = getSharedPreferences("LanguagePreferences", Context.MODE_PRIVATE)
+        val savedLanguage = sharedPreferences.getString("selectedLanguage", "English")
+
+        // Apply the saved language
+        setAppLocale(savedLanguage ?: "English")
 
         super.onCreate(savedInstanceState)
 
@@ -92,6 +115,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (isLoggedIn()) {
             setupBottomNavigation()  // Initialize bottom navigation
             setupNavigationView()    // Initialize navigation drawer
+            val connectivityReceiver = ConnectivityReceiver {
+                enqueueGoalSyncWorker(this)
+            }
+            this.registerReceiver(connectivityReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
         } else {
             navigateToWelcome()      // Redirect to welcome screen
         }
@@ -109,9 +136,59 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Set click listener for the Floating Action Button (FAB) to open transaction creation
         binding.fab.setOnClickListener {
             // Handle FAB click, e.g., open GoalsFragment
-            changeCurrentFragment(CreateTransactionFragment(), "Create Transaction")
+            changeCurrentFragment(CreateTransactionFragment())
+        }
+
+
+    }
+
+//    private fun enqueueSyncRequest() {
+//        val syncRequest = OneTimeWorkRequestBuilder<SyncWorker>()
+//            .setConstraints(
+//                Constraints.Builder()
+//                    .setRequiredNetworkType(NetworkType.CONNECTED) // Ensure network connectivity
+//                    .build()
+//            )
+//            .build()
+//
+//        WorkManager.getInstance(applicationContext).enqueue(syncRequest)
+//    }
+
+    fun enqueueGoalSyncWorker(context: Context) {
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        val syncRequest = PeriodicWorkRequestBuilder<GoalSyncWorker>(15, TimeUnit.MINUTES)
+            .setConstraints(constraints)
+            .build()
+
+        WorkManager.getInstance(context).enqueue(syncRequest)
+    }
+
+    fun enqueueCategorySyncWorker(context: Context) {
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        val syncRequest = OneTimeWorkRequestBuilder<SyncWorker>()
+            .setConstraints(constraints)
+            .build()
+
+        WorkManager.getInstance(context).enqueue(syncRequest)
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+
+        // Check if user is logged in, then trigger biometric authentication if enabled
+        if (isLoggedIn()) {
+            val biometricAuth = BiometricAuth()
+            biometricAuth.loadFingerprint(this)  // Trigger biometric authentication when app is resumed
         }
     }
+
 
     // Loads the theme preference from SharedPreferences and applies it
     private fun loadAndApplyTheme() {
@@ -139,22 +216,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     // Sets up bottom navigation for fragment switching
     private fun setupBottomNavigation() {
         // Start with the HomeFragment as the initial fragment
-        changeCurrentFragment(HomeFragment(), "Home")
+        changeCurrentFragment(HomeFragment())
 
         // Set the listener for bottom navigation item selections
         binding.bottomNavigation.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
-                R.id.home -> changeCurrentFragment(HomeFragment(), "Home")
-                R.id.transactions -> changeCurrentFragment(TransactionsFragment(), "Transactions")
-                R.id.analytics -> changeCurrentFragment(AnalyticsFragment(), "Analytics")
-                R.id.settings -> changeCurrentFragment(SettingsFragment(), "Settings")
+                R.id.home -> changeCurrentFragment(HomeFragment())
+                R.id.transactions -> changeCurrentFragment(TransactionsFragment())
+                R.id.analytics -> changeCurrentFragment(AnalyticsFragment())
+                R.id.settings -> changeCurrentFragment(SettingsFragment())
             }
             true
         }
     }
 
     // Changes the current displayed fragment and updates the toolbar title
-    private fun changeCurrentFragment(fragment: Fragment, title: String) {
+    private fun changeCurrentFragment(fragment: Fragment) {
         // This method was adapted from stackoverflow
         // https://stackoverflow.com/questions/52318195/how-to-change-fragment-kotlin
         // Marcos Maliki
@@ -163,7 +240,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             replace(R.id.frame_layout, fragment) // Replace the current fragment
             commit() // Commit the transaction
         }
-        setToolbarTitle(title) // Update the toolbar title
     }
 
     // Sets the title of the toolbar
@@ -179,9 +255,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     // Handles navigation item selections from the navigation drawer
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.nav_investment -> changeCurrentFragment(CategoriesFragment(), "Investments")
-            R.id.nav_categories -> changeCurrentFragment(CategoriesFragment(), "Categories")
-            R.id.nav_goal -> changeCurrentFragment(GoalsFragment(), "Goals")
+            R.id.nav_investment -> changeCurrentFragment(CategoriesFragment())
+            R.id.nav_categories -> changeCurrentFragment(CategoriesFragment())
+            R.id.nav_notification -> changeCurrentFragment(NotificationListFragment())
+            R.id.nav_goal -> changeCurrentFragment(GoalsFragment())
             R.id.nav_logout -> {
                 logOut() // Handle logout action
             }
@@ -223,4 +300,28 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         startActivity(Intent(this, MainActivity::class.java)) // Restart the MainActivity
         finish() // Finish the current activity
     }
+
+    private fun setAppLocale(language: String) {
+        // This method was adapted from stackoverflow
+        // https://stackoverflow.com/questions/3624280/how-to-use-sharedpreferences-in-android-to-store-fetch-and-edit-values
+        // Harneet Kaur
+        // https://stackoverflow.com/users/1444525/harneet-kaur
+        // Ziem
+        // Determine the locale code based on the selected language
+        val localeCode = when (language) {
+            "Afrikaans" -> "af" // Afrikaans language code
+            "Zulu" -> "zu" // Zulu language code
+            else -> "en" // Default to English if no match is found
+        }
+
+        val locale = Locale(localeCode) // Create a new Locale object
+        Locale.setDefault(locale) // Set the default locale
+
+        val config = Configuration() // Create a new Configuration object
+        config.setLocale(locale) // Set the locale in the configuration
+
+        resources.updateConfiguration(config, resources.displayMetrics)
+    }
+
+
 }

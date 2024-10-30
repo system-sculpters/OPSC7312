@@ -16,7 +16,7 @@ data class Goal(
     var targetamount: Double = 0.00,    // Target savings amount
     var currentamount: Double = 0.00,   // Current savings amount
     var deadline: Long = 0L,            // Deadline for the goal (in Unix timestamp format)
-    var contrubitiontype: String = "",  // Type of contribution (e.g., "monthly", "weekly")
+    var contributiontype: String = "",  // Type of contribution (e.g., "monthly", "weekly")
     var contributionamount: Double = 0.00  // Amount contributed regularly towards the goal
 ) : Parcelable {
     // Implementing Parcelable for passing Category objects between components
@@ -45,7 +45,7 @@ data class Goal(
         parcel.writeDouble(targetamount)
         parcel.writeDouble(currentamount)
         parcel.writeLong(deadline)
-        parcel.writeString(contrubitiontype)
+        parcel.writeString(contributiontype)
         parcel.writeDouble(contributionamount)
     }
 

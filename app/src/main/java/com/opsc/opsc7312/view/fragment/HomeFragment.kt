@@ -96,7 +96,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Access the MainActivity and set the toolbar title to "Home"
-        (activity as? MainActivity)?.setToolbarTitle("Home")
+        (activity as? MainActivity)?.setToolbarTitle(getString(R.string.home))
     }
 
     // Sets up user details in the UI, including username and email.
@@ -135,13 +135,13 @@ class HomeFragment : Fragment() {
             // https://stackoverflow.com/users/244702/kevin-robatel
             if (status) {
                 // If successful, update the progress dialog message
-                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Transaction retrieval successful!", hideProgressBar = true)
+                //timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Transaction retrieval successful!", hideProgressBar = true)
 
                 // Dismiss the progress dialog immediately upon success
                 progressDialog.dismiss()
             } else {
                 // If failed, update the progress dialog message
-                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Transaction retrieval failed!", hideProgressBar = true)
+                //timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Transaction retrieval failed!", hideProgressBar = true)
 
                 // Dismiss the progress dialog immediately upon failure
                 progressDialog.dismiss()
@@ -164,7 +164,7 @@ class HomeFragment : Fragment() {
                     progressDialog.dismiss()
                     // Show a new progress dialog while attempting to reconnect
                     timeOutDialog.showProgressDialog(requireContext())
-                    timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Connecting...", hideProgressBar = false)
+                    timeOutDialog.updateProgressDialog(requireContext(), progressDialog, getString(R.string.connecting), hideProgressBar = false)
                     // Retry fetching transactions after a timeout
                     transactionViewModel.getAllTransactions(token, userId)
                 }

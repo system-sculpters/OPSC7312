@@ -64,7 +64,7 @@ class LanguageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Access the MainActivity and set the toolbar title
-        (activity as? MainActivity)?.setToolbarTitle("Language")
+        (activity as? MainActivity)?.setToolbarTitle(getString(R.string.language))
     }
 
     //Saves the selected language preference to SharedPreferences.
@@ -96,12 +96,15 @@ class LanguageFragment : Fragment() {
 
         val locale = Locale(localeCode) // Create a new Locale object
         Locale.setDefault(locale) // Set the default locale
+
         val config = Configuration() // Create a new Configuration object
         config.setLocale(locale) // Set the locale in the configuration
-        requireContext().createConfigurationContext(config) // Apply the configuration context
+        //requireContext().createConfigurationContext(config) // Apply the configuration context
+        requireActivity().resources.updateConfiguration(config, requireActivity().resources.displayMetrics)
 
+        requireActivity().recreate()
         // Refresh the UI to reflect the new language
-        refreshUI() // Call to update the UI with the new locale
+        //refreshUI() // Call to update the UI with the new locale
     }
 
     ///Refreshes the user interface by detaching and re-attaching the fragment.

@@ -37,7 +37,7 @@
                 android:paddingVertical="4dp"
                 android:background="@drawable/edittext_background"
                 android:fontFamily="@font/inter_medium"
-                android:hint="Enter category name"
+                android:hint="@string/enter_category_name"
                 />
 
             <TextView
@@ -144,7 +144,7 @@
                 android:layout_marginTop="12dp"
                 android:background="@drawable/edittext_background"
                 android:foreground="?attr/selectableItemBackground"
-                android:hint="Select a question"
+                android:hint="@string/enter_transaction_type1"
                 android:padding="10dp"
                 android:textColor="?attr/themeBgBorder"
                 android:textColorHint="@color/light_grey"

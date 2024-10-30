@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Selected language"
+        android:text="@string/selected_language"
         android:textSize="25dp"
         android:layout_marginTop="20dp"/>
 
@@ -19,7 +19,5 @@
         android:layout_height="wrap_content"
         android:minHeight="48dp"
         android:layout_marginTop="25dp" />
-
-
 
 </LinearLayout>

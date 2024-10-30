@@ -102,7 +102,7 @@ class UpdateGoalFragment : Fragment() {
         // If the goal is not null, populate the UI elements with its data
         if (goal != null) {
             Log.d("goal", "this is the goal: $goal")
-            val selectedIndex = contributionTypes.indexOf(goal.contrubitiontype) // Get index of the contribution type
+            val selectedIndex = contributionTypes.indexOf(goal.contributiontype) // Get index of the contribution type
             goalId = goal.id // Store the goal ID
             goalName = goal.name  // Store the goal Name
             binding.goalName.setText(goal.name) // Set the goal name
@@ -224,7 +224,7 @@ class UpdateGoalFragment : Fragment() {
             currentamount = currentAmount.toDouble(),
             deadline = deadline,
             contributionamount = contributionAmount.toDouble(),
-            contrubitiontype = contributionTypes[contributionType.selectedIndex]
+            contributiontype = contributionTypes[contributionType.selectedIndex]
         )
 
         // Observe the status of the goal update operation
@@ -236,7 +236,7 @@ class UpdateGoalFragment : Fragment() {
             // https://stackoverflow.com/users/244702/kevin-robatel
             if (status) {
                 // Update progress dialog to show success message
-                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Goal creation successful!", hideProgressBar = true)
+                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, getString(R.string.update_goal_successful), hideProgressBar = true)
 
                 // Dismiss the dialog after a delay and navigate to GoalsFragment
                 Handler(Looper.getMainLooper()).postDelayed({
@@ -246,7 +246,7 @@ class UpdateGoalFragment : Fragment() {
 
             } else {
                 // Update progress dialog to show failure message
-                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Goal creation failed!", hideProgressBar = true)
+                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, getString(R.string.update_goal_fail), hideProgressBar = true)
 
                 // Dismiss the dialog after a delay
                 Handler(Looper.getMainLooper()).postDelayed({
@@ -276,38 +276,37 @@ class UpdateGoalFragment : Fragment() {
         goalViewModel.updateGoal(token, goalId, updatedGoal)
     }
 
-    // Validates the input data for updating the goal
+    // Validates the input data for goal creation
     private fun validateData(name: String, targetAmount: String, selectedIndex: Int, contributionAmount: String): Boolean {
-        var errors = 0 // Counter for validation errors
+        var errors = 0
 
         // Check if the goal name is blank
         if (name.isBlank()) {
             errors += 1
-            errorMessage += "• Enter a goal name\n" // Add error message
+            errorMessage += "${getString(R.string.enter_goal_name)}\n"
         }
 
         // Check if the target amount is blank
         if (targetAmount.isBlank()) {
-            errorMessage += "• Enter a target amount\n" // Add error message
+            errorMessage += "${getString(R.string.enter_target_amount)}\n"
             errors += 1
         }
 
-        // Check if a contribution type is selected
+        // Check if a contribution type has been selected
         if (selectedIndex == -1) {
-            errorMessage += "• Select a contribution type\n" // Add error message
+            errorMessage += "${getString(R.string.contribution_type)}\n"
             errors += 1
         }
 
         // Check if the contribution amount is blank
         if (contributionAmount.isBlank()) {
-            errorMessage += "• Enter a contribution amount"
+            errorMessage += getString(R.string.contribution_amount)
             errors += 1
         }
 
-        // Return true if there are no errors, false otherwise
+        // Return true if there are no validation errors
         return errors == 0
     }
-
     // Changes the current displayed fragment to the specified fragment
     private fun changeCurrentFragment(fragment: Fragment) {
         // This method was adapted from stackoverflow

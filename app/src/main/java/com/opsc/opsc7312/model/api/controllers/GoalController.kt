@@ -3,11 +3,17 @@ package com.opsc.opsc7312.model.api.controllers
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.gson.Gson
 import com.opsc.opsc7312.model.api.retrofitclients.GoalRetrofitClient
 import com.opsc.opsc7312.model.api.retrofitclients.RetrofitClient
 import com.opsc.opsc7312.model.api.services.AnalyticsService
 import com.opsc.opsc7312.model.api.services.GoalService
 import com.opsc.opsc7312.model.data.model.Goal
+import com.opsc.opsc7312.model.data.model.GoalsHolder
+import com.opsc.opsc7312.model.data.model.IdMapping
+import com.opsc.opsc7312.model.data.model.SyncResponse
+import com.opsc.opsc7312.model.data.model.Transaction
+import com.opsc.opsc7312.model.data.model.TransactionsHolder
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -176,6 +182,56 @@ class GoalController : ViewModel() {
                 Log.e("MainActivity", "Error: ${t.message}")
                 status.postValue(false)  // Mark the operation as failed
                 message.postValue(t.message)  // Set an error message
+            }
+        })
+    }
+
+    // Sends a request to create a new category for the user.
+    // Takes a user token for authentication and a Category object.
+    // Updates the `status` and `message` based on the success of the request.
+
+    // This method was adapted from medium
+    // https://medium.com/quick-code/working-with-restful-apis-in-android-retrofit-volley-okhttp-eb8d3ec71e06
+    // Megha Verma
+    // https://medium.com/@meghaverma12
+    fun syncGoals(userToken: String, unSyncedGoals: List<Goal>, onSyncComplete: (Boolean, List<IdMapping>?) -> Unit) {
+        val token = "Bearer $userToken"  // Ensure proper token formatting
+        val transactionHolder = GoalsHolder(goals = unSyncedGoals)
+
+        api.syncGoals(token, transactionHolder).enqueue(object : Callback<SyncResponse> {
+            override fun onResponse(call: Call<SyncResponse>, response: Response<SyncResponse>) {
+                if (response.isSuccessful) {
+                    // On successful sync, update the status
+                    onSyncComplete(true, response.body()?.ids)
+                    message.postValue("Categories synced successfully.")
+                } else {
+
+                    onSyncComplete(false, null)
+
+                    val errorMessage = if (response.errorBody() != null) {
+                        try {
+                            // Parse the error body to get the SyncResponse object
+                            val errorResponse = Gson().fromJson(response.errorBody()?.string(), SyncResponse::class.java)
+                            "Error syncing goals: ${errorResponse.message}"
+                        } catch (e: Exception) {
+                            "Request failed with code: ${response.code()}, but failed to parse error response."
+                        }
+                    } else {
+                        "Request failed with code: ${response.code()}, message: ${response.message()}"
+                    }
+
+                    message.postValue(errorMessage)
+                    Log.e("CategorySync", errorMessage)
+
+                }
+            }
+
+            override fun onFailure(call: Call<SyncResponse>, t: Throwable) {
+                // Handle network or other failures
+                val errorMessage = "Sync failed: ${t.message ?: "Unknown error"}\n c${call}"
+                Log.e("CategorySync", errorMessage)
+                onSyncComplete(false, null)
+                message.postValue(t.message)
             }
         })
     }

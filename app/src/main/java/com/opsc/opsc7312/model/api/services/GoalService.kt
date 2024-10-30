@@ -1,6 +1,9 @@
 package com.opsc.opsc7312.model.api.services
 
 import com.opsc.opsc7312.model.data.model.Goal
+import com.opsc.opsc7312.model.data.model.GoalsHolder
+import com.opsc.opsc7312.model.data.model.SyncResponse
+import com.opsc.opsc7312.model.data.model.TransactionsHolder
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -46,4 +49,14 @@ interface GoalService {
     // Returns a Call object with no content on successful deletion.
     @DELETE("goal/{id}")
     fun deleteGoal(@Header("Authorization") token: String, @Path("id") id: String): Call<Void>
+
+
+    // Retrieves a list of categories associated with a specific user.
+    // This function sends a GET request to the "category/{id}" endpoint.
+    // It requires an authorization token in the header and the user ID in the path.
+    // The response will be a Call object containing a list of Category objects.
+    @POST("goal/batch-create")
+    fun syncGoals(@Header("Authorization") token: String, @Body goals: GoalsHolder): Call<SyncResponse>
+
+
 }

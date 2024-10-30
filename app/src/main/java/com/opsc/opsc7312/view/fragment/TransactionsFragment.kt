@@ -15,10 +15,13 @@ import com.opsc.opsc7312.model.api.controllers.AuthController
 import com.opsc.opsc7312.model.api.controllers.TransactionController
 import com.opsc.opsc7312.model.data.model.Category
 import com.opsc.opsc7312.model.data.model.Transaction
+import com.opsc.opsc7312.model.data.offline.dbhelpers.CategoryDatabaseHelper
+import com.opsc.opsc7312.model.data.offline.dbhelpers.TransactionDatabaseHelper
 import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
 import com.opsc.opsc7312.model.data.offline.preferences.UserManager
 import com.opsc.opsc7312.view.adapter.TransactionAdapter
 import com.opsc.opsc7312.view.custom.FilterBottomSheet
+import com.opsc.opsc7312.view.custom.NotificationHandler
 import com.opsc.opsc7312.view.custom.SortBottomSheet
 import com.opsc.opsc7312.view.custom.TimeOutDialog
 import com.opsc.opsc7312.view.observers.TransactionsObserver
@@ -54,6 +57,8 @@ class TransactionsFragment : Fragment() {
     private lateinit var sortBottomSheet: SortBottomSheet
     private lateinit var filterBottomSheet: FilterBottomSheet
 
+    private lateinit var dbHelper: TransactionDatabaseHelper
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -70,6 +75,8 @@ class TransactionsFragment : Fragment() {
         // Initialize bottom sheets for filtering and sorting transactions
         filterBottomSheet = FilterBottomSheet()
         sortBottomSheet = SortBottomSheet()
+
+        dbHelper = TransactionDatabaseHelper(requireContext())
 
         // Get instances of user and token managers
         userManager = UserManager.getInstance(requireContext())
@@ -114,7 +121,7 @@ class TransactionsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Set the toolbar title for the activity to "Transactions"
-        (activity as? MainActivity)?.setToolbarTitle("Transactions")
+        (activity as? MainActivity)?.setToolbarTitle(getString(R.string.transactions))
     }
 
     // Function to set up the RecyclerView for displaying transactions
@@ -197,7 +204,7 @@ class TransactionsFragment : Fragment() {
                     timeOutDialog.showProgressDialog(requireContext())
 
                     // Update the progress dialog message to indicate connection attempts
-                    timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Connecting...", hideProgressBar = false)
+                    timeOutDialog.updateProgressDialog(requireContext(), progressDialog, getString(R.string.connecting), hideProgressBar = false)
 
                     // Retry fetching transactions after a timeout
                     transactionViewModel.getAllTransactions(token, userId)

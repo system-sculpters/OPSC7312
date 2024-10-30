@@ -25,6 +25,7 @@ object AppConstants {
     // This URL is used as the prefix for all network requests.
     const val BASE_URL = "https://pennywise-1rw5.onrender.com/api/"
 
+    //const val BASE_URL = "https://localhost:3001/api/"
 
     const val UNCATEGORIZED = "wEijTYKaY8738zHM4oJb"
 

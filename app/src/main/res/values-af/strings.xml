@@ -1,0 +1,191 @@
+<resources>
+    <string name="app_name">PennyWise</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="expense">Uitgawes</string>
+    <string name="income">Inkomste</string>
+    <string name="more">Sien Meer</string>
+    <string name="recent">Onlangse Transaksies</string>
+    <string name="name">Naam</string>
+    <string name="create_text">Skep</string>
+    <string name="target_amount">Teikenbedrag</string>
+    <string name="current_amount">Huidige Bedrag (opsioneel)</string>
+    <string name="contribution_amount">Bydraebedrag</string>
+    <string name="contribution_type">Bydrae Tipe</string>
+    <string name="deadline">Sperdatum (opsioneel)</string>
+    <string name="edit_goals">Wysig Doelwitte</string>
+    <string name="log_out">Teken uit</string>
+    <string name="category">Kategorieë</string>
+    <string name="investment">Beleggings</string>
+    <string name="account">Rekening</string>
+    <string name="general">Algemeen</string>
+    <string name="language">Taal</string>
+    <string name="goals">Doelwitte</string>
+    <string name="system">Stelsel</string>
+    <string name="dark">Donker</string>
+    <string name="light">Lig</string>
+    <string name="tagline">Slim Begroting Maak Dit Maklik</string>
+    <string name="fingerprint_icon"/>
+
+    <string name="signup_redirect">
+    <font>Het nie n rekening nie? </font>
+    <font color="#007BFF">Teken aan</font>
+</string>
+
+    <string name="signin_redirect">
+    <font>Het reeds n rekening? </font>
+    <font color="#007BFF">Meld aan</font>
+</string>
+
+    <string name="biometric">Teken aan met vingerafdruk</string>
+
+    <string name="welcome">
+    <font>Welkom by </font>
+    <font color="#007BFF">PennyWise</font>
+</string>
+    <string name="color_label">Kleur</string>
+    <string name="icon_label">Ikoon</string>
+    <string name="icon_selection">Kies n ikoon</string>
+    <string name="type">Transaksie Tipe</string>
+    <string name="recurring">Herhalend?</string>
+    <string name="amount">Bedrag</string>
+    <string name="category_label">Kategorie</string>
+    <string name="category_selection">Kies n kategorie</string>
+    <string name="error_icon">boodskap beeld</string>
+    <string name="week">week</string>
+    <string name="monthly">maand</string>
+    <string name="google">Teken aan met Google</string>
+    <string name="update_text">Opdateer</string>
+    <string name="selected_language">Gekose taal</string>
+    <string name="show_results">Wys resultate</string>
+    <string name="default_web_client_id">577849445889-0bk53jvg92vut6tiqn0tkgomueu67bg3.apps.googleusercontent.com</string>
+    <string name="password">Wagwoord</string>
+    <string name="delete_text">Verwyder</string>
+    <string name="cancel_text">Kanselleer</string>
+    <string name="notification">Kennisgewings</string>
+
+
+
+    <string name="home">Tuis</string>
+    <string name="analytics">Analise</string>
+    <string name="categories">Kategorieë</string>
+    <string name="security">Sekuriteit</string>
+    <string name="settings">Instellings</string>
+    <string name="theme">Tema</string>
+    <string name="transactions">Transaksies</string>
+    <string name="profile">Profiel</string>
+
+    <string name="connecting">Verbind...</string>
+
+    <string name="goal_created">Nuwe Doel Geskep</string>
+    <string name="transaction_created">Nuwe Transaksie Geskep</string>
+    <string name="category_created">Nuwe kategorie geskep</string>
+
+
+    <string name="enter_category_name">• Voer n kategorie naam in</string>
+    <string name="enter_transaction_type">• Kies n transaksietipe</string>
+    <string name="enter_category_color">• Kies n kategorie kleur</string>
+    <string name="icon_selection1">• Kies n kategorie-ikoon</string>
+
+    <string name="enter_goal_name">• Voer n doelnaam in</string>
+    <string name="enter_target_amount">• Voer n teikenbedrag in</string>
+    <string name="enter_contribution_type">• Kies n bydraetipe</string>
+    <string name="enter_contribution_amount">• Voer n bydraebedrag in</string>
+
+    <string name="enter_transaction_name">• Voer n transaksienaam in</string>
+    <string name="enter_transaction_amount">• Voer n transaksiebedrag in</string>
+    <string name="enter_category">• Kies n kategorie</string>
+
+    <string name="already_in_use">Die e-posadres word reeds deur n ander rekening gebruik!</string>
+    <string name="profile_update_successful">Profiel suksesvol opgedateer!</string>
+    <string name="password_update_successful">Wagwoord suksesvol opgedateer!</string>
+    <string name="password_update_failed">Wagwoord opdatering het misluk!</string>
+    <string name="confirm_password_not_match">Bevestig nuwe wagwoord stem nie ooreen nie</string>
+    <string name="fetch_analytics">Besig om analise te kry...</string>
+    <string name="analytics_update_successful">Analise suksesvol opgedateer!</string>
+    <string name="analytics_update_fail">Analise opdatering het misluk!</string>
+    <string name="fetch_categories">Besig om kategorieë te kry...</string>
+
+    <string name="create_category_fail">Kategorie skep het misluk!</string>
+    <string name="create_category_successful">Kategorie suksesvol geskep!</string>
+
+    <string name="create_transaction_fail">Transaksie skep het misluk!</string>
+    <string name="create_transaction_successful">Transaksie suksesvol geskep!</string>
+
+    <string name="create_goal_fail">Doelskep het misluk!</string>
+    <string name="create_goal_successful">Doel suksesvol geskep!</string>
+
+    <string name="update_category_fail">Kategorie opdatering het misluk!</string>
+    <string name="update_category_successful">Kategorie suksesvol opgedateer!</string>
+
+    <string name="update_transaction_fail">Transaksie opdatering het misluk!</string>
+    <string name="update_transaction_successful">Transaksie suksesvol opgedateer!</string>
+
+    <string name="update_goal_fail">Doel opdatering het misluk!</string>
+    <string name="update_goal_successful">Doel suksesvol opgedateer!</string>
+
+    <string name="category_retrieval_successful">Kategorieë suksesvol verkry!</string>
+    <string name="category_retrieval_fail">Kategorie verkryging het misluk!</string>
+    <string name="creating_category">Besig om kategorie te skep...</string>
+    <string name="details">Besonderhede</string>
+
+
+
+
+    <string name="welcome_back">Welkom Terug</string>
+    <string name="email">E-pos</string>
+    <string name="sign_in">Teken In</string>
+    <string name="sign_up">Teken Aan</string>
+    <string name="create_a_new_account">Skep n nuwe rekening</string>
+    <string name="username">Gebruikersnaam</string>
+    <string name="change_password">Verander wagwoord</string>
+    <string name="enter_password">Voer wagwoord in</string>
+    <string name="confirm_password">Bevestig wagwoord</string>
+    <string name="save">Stoor</string>
+    <string name="are_you_sure_you_want_to_delete_nthis_item">Is jy seker jy wil hierdie item \nverwyder?</string>
+    <string name="all">Alles</string>
+    <string name="expenses">Uitgawes</string>
+    <string name="enter_category_name1">Voer kategorie naam in</string>
+    <string name="select_a_question">Kies n vraag</string>
+    <string name="enter_transaction_type1">Kies transaksie tipe</string>
+    <string name="enter_goal_name1">Voer doel naam in</string>
+    <string name="enter_target_amount1">Voer teikenbedrag in</string>
+    <string name="enter_current_amount1">Voer huidige bedrag in</string>
+    <string name="enter_contribution_amount1">Voer bydraebedrag in</string>
+    <string name="enter_tranaction_name">Voer transaksie naam in</string>
+    <string name="select_a_type">Kies n tipe</string>
+    <string name="enter_amount">Voer bedrag in</string>
+    <string name="yes">Ja</string>
+    <string name="no">Nee</string>
+    <string name="total_goal_amount">Totale doelbedrag</string>
+    <string name="net_balance">Netto Balans</string>
+    <string name="select_a_language">Kies n taal</string>
+    <string name="transaction">Transaksie</string>
+    <string name="notify_after_every_purchase">Stel in kennis na elke aankoop</string>
+    <string name="notify_at_25_50_and_75_progress">Stel in kennis by 25%, 50%, en 75% vordering</string>
+    <string name="alert_when_goal_is_reached">Waarsku wanneer doelwit bereik is</string>
+    <string name="notify_when_profile_is_updated">Stel in kennis wanneer profiel opgedateer is</string>
+    <string name="alert_for_new_logins_or_failed_attempts">Waarsku vir nuwe aanmeldings of mislukte pogings</string>
+    <string name="enter_username">Voer gebruikersnaam in</string>
+    <string name="enter_email">Voer e-pos in</string>
+    <string name="fingerprint">Vingerafdruk</string>
+    <string name="theme_appearance">Tema/Uiterlike</string>
+    <string name="total_balance">Totale Balans</string>
+    <string name="name_a_to_z">Naam (A tot Z)</string>
+    <string name="name_z_to_a">Naam (Z tot A)</string>
+    <string name="date_ascending">Datum (oplopend)</string>
+    <string name="date_descending">Datum (aflopend)</string>
+    <string name="amount_high_to_low">Bedrag: Hoog na Laag</string>
+    <string name="amount_low_to_high">Bedrag: Laag na Hoog</string>
+
+    <string name="something_went_wrong">Iets het verkeerd gegaan...</string>
+    <string name="login_successful">Aanmelding suksesvol!</string>
+    <string name="login_fail">Aanmelding onsuksesvol!</string>
+    <string name="empty_email">• E-pos kan nie leeg wees nie.</string>
+    <string name="invalid_email_format">• Ongeldige e-pos formaat.</string>
+    <string name="blank_password">• Wagwoord kan nie leeg wees nie.</string>
+    <string name="empty_username">• Gebruikersnaam kan nie leeg wees nie.</string>
+    <string name="registration_failed">Registrasie onsuksesvol!</string>
+    <string name="registration_successful">Registrasie suksesvol!</string>
+    <string name="user_exists">Gebruiker bestaan reeds!</string>
+
+</resources>

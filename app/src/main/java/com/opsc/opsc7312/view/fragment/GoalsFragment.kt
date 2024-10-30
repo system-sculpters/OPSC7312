@@ -84,7 +84,7 @@ class GoalsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Access the MainActivity and set the toolbar title
-        (activity as? MainActivity)?.setToolbarTitle("Goals")
+        (activity as? MainActivity)?.setToolbarTitle(getString(R.string.goals))
     }
 
     // method that sets up the RecyclerView for displaying the list of goals.
@@ -176,7 +176,7 @@ class GoalsFragment : Fragment() {
                     // Display a new progress dialog indicating a reconnection attempt
                     timeOutDialog.showProgressDialog(requireContext())
                     // Update the progress dialog with a message while connecting
-                    timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Connecting...", hideProgressBar = false)
+                    timeOutDialog.updateProgressDialog(requireContext(), progressDialog, getString(R.string.connecting), hideProgressBar = false)
                     // Retry fetching all goals from the ViewModel
                     goalViewModel.getAllGoals(token, id)
                 }

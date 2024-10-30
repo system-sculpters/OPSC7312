@@ -1,6 +1,7 @@
 package com.opsc.opsc7312.view.activity
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
@@ -10,6 +11,7 @@ import android.text.method.PasswordTransformationMethod
 import android.util.Log
 import android.util.TypedValue
 import android.view.MotionEvent
+import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -31,6 +33,7 @@ import com.opsc.opsc7312.model.api.controllers.AuthController
 import com.opsc.opsc7312.model.data.model.User
 import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
 import com.opsc.opsc7312.model.data.offline.preferences.UserManager
+import com.opsc.opsc7312.view.custom.BiometricAuth
 import com.opsc.opsc7312.view.custom.TimeOutDialog
 
 // Activity class for handling user login functionality
@@ -85,6 +88,7 @@ class LoginActivity : AppCompatActivity() {
         tokenManager = TokenManager.getInstance(this)
         userManager = UserManager.getInstance(this)
 
+
         // Configure Google Sign-In options
         // These variables were adapted from YouTube
         // https://youtu.be/suVgcrPwYKQ?si=2FCFY8EXmnnaZuh0
@@ -101,9 +105,6 @@ class LoginActivity : AppCompatActivity() {
 
         // Set up click listener for the Sign In button
         binding.btnSignIn.setOnClickListener { loginUser() }
-
-        // Set up click listener for biometric login button
-        binding.biometricLogin.setOnClickListener { biometricLogin() }
 
         // Set up click listener to navigate to the registration activity
         binding.tvSignUpPrompt.setOnClickListener {
@@ -131,6 +132,8 @@ class LoginActivity : AppCompatActivity() {
 
         // Initialize the timeout dialog for session management
         timeOutDialog = TimeOutDialog()
+
+
     }
 
     // Function to handle user login process
@@ -200,7 +203,7 @@ class LoginActivity : AppCompatActivity() {
                 timeOutDialog.showTimeoutDialog(this) {
                     // Restart the progress dialog
                     timeOutDialog.showProgressDialog(this)
-                    timeOutDialog.updateProgressDialog(this, progressDialog, "Connecting...", hideProgressBar = false)
+                    timeOutDialog.updateProgressDialog(this, progressDialog, getString(R.string.connecting), hideProgressBar = false)
                     auth.login(user) // Attempt to login again
                 }
             }
@@ -222,20 +225,16 @@ class LoginActivity : AppCompatActivity() {
 
     private fun validateInput( email: String, password: String): Boolean {
         if (email.isEmpty()) {
-            errorMessage += "• Email cannot be empty.\n"
+            errorMessage += "${getString(R.string.empty_email)}\n"
         } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            errorMessage += "• Invalid email format.\n"
+            errorMessage += "${getString(R.string.invalid_email_format)}\n"
         }
 
         if (password.isBlank()){
-            errorMessage += "• Password cannot be empty.\n"
+            errorMessage += "${getString(R.string.blank_password)}\n"
         }
 
         return errorMessage == ""
-    }
-
-    private fun biometricLogin() {
-        TODO("Not yet implemented")
     }
 
     private fun togglePasswordVisibility() {
@@ -337,7 +336,7 @@ class LoginActivity : AppCompatActivity() {
             firebaseAuthWithGoogle(account.idToken!!)
         } catch (e: ApiException) {
             // Handle any errors that occurred during sign-in
-            Toast.makeText(this, "Something went wrong...", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -367,7 +366,7 @@ class LoginActivity : AppCompatActivity() {
                 } else {
                     // Handle any errors that occurred during Firebase sign-in
                     Log.d("login error", "this is the account ")
-                    Toast.makeText(this, "Something went wrong...", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show()
                 }
             }
     }
@@ -391,7 +390,7 @@ class LoginActivity : AppCompatActivity() {
             // Handle status changes (success or failure)
             if (status) {
                 // Update the progress dialog to indicate success
-                timeOutDialog.updateProgressDialog(this, progressDialog, "Login successful!", hideProgressBar = true)
+                timeOutDialog.updateProgressDialog(this, progressDialog, getString(R.string.login_successful), hideProgressBar = true)
 
                 // Dismiss the dialog after 2 seconds
                 Handler(Looper.getMainLooper()).postDelayed({
@@ -404,7 +403,7 @@ class LoginActivity : AppCompatActivity() {
                 }, 2000)
             } else {
                 // Update the progress dialog to indicate failure
-                timeOutDialog.updateProgressDialog(this, progressDialog, "Login unsuccessful!", hideProgressBar = true)
+                timeOutDialog.updateProgressDialog(this, progressDialog, getString(R.string.login_fail), hideProgressBar = true)
 
                 // Dismiss the dialog after 2 seconds
                 Handler(Looper.getMainLooper()).postDelayed({
@@ -429,7 +428,7 @@ class LoginActivity : AppCompatActivity() {
                 timeOutDialog.showTimeoutDialog(this) {
                     // Show a progress dialog while connecting
                     timeOutDialog.showProgressDialog(this)
-                    timeOutDialog.updateProgressDialog(this, progressDialog, "Connecting...", hideProgressBar = false)
+                    timeOutDialog.updateProgressDialog(this, progressDialog, getString(R.string.connecting), hideProgressBar = false)
 
                     // Attempt to log in with Single Sign-On (SSO) again
                     auth.loginWithSSO(user)

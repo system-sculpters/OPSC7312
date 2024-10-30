@@ -45,7 +45,7 @@ class SettingsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Set the toolbar title for the activity to "Settings"
-        (activity as? MainActivity)?.setToolbarTitle("Settings")
+        (activity as? MainActivity)?.setToolbarTitle(getString(R.string.settings))
     }
 
     // Function to set up click listeners for various sections in the settings
@@ -86,6 +86,12 @@ class SettingsFragment : Fragment() {
             .replace(R.id.frame_layout, fragment) // Replace the content of the frame layout
             .addToBackStack(null) // Add the transaction to the back stack
             .commit() // Commit the transaction
+    }
+
+    // Clean up binding object when the fragment is destroyed
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
 

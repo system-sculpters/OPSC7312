@@ -302,7 +302,7 @@ class UpdateCategoryFragment : Fragment() {
             // https://stackoverflow.com/users/244702/kevin-robatel
             if (status) {
                 // Show a success message and redirect to categories after a delay.
-                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Category update successful!", hideProgressBar = true)
+                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, getString(R.string.update_category_successful), hideProgressBar = true)
 
                 // Dismiss the dialog after 2 seconds and redirect to the categories screen.
                 Handler(Looper.getMainLooper()).postDelayed({
@@ -311,7 +311,7 @@ class UpdateCategoryFragment : Fragment() {
                 }, 2000)
             } else {
                 // Show a failure message and dismiss the progress dialog after a delay.
-                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Category update failed!", hideProgressBar = true)
+                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, getString(R.string.update_category_fail), hideProgressBar = true)
 
                 Handler(Looper.getMainLooper()).postDelayed({
                     progressDialog.dismiss()
@@ -331,7 +331,7 @@ class UpdateCategoryFragment : Fragment() {
                 timeOutDialog.showTimeoutDialog(requireContext()) {
                     progressDialog.dismiss()
                     timeOutDialog.showProgressDialog(requireContext())
-                    timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Connecting...", hideProgressBar = false)
+                    timeOutDialog.updateProgressDialog(requireContext(), progressDialog, getString(R.string.connecting), hideProgressBar = false)
                     categoryViewModel.updateCategory(token, categoryId, updatedCategory)
                 }
             }
@@ -341,46 +341,45 @@ class UpdateCategoryFragment : Fragment() {
         categoryViewModel.updateCategory(token, categoryId, updatedCategory)
     }
 
-    // Validates the category data to ensure that all required fields are filled out.
+
+    // Validates the input fields for creating a category
     private fun validateCategoryData(
         catName: String,
         transactionType: Int,
         selectedColor: Color?,
         selectedIcon: Int?
     ): Boolean {
-        var errors = 0 // Counter for validation errors.
+        var errors = 0
 
-        // Check if the category name is blank; if so, log an error message.
+        // Check if category name is entered
         if (catName.isBlank()) {
             errors += 1
             messages.add("Enter a category name")
-            errorMessage += "• Enter a category name\n"
+            errorMessage += "${getString(R.string.enter_category_name)}\n"
         }
 
-        // Check if a transaction type is selected; if not, log an error message.
+        // Check if a transaction type is selected
         if (transactionType == -1) {
             messages.add("Select a transaction type")
-            errorMessage += "• Select a transaction type\n"
+            errorMessage += "${getString(R.string.enter_transaction_type)}\n"
             errors += 1
         }
 
-        // Check if a color is selected; if not, log an error message.
+        // Check if a color is selected
         if (selectedColor == null) {
-            errorMessage += "• Select a color\n"
+            messages.add("Select a category color")
+            errorMessage += "${getString(R.string.enter_category_color)}\n"
             errors += 1
         }
 
-        // Check if an icon is selected; if not, log an error message.
+        // Check if an icon is selected
         if (selectedIcon == null) {
-            errorMessage += "• Select an icon"
+            messages.add("Select a category icon")
+            errorMessage += "${getString(R.string.icon_selection)}\n"
             errors += 1
         }
 
-        // Log the category data for debugging purposes.
-        val test = "Cat Name: $catName, transaction type: $transactionType, Color: ${selectedColor?.name}, icon: ${selectedIcon?.let { getIconName(it) }}"
-        Log.d("Category", test)
-
-        // Return true if no errors were found; otherwise, return false.
+        // Return whether all fields are valid or not
         return errors == 0
     }
 

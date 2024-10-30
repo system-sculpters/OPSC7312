@@ -23,7 +23,7 @@
         android:layout_marginTop="12dp"
         android:background="@drawable/edittext_background"
         android:foreground="?attr/selectableItemBackground"
-        android:hint="Select a question"
+        android:hint="@string/select_a_language"
         android:padding="10dp"
         android:textColor="?attr/themeBgBorder"
         android:textColorHint="@color/light_grey"

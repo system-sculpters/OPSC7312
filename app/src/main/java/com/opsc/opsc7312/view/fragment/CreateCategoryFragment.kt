@@ -29,11 +29,16 @@ import com.opsc.opsc7312.model.api.controllers.CategoryController
 import com.opsc.opsc7312.model.api.controllers.GoalController
 import com.opsc.opsc7312.model.data.model.Category
 import com.opsc.opsc7312.model.data.model.Color
+import com.opsc.opsc7312.model.data.offline.dbhelpers.CategoryDatabaseHelper
 import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
 import com.opsc.opsc7312.model.data.offline.preferences.UserManager
 import com.opsc.opsc7312.view.adapter.ColorAdapter
 import com.opsc.opsc7312.view.adapter.IconAdapter
+import com.opsc.opsc7312.view.custom.NotificationHandler
 import com.opsc.opsc7312.view.custom.TimeOutDialog
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 
 class CreateCategoryFragment : Fragment() {
@@ -75,7 +80,7 @@ class CreateCategoryFragment : Fragment() {
     private val REQUEST_CODE = 1234
 
     // Variable to store the name of the selected icon
-    private var selectedIconName: String = "Select an icon"
+    private lateinit var selectedIconName: String
 
     // Variable to store the error message if input validation fails
     private var errorMessage = ""
@@ -83,7 +88,10 @@ class CreateCategoryFragment : Fragment() {
     // Dialog to handle timeout or long running processes
     private lateinit var timeOutDialog: TimeOutDialog
 
-    // Inflates the layout and initializes the data required for the fragment
+    private lateinit var notificationHandler: NotificationHandler
+    private lateinit var dbHelper: CategoryDatabaseHelper
+
+        // Inflates the layout and initializes the data required for the fragment
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -97,12 +105,18 @@ class CreateCategoryFragment : Fragment() {
         // Initialize empty messages list
         messages = arrayListOf()
 
+        selectedIconName = getString(R.string.icon_selection)
+
         // Set up user and token managers
         userManager = UserManager.getInstance(requireContext())
         tokenManager = TokenManager.getInstance(requireContext())
 
         // Set up ViewModel for managing category data
         categoryViewModel = ViewModelProvider(this).get(CategoryController::class.java)
+
+        notificationHandler = NotificationHandler(requireContext())
+
+        dbHelper = CategoryDatabaseHelper(requireContext())
 
         // Get contribution types from app constants
         contributionTypes = AppConstants.TRANSACTIONTYPE.entries.map { it.name }
@@ -145,7 +159,7 @@ class CreateCategoryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Set toolbar title to "Create"
-        (activity as? MainActivity)?.setToolbarTitle("Create")
+        (activity as? MainActivity)?.setToolbarTitle(getString(R.string.create_text))
     }
 
     // Sets up the color picker RecyclerView
@@ -222,12 +236,59 @@ class CreateCategoryFragment : Fragment() {
         val token = tokenManager.getToken()
 
         if (token != null) {
-            addCategory(token, user.id)
+            //addCategory(token, user.id)
+            addNewCategory(user.id)
         } else {
             // Handle case when token is null (optional)
         }
     }
 
+    private fun addNewCategory(id: String){
+        val progressDialog = timeOutDialog.showProgressDialog(requireContext())
+
+        val catName = binding.categoryNameEdittext.text.toString()
+        val selectedColor = colorAdapter.getSelectedItem()
+        val selectedIcon = iconAdapter.getSelectedItem()
+
+        // Validate user input before sending data to the server
+        if (!validateCategoryData(catName, binding.contributionType.selectedIndex, selectedColor, selectedIcon)) {
+            progressDialog.dismiss()
+            timeOutDialog.showAlertDialog(requireContext(), errorMessage)
+            errorMessage = ""
+            return
+        }
+
+        // Prepare the new category data
+        val transactionType = contributionTypes[binding.contributionType.selectedIndex]
+        val newCategory = Category(
+            id = "",
+            name = catName,
+            transactiontype = transactionType,
+            color = selectedColor!!.name,
+            icon = getIconName(selectedIcon!!),
+            userid = id
+        )
+
+
+        dbHelper.insertCategory(newCategory)
+
+        val notificationTitle = getString(R.string.category_created)
+        val notificationMessage = "Your category '${newCategory.name}' has been created successfully."
+        notificationHandler.createNotificationChannel()
+        notificationHandler.showNotification(notificationTitle, notificationMessage)
+        getAllCategories()
+    }
+
+    fun getAllCategories(){
+        //val pinData: MutableList<Triple<String, String, String>> = mutableListOf()
+
+        val categories = dbHelper.getAllCategories()
+
+        categories.forEach {
+            // Log.d("DB TEST", "PIN: ${it.first}, Locker No: ${it.second}, timestamp: ${it.third}")
+            Log.d("DB TEST", "categories: ${it}")
+        }
+    }
     // Sends the data to create a new category using the ViewModel
     private fun addCategory(token: String, id: String) {
         val progressDialog = timeOutDialog.showProgressDialog(requireContext())
@@ -263,14 +324,19 @@ class CreateCategoryFragment : Fragment() {
             // https://stackoverflow.com/users/244702/kevin-robatel
             if (status) {
                 // Update and dismiss the progress dialog on success
-                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Category created successfully!", hideProgressBar = true)
+                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, getString(R.string.create_category_successful), hideProgressBar = true)
                 Handler(Looper.getMainLooper()).postDelayed({
                     progressDialog.dismiss()
                     redirectToCategories()
                 }, 2000)
+
+                val notificationTitle = getString(R.string.category_created)
+                val notificationMessage = "Your category '${newCategory.name}' has been created successfully."
+                notificationHandler.createNotificationChannel()
+                notificationHandler.showNotification(notificationTitle, notificationMessage)
             } else {
                 // Handle failure and dismiss dialog after a delay
-                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Category creation failed!", hideProgressBar = true)
+                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, getString(R.string.create_category_fail), hideProgressBar = true)
                 Handler(Looper.getMainLooper()).postDelayed({
                     progressDialog.dismiss()
                 }, 2000)
@@ -287,7 +353,7 @@ class CreateCategoryFragment : Fragment() {
                 timeOutDialog.showTimeoutDialog(requireContext()) {
                     progressDialog.dismiss()
                     timeOutDialog.showProgressDialog(requireContext())
-                    timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Creating Category...", hideProgressBar = false)
+                    timeOutDialog.updateProgressDialog(requireContext(), progressDialog, getString(R.string.creating_category), hideProgressBar = false)
                     categoryViewModel.createCategory(token, newCategory)
                 }
             }
@@ -310,27 +376,27 @@ class CreateCategoryFragment : Fragment() {
         if (catName.isBlank()) {
             errors += 1
             messages.add("Enter a category name")
-            errorMessage += "• Enter a category name\n"
+            errorMessage += "${getString(R.string.enter_category_name)}\n"
         }
 
         // Check if a transaction type is selected
         if (transactionType == -1) {
             messages.add("Select a transaction type")
-            errorMessage += "• Select a transaction type\n"
+            errorMessage += "${getString(R.string.enter_transaction_type)}\n"
             errors += 1
         }
 
         // Check if a color is selected
         if (selectedColor == null) {
             messages.add("Select a category color")
-            errorMessage += "• Select a category color\n"
+            errorMessage += "${getString(R.string.enter_category_color)}\n"
             errors += 1
         }
 
         // Check if an icon is selected
         if (selectedIcon == null) {
             messages.add("Select a category icon")
-            errorMessage += "• Select a category icon\n"
+            errorMessage += "${getString(R.string.icon_selection)}\n"
             errors += 1
         }
 

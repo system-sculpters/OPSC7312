@@ -46,7 +46,7 @@ class ThemeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Set the toolbar title for the activity to "Theme"
-        (activity as? MainActivity)?.setToolbarTitle("Theme")
+        (activity as? MainActivity)?.setToolbarTitle(getString(R.string.theme))
     }
 
     // Function to set up click listeners for theme selection options
@@ -126,5 +126,11 @@ class ThemeFragment : Fragment() {
             putString("theme_preference", theme) // Save the selected theme
             apply() // Apply changes asynchronously
         }
+    }
+
+    // Clean up binding object when the fragment is destroyed
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

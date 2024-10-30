@@ -27,7 +27,7 @@
             android:id="@+id/allFilter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="All"
+            android:text="@string/all"
             android:fontFamily="@font/inter_semibold"
             android:textSize="15sp"/>
 
@@ -35,7 +35,7 @@
             android:id="@+id/incomeFilter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Income"
+            android:text="@string/income"
             android:fontFamily="@font/inter_semibold"
             android:textSize="15sp"/>
 
@@ -43,7 +43,7 @@
             android:id="@+id/expenseFilter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Expenses"
+            android:text="@string/expense"
             android:fontFamily="@font/inter_semibold"
             android:textSize="15sp"/>
     </RadioGroup>

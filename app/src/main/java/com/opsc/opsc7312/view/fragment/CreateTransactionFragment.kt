@@ -26,10 +26,14 @@ import com.opsc.opsc7312.model.api.controllers.CategoryController
 import com.opsc.opsc7312.model.api.controllers.TransactionController
 import com.opsc.opsc7312.model.data.model.Category
 import com.opsc.opsc7312.model.data.model.Transaction
+import com.opsc.opsc7312.model.data.offline.dbhelpers.CategoryDatabaseHelper
+import com.opsc.opsc7312.model.data.offline.dbhelpers.GoalDatabaseHelper
+import com.opsc.opsc7312.model.data.offline.dbhelpers.TransactionDatabaseHelper
 import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
 import com.opsc.opsc7312.model.data.offline.preferences.UserManager
 import com.opsc.opsc7312.view.adapter.IconAdapter
 import com.opsc.opsc7312.view.adapter.SelectCategoryAdapter
+import com.opsc.opsc7312.view.custom.NotificationHandler
 import com.opsc.opsc7312.view.custom.TimeOutDialog
 import com.opsc.opsc7312.view.observers.CategoriesObserver
 
@@ -77,6 +81,10 @@ class CreateTransactionFragment : Fragment() {
     // Instance of TimeOutDialog for managing timeout-related dialogs
     private lateinit var timeOutDialog: TimeOutDialog
 
+    private lateinit var notificationHandler: NotificationHandler
+    private lateinit var dbHelper: TransactionDatabaseHelper
+    private lateinit var categoryDbHelper: CategoryDatabaseHelper
+
     // Inflates the Fragment's layout and initializes necessary components
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -96,6 +104,12 @@ class CreateTransactionFragment : Fragment() {
         transactionViewModel = ViewModelProvider(this).get(TransactionController::class.java)
         categoryViewModel = ViewModelProvider(this).get(CategoryController::class.java)
 
+
+        notificationHandler = NotificationHandler(requireContext())
+
+        dbHelper = TransactionDatabaseHelper(requireContext())
+
+        categoryDbHelper = CategoryDatabaseHelper(requireContext())
         // Initialize the TimeOutDialog instance
         timeOutDialog = TimeOutDialog()
 
@@ -148,7 +162,7 @@ class CreateTransactionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Access the MainActivity and set the toolbar title to "Create"
-        (activity as? MainActivity)?.setToolbarTitle("Create")
+        (activity as? MainActivity)?.setToolbarTitle(getString(R.string.create_text))
     }
 
     // Initializes input fields and sets up listeners for user interactions
@@ -158,9 +172,11 @@ class CreateTransactionFragment : Fragment() {
         val token = tokenManager.getToken()
 
         // Observe the ViewModel if a token is available
-        if (token != null) {
-            observeViewModel(token, user.id)
-        }
+//        if (token != null) {
+//            observeViewModel(token, user.id)
+//        }
+
+        getCategories()
 
         // Set the available transaction types in the dropdown
         binding.transactionType.setItems(transactionTypes)
@@ -172,11 +188,54 @@ class CreateTransactionFragment : Fragment() {
 
         // Set up the listener for the submit button
         binding.submitButton.setOnClickListener {
-            if (token != null) {
-                addTransaction(token, user.id) // Add the transaction if a token is available
-            }
+            createTransaction(user.id) // Add the transaction if a token is available
         }
     }
+
+    private fun getCategories(){
+        val categories = categoryDbHelper.getAllCategories()
+
+        categories.forEach {
+            // Log.d("DB TEST", "PIN: ${it.first}, Locker No: ${it.second}, timestamp: ${it.third}")
+            Log.d("DB TEST", "categories: ${it}")
+        }
+
+        adapter.updateCategories(categories)
+    }
+
+    private fun createTransaction(id: String){
+        // Show a progress dialog while the transaction is being created
+        val progressDialog = timeOutDialog.showProgressDialog(requireContext())
+
+        // Retrieve the transaction name and amount from the input fields
+        val transactionName = binding.transactionNameEdittext.text.toString()
+        val amount = binding.amount.text.toString()
+
+        // Verify the entered data before proceeding
+        if (!verifyData(transactionName, amount, selectedCategoryId, binding.transactionType.selectedIndex)) {
+            progressDialog.dismiss() // Dismiss the progress dialog if validation fails
+            timeOutDialog.showAlertDialog(requireContext(), errorMessage) // Show error message dialog
+            errorMessage = "" // Reset error message
+            return // Exit the function
+        }
+
+        // Get the selected transaction type from the dropdown
+        val transactionType = transactionTypes[binding.transactionType.selectedIndex]
+
+        // Create a new Transaction object with the user input
+        val newTransaction = Transaction(
+            name = transactionName,
+            amount = amount.toDouble(),
+            userid = id,
+            isrecurring = isRecurring,
+            type = transactionType,
+            categoryId = selectedCategoryId
+        )
+
+        dbHelper.addTransaction(newTransaction)
+
+    }
+
 
     // Displays a dialog for the user to pick an icon for the transaction category
     private fun showIconPickerDialog() {
@@ -269,7 +328,7 @@ class CreateTransactionFragment : Fragment() {
             // https://stackoverflow.com/users/244702/kevin-robatel
             if (status) {
                 // Show success message if transaction creation is successful
-                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Transaction creation successful!", hideProgressBar = true)
+                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, getString(R.string.create_transaction_successful), hideProgressBar = true)
 
                 // Dismiss the dialog after a delay
                 Handler(Looper.getMainLooper()).postDelayed({
@@ -278,7 +337,7 @@ class CreateTransactionFragment : Fragment() {
                 }, 2000)
             } else {
                 // Show error message if transaction creation fails
-                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Transaction creation failed!", hideProgressBar = true)
+                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, getString(R.string.create_transaction_fail), hideProgressBar = true)
 
                 // Dismiss the dialog after a delay
                 Handler(Looper.getMainLooper()).postDelayed({
@@ -302,7 +361,7 @@ class CreateTransactionFragment : Fragment() {
                     // Show a new progress dialog to indicate that a reconnection attempt is being made
                     timeOutDialog.showProgressDialog(requireContext())
                     // Update the progress dialog message to inform the user that the application is attempting to connect
-                    timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Connecting...", hideProgressBar = false)
+                    timeOutDialog.updateProgressDialog(requireContext(), progressDialog, getString(R.string.connecting), hideProgressBar = false)
                     // Attempt to create the transaction again after the user acknowledges the timeout dialog
                     transactionViewModel.createTransaction(token, newTransaction)
                 }
@@ -319,25 +378,25 @@ class CreateTransactionFragment : Fragment() {
 
         // Check if the transaction name is empty or blank
         if (transactionName.isBlank()) {
-            errorMessage += "• Enter a transaction name\n"  // Append error message for empty transaction name
+            errorMessage += "${getString(R.string.enter_transaction_name)}\n"  // Append error message for empty transaction name
             errors += 1  // Increment error count
         }
 
         // Check if the amount is empty or blank
         if (amount.isBlank()) {
-            errorMessage += "• Enter a transaction amount\n"  // Append error message for empty amount
+            errorMessage += "${getString(R.string.enter_transaction_amount)}\n"  // Append error message for empty amount
             errors += 1  // Increment error count
         }
 
         // Check if a category has been selected
         if (selectedCategory.isBlank()) {
-            errorMessage += "• Select a category\n"  // Append error message for no category selection
+            errorMessage += "${getString(R.string.enter_category)}\n"  // Append error message for no category selection
             errors += 1  // Increment error count
         }
 
         // Check if the transaction type is valid (not selected)
         if (transactionType == -1) {
-            errorMessage += "• Select a transaction type"  // Append error message for no transaction type selected
+            errorMessage += getString(R.string.enter_transaction_type)  // Append error message for no transaction type selected
             errors += 1  // Increment error count
         }
 
@@ -358,14 +417,14 @@ class CreateTransactionFragment : Fragment() {
             // https://stackoverflow.com/users/244702/kevin-robatel
             if (status) {
                 // Success case
-                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Categories retrieved successfully!", hideProgressBar = true)
+                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, getString(R.string.category_retrieval_successful), hideProgressBar = true)
 
                 // Dismiss the dialog immediately after success
                 progressDialog.dismiss()
 
             } else {
                 // Failure case
-                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Category retrieval failed!", hideProgressBar = true)
+                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, getString(R.string.category_retrieval_fail), hideProgressBar = true)
 
                 // Dismiss the dialog after a delay of 2 seconds to show the failure message
                 Handler(Looper.getMainLooper()).postDelayed({
@@ -387,7 +446,7 @@ class CreateTransactionFragment : Fragment() {
                     // Retry logic: dismiss the current dialog and show a new one
                     progressDialog.dismiss()
                     timeOutDialog.showProgressDialog(requireContext())
-                    timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Connecting...", hideProgressBar = false)
+                    timeOutDialog.updateProgressDialog(requireContext(), progressDialog, getString(R.string.connecting), hideProgressBar = false)
                     categoryViewModel.getAllCategories(token, id)  // Retry fetching categories
                 }
             }

@@ -1,6 +1,8 @@
 package com.opsc.opsc7312.model.api.services
 
+import com.opsc.opsc7312.model.data.model.CategoriesHolder
 import com.opsc.opsc7312.model.data.model.Category
+import com.opsc.opsc7312.model.data.model.SyncResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -25,6 +27,14 @@ interface CategoryService {
     // The response will be a Call object containing a list of Category objects.
     @GET("category/{id}")
     fun getCategories(@Header("Authorization") token: String, @Path("id") userId: String): Call<List<Category>>
+
+    // Retrieves a list of categories associated with a specific user.
+    // This function sends a GET request to the "category/{id}" endpoint.
+    // It requires an authorization token in the header and the user ID in the path.
+    // The response will be a Call object containing a list of Category objects.
+    @POST("category/batch-create")
+    fun syncCategories(@Header("Authorization") token: String, @Body categories: CategoriesHolder): Call<SyncResponse>
+
 
     // Creates a new category based on the provided category details.
     // This function sends a POST request to the "category/create" endpoint.

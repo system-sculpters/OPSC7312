@@ -25,7 +25,7 @@
             android:id="@+id/sortByNameAscending"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Name (A to Z)"
+            android:text="@string/name_a_to_z"
             android:fontFamily="@font/inter_semibold"
             android:layoutDirection="rtl"
             android:textSize="15sp"/>
@@ -34,7 +34,7 @@
             android:id="@+id/sortByNameDescending"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Name (Z to A)"
+            android:text="@string/name_z_to_a"
             android:fontFamily="@font/inter_semibold"
             android:layoutDirection="rtl"
             android:textSize="15sp"/>
@@ -43,7 +43,7 @@
             android:id="@+id/sortByDateAscending"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Date (ascending)"
+            android:text="@string/date_ascending"
             android:fontFamily="@font/inter_semibold"
             android:layoutDirection="rtl"
             android:textSize="15sp"/>
@@ -52,7 +52,7 @@
             android:id="@+id/sortByDateDescending"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Date (descending)"
+            android:text="@string/date_descending"
             android:fontFamily="@font/inter_semibold"
             android:layoutDirection="rtl"
             android:textSize="15sp"/>
@@ -61,7 +61,7 @@
             android:id="@+id/sortByHigehestAmount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Amount: High to Low"
+            android:text="@string/amount_high_to_low"
             android:fontFamily="@font/inter_semibold"
             android:layoutDirection="rtl"
             android:textSize="15sp" />
@@ -70,7 +70,7 @@
             android:id="@+id/sortByLowestAmount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Amount: Low to High"
+            android:text="@string/amount_low_to_high"
             android:fontFamily="@font/inter_semibold"
             android:layoutDirection="rtl"
             android:textSize="15sp"/>

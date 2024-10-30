@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text="Welcome Back"
+        android:text="@string/welcome_back"
         android:textSize="24sp"
         android:fontFamily="@font/inter_black"
         android:layout_marginBottom="20dp"
@@ -40,7 +40,7 @@
         android:layout_height="60dp"
         android:inputType="text"
         android:layout_marginTop="35dp"
-        android:hint="Email"
+        android:hint="@string/email"
         android:paddingHorizontal="12dp"
         android:background="@drawable/edittext_background"
         android:fontFamily="@font/inter_medium"
@@ -90,7 +90,7 @@
             android:id="@+id/btnSignIn"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:text="Sign In"
+            android:text="@string/sign_in"
             android:textColor="@color/white"
             android:textSize="24sp"
             android:layout_marginTop="10dp"
@@ -107,34 +107,7 @@
             android:text="@string/signup_redirect"
             android:textSize="14sp"/>
 
-        <LinearLayout
-            android:id="@+id/biometric_login"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingHorizontal="20dp"
-            android:background="@drawable/primary_highlight_bg"
-            android:layout_marginTop="30dp"
-            android:clickable="true"
-            android:focusable="true">
 
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:contentDescription="Top Image"
-                android:src="@drawable/baseline_fingerprint_24"
-                app:tint="@color/primary"
-                android:layout_marginEnd="20dp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/primary"
-                android:text="@string/biometric"
-                android:fontFamily="@font/inter_medium"
-                android:textSize="18sp"/>
-        </LinearLayout>
         <LinearLayout
             android:id="@+id/google_login"
             android:layout_width="match_parent"
@@ -143,7 +116,7 @@
             android:orientation="horizontal"
             android:paddingHorizontal="20dp"
             android:background="@drawable/edittext_background"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="50dp"
             android:clickable="true"
             android:focusable="true">
 

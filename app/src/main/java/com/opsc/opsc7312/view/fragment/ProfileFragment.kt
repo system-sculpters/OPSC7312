@@ -119,7 +119,7 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Set the toolbar title in the MainActivity
-        (activity as? MainActivity)?.setToolbarTitle("Profile")
+        (activity as? MainActivity)?.setToolbarTitle(getString(R.string.profile))
     }
 
     // Load the user's profile data and display it in the UI
@@ -164,7 +164,7 @@ class ProfileFragment : Fragment() {
                 timeOutDialog.updateProgressDialog(
                     requireContext(),
                     progressDialog,
-                    "Profile update successful!",
+                    getString(R.string.profile_update_successful),
                     hideProgressBar = true
                 )
 
@@ -180,7 +180,7 @@ class ProfileFragment : Fragment() {
                 timeOutDialog.updateProgressDialog(
                     requireContext(),
                     progressDialog,
-                    "The email address is already in use by another account!",
+                    getString(R.string.already_in_use),
                     hideProgressBar = true
                 )
 
@@ -206,7 +206,7 @@ class ProfileFragment : Fragment() {
                     timeOutDialog.updateProgressDialog(
                         requireContext(),
                         progressDialog,
-                        "Connecting...",
+                        getString(R.string.connecting),
                         hideProgressBar = false
                     )
                     // Retry updating the email and username
@@ -271,7 +271,7 @@ class ProfileFragment : Fragment() {
             progressDialog.dismiss() // Dismiss the progress dialog
 
             // Show an alert dialog to inform the user of the mismatch
-            timeOutDialog.showAlertDialog(requireContext(), "Confirm new password does not match")
+            timeOutDialog.showAlertDialog(requireContext(), getString(R.string.confirm_password_not_match))
 
             return // Exit the method to prevent further processing
         }
@@ -290,7 +290,7 @@ class ProfileFragment : Fragment() {
                 timeOutDialog.updateProgressDialog(
                     requireContext(),
                     progressDialog,
-                    "Password update successful!",
+                    getString(R.string.password_update_successful),
                     hideProgressBar = true
                 )
 
@@ -303,7 +303,7 @@ class ProfileFragment : Fragment() {
                 timeOutDialog.updateProgressDialog(
                     requireContext(),
                     progressDialog,
-                    "Password update failed!",
+                    getString(R.string.password_update_failed),
                     hideProgressBar = true
                 )
 
@@ -329,7 +329,7 @@ class ProfileFragment : Fragment() {
                     timeOutDialog.updateProgressDialog(
                         requireContext(),
                         progressDialog,
-                        "Connecting...",
+                        getString(R.string.connecting),
                         hideProgressBar = false
                     )
                     // Retry updating the email and username
@@ -346,5 +346,11 @@ class ProfileFragment : Fragment() {
     private fun maskPassword(password: String): String {
         // Replace each character in the password with '*' for security
         return "*".repeat(password.length)
+    }
+
+    // Clean up binding object when the fragment is destroyed
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

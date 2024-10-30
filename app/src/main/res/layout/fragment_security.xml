@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
-            android:text="Fingerprint"
+            android:text="@string/fingerprint"
             android:textSize="20sp"
             android:fontFamily="@font/inter_medium"/>
 

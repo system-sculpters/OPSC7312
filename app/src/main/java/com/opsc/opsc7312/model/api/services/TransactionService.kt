@@ -1,6 +1,9 @@
 package com.opsc.opsc7312.model.api.services
 
+import com.opsc.opsc7312.model.data.model.CategoriesHolder
+import com.opsc.opsc7312.model.data.model.SyncResponse
 import com.opsc.opsc7312.model.data.model.Transaction
+import com.opsc.opsc7312.model.data.model.TransactionsHolder
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -46,4 +49,12 @@ interface TransactionService {
     // Returns a Call object with no content on successful deletion.
     @DELETE("transaction/{id}")
     fun deleteTransaction(@Header("Authorization") token: String, @Path("id") id: String): Call<Void>
+
+
+    // Retrieves a list of categories associated with a specific user.
+    // This function sends a GET request to the "category/{id}" endpoint.
+    // It requires an authorization token in the header and the user ID in the path.
+    // The response will be a Call object containing a list of Category objects.
+    @POST("transaction/batch-create")
+    fun syncTransactions(@Header("Authorization") token: String, @Body transactions: TransactionsHolder): Call<SyncResponse>
 }

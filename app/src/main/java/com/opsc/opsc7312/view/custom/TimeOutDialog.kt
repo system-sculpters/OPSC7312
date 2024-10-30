@@ -33,8 +33,9 @@ class TimeOutDialog {
             .setCancelable(false) // Prevent dialog from being canceled by tapping outside.
             .setPositiveButton("Retry") { dialog, id ->
                 // When "Retry" is clicked, invoke the onRetry callback and dismiss the dialog.
-                onRetry()
                 dialog.dismiss()
+                onRetry()
+
             }
             .setNegativeButton("Cancel") { dialog, id ->
                 // When "Cancel" is clicked, simply dismiss the dialog without any action.
