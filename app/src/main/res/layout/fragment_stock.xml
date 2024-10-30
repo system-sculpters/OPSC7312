@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingHorizontal="20dp"
+    android:paddingVertical="10dp"
+    tools:context=".view.fragment.StockFragment">
+
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingBottom="10dp">
+
+        <TextView
+            android:id="@+id/stock_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="Stock"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="center" />
+    </LinearLayout>
+
+    <!-- Stock Info -->
+    <TextView
+        android:id="@+id/stock_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="AAPL"
+        android:textSize="14sp"
+        android:fontFamily="@font/inter_medium"
+        android:gravity="center"
+        android:layout_gravity="center" />
+
+    <TextView
+        android:id="@+id/current_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="847.91 ZAR"
+        android:textSize="24sp"
+        android:fontFamily="@font/inter_bold"
+        android:gravity="center"
+        android:layout_gravity="center" />
+
+    <TextView
+        android:id="@+id/value_change"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+7.85 ZAR"
+        android:textColor="@color/green"
+        android:textSize="16sp"
+        android:fontFamily="@font/inter_medium"
+        android:gravity="center"
+        android:layout_gravity="center" />
+
+    <!-- Graph Placeholder -->
+    <ImageView
+        android:id="@+id/graph_placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginVertical="10dp"
+        android:src="@drawable/splash_image" />
+
+    <!-- Time Range Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/one_month_button"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="1 M"
+            android:textColor="@color/white"
+            android:background="@drawable/button_background" />
+
+        <Button
+            android:id="@+id/three_months_button"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="3 M"
+            android:textColor="@color/white"
+            android:layout_marginStart="5dp"
+            android:background="@drawable/button_background" />
+
+        <Button
+            android:id="@+id/six_months_button"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="6 M"
+            android:textColor="@color/white"
+            android:layout_marginStart="5dp"
+            android:background="@drawable/button_background" />
+
+        <Button
+            android:id="@+id/max_button"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="Max"
+            android:textColor="@color/white"
+            android:layout_marginStart="5dp"
+            android:background="@drawable/button_background" />
+    </LinearLayout>
+
+    <!-- Stock Details -->
+    <TextView
+        android:id="@+id/details_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Details"
+        android:textSize="16sp"
+        android:fontFamily="@font/inter_bold"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/label_full_name"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Full Name"
+            android:textColor="@color/light_grey" />
+
+        <TextView
+            android:id="@+id/full_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Apple Inc" />
+    </LinearLayout>
+
+    <!-- Market name and Currency -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/label_market_name"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Market name"
+            android:textColor="@color/light_grey" />
+
+        <TextView
+            android:id="@+id/market_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="AAPL (NASDAQ)" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/label_currency"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Currency"
+            android:textColor="@color/light_grey" />
+
+        <TextView
+            android:id="@+id/currency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ZAR" />
+    </LinearLayout>
+
+    <!-- Buy and Sell Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="80dp"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/buy_button"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Buy"
+            android:textColor="@color/white"
+            android:background="@drawable/button_background" />
+
+        <Button
+            android:id="@+id/sell_button"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Sell"
+            android:textColor="@color/white"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/button_background" />
+    </LinearLayout>
+</LinearLayout>
