@@ -225,6 +225,31 @@ This feature provides users with comprehensive insights into their financial beh
 ![IMG-20240930-WA0023](https://github.com/user-attachments/assets/b20102ec-b974-4bcd-a71f-1b13317465d6)
 
 
+### Language Selection 
+
+This feature enables users to switch seamlessly between **English**, **Afrikaans**, and **Zulu**. This feature allows users to navigate and interact with the app in their preferred language, enhancing accessibility and creating a more personalized user experience. To change the language, simply go to the settings menu, select "Language," and choose from the available options.
+
+![WhatsApp Image 2024-11-02 at 16 13 39 (1)](https://github.com/user-attachments/assets/0093079d-7852-4b84-aa44-c5d94c1396c7)
+![WhatsApp Image 2024-11-02 at 16 13 39](https://github.com/user-attachments/assets/29bd4bef-5539-497f-88e6-3423977e573e)
+
+### Stock Investment (Demo):
+
+This feature that allows users to virtually buy and sell stocks in a simulated environment. This feature enables users to experience real-time market dynamics without any financial risk, helping them build confidence and practice investment strategies. Users can track the performance of their virtual portfolio, experiment with buying and selling, and gain valuable insights into the stock market—all in a risk-free setting designed for learning and skill-building.
+
+![WhatsApp Image 2024-11-02 at 16 01 14](https://github.com/user-attachments/assets/cbeb1739-2f80-495b-a35a-2b7179e199b0)
+-Portfolio: This feature provides users with a comprehensive view of their current stock portfolio, displaying all purchased stocks along with the real-time value of each. Users can easily monitor their investments and track how each stock is performing, offering a clear snapshot of their overall portfolio health.
+
+![WhatsApp Image 2024-11-02 at 16 01 14 (2)](https://github.com/user-attachments/assets/0bdcf4ed-32c1-4754-848a-517b278d5f9f)
+-Markets: This feature enables users to explore and search through a wide selection of available stocks. Users can browse various investment options and choose stocks to buy or sell, making it easy to discover opportunities and manage their virtual investments.
+
+![WhatsApp Image 2024-11-02 at 16 01 14 (1)](https://github.com/user-attachments/assets/277fd124-33bc-48f5-a3dd-3f941ab7405b)
+-View-Stock: This feature allows users to view a real-time graph of a selected stock's performance, providing a quick snapshot of recent trends to help them decide whether to buy or sell.
+
+![WhatsApp Image 2024-11-02 at 16 01 15 (1)](https://github.com/user-attachments/assets/c4c48e4a-aca6-45d2-af7d-d07afcc3ce5e)
+-Buy Stock: This feature enables users to virtually purchase stocks, specifying the desired quantity and viewing the total purchase value. It provides an easy and interactive way to add stocks to their portfolio while understanding the cost of their investment.
+
+![WhatsApp Image 2024-11-02 at 16 29 41](https://github.com/user-attachments/assets/2d280b71-8e21-4ad9-b16e-c519e47d18a5)
+-Portfolio: After purchasing stocks, users can view them directly in their portfolio, allowing for easy access and management of their investments in one consolidated location.
 
 ### Key Features of Analytics and Reporting:
 - Income and Expense Breakdown: Users can view a detailed analysis of their income and expenses over the last week or 6-months. 
