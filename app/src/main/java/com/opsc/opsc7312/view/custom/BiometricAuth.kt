@@ -36,8 +36,9 @@ class BiometricAuth {
 
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                     super.onAuthenticationSucceeded(result)
-                    if (activity is WelcomeActivity) {
+                    if (activity is LoginActivity) {
                         activity.startActivity(Intent(activity, MainActivity::class.java))
+                        activity.finish()
                     }
                 }
 

@@ -27,6 +27,7 @@ import com.opsc.opsc7312.model.api.controllers.TransactionController
 import com.opsc.opsc7312.model.data.model.Category
 import com.opsc.opsc7312.model.data.model.Transaction
 import com.opsc.opsc7312.model.data.offline.dbhelpers.CategoryDatabaseHelper
+import com.opsc.opsc7312.model.data.offline.dbhelpers.DatabaseHelperProvider
 import com.opsc.opsc7312.model.data.offline.dbhelpers.GoalDatabaseHelper
 import com.opsc.opsc7312.model.data.offline.dbhelpers.TransactionDatabaseHelper
 import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
@@ -36,6 +37,7 @@ import com.opsc.opsc7312.view.adapter.SelectCategoryAdapter
 import com.opsc.opsc7312.view.custom.NotificationHandler
 import com.opsc.opsc7312.view.custom.TimeOutDialog
 import com.opsc.opsc7312.view.observers.CategoriesObserver
+import java.util.UUID
 
 
 // This class represents a Fragment that allows users to create a new transaction.
@@ -82,8 +84,10 @@ class CreateTransactionFragment : Fragment() {
     private lateinit var timeOutDialog: TimeOutDialog
 
     private lateinit var notificationHandler: NotificationHandler
-    private lateinit var dbHelper: TransactionDatabaseHelper
-    private lateinit var categoryDbHelper: CategoryDatabaseHelper
+
+    private lateinit var dbHelperProvider: CategoryDatabaseHelper
+
+    private lateinit var transactionDatabaseHelper: TransactionDatabaseHelper
 
     // Inflates the Fragment's layout and initializes necessary components
     override fun onCreateView(
@@ -107,9 +111,10 @@ class CreateTransactionFragment : Fragment() {
 
         notificationHandler = NotificationHandler(requireContext())
 
-        dbHelper = TransactionDatabaseHelper(requireContext())
+        dbHelperProvider = CategoryDatabaseHelper(requireContext())
 
-        categoryDbHelper = CategoryDatabaseHelper(requireContext())
+        transactionDatabaseHelper = TransactionDatabaseHelper(requireContext())
+
         // Initialize the TimeOutDialog instance
         timeOutDialog = TimeOutDialog()
 
@@ -169,12 +174,6 @@ class CreateTransactionFragment : Fragment() {
     private fun setUpInputs() {
         // Get the current user and token
         val user = userManager.getUser()
-        val token = tokenManager.getToken()
-
-        // Observe the ViewModel if a token is available
-//        if (token != null) {
-//            observeViewModel(token, user.id)
-//        }
 
         getCategories()
 
@@ -193,7 +192,7 @@ class CreateTransactionFragment : Fragment() {
     }
 
     private fun getCategories(){
-        val categories = categoryDbHelper.getAllCategories()
+        val categories = dbHelperProvider.getAllCategories()
 
         categories.forEach {
             // Log.d("DB TEST", "PIN: ${it.first}, Locker No: ${it.second}, timestamp: ${it.third}")
@@ -222,8 +221,11 @@ class CreateTransactionFragment : Fragment() {
         // Get the selected transaction type from the dropdown
         val transactionType = transactionTypes[binding.transactionType.selectedIndex]
 
+        val uniqueID = UUID.randomUUID().toString()
+
         // Create a new Transaction object with the user input
         val newTransaction = Transaction(
+            id = uniqueID,
             name = transactionName,
             amount = amount.toDouble(),
             userid = id,
@@ -232,8 +234,22 @@ class CreateTransactionFragment : Fragment() {
             categoryId = selectedCategoryId
         )
 
-        dbHelper.addTransaction(newTransaction)
+        val isInserted = transactionDatabaseHelper.addTransaction(newTransaction)
 
+
+        progressDialog.dismiss()
+
+        if(isInserted){
+            val notificationTitle = getString(R.string.goal_created)
+            val notificationMessage = "Your Goal '${newTransaction.name}' has been created successfully."
+            notificationHandler.createNotificationChannel()
+            notificationHandler.showNotification(notificationTitle, notificationMessage)
+
+            redirectToTransactions()
+        } else {
+            // Handle the case where the category was not inserted
+            timeOutDialog.showAlertDialog(requireContext(), "Failed to create transaction. Please try again.")
+        }
     }
 
 

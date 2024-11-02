@@ -1,16 +1,5 @@
 package com.opsc.opsc7312
 
-import android.content.Context
-import android.graphics.PixelFormat
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.WindowManager
-import android.widget.FrameLayout
-import android.widget.TextView
-import android.widget.Toast
-import androidx.core.content.ContextCompat
-import com.google.android.material.snackbar.Snackbar
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

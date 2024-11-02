@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.opsc.opsc7312.AppConstants
 import com.opsc.opsc7312.MainActivity
 import com.opsc.opsc7312.R
 import com.opsc.opsc7312.databinding.FragmentTransactionsBinding
@@ -16,6 +17,7 @@ import com.opsc.opsc7312.model.api.controllers.TransactionController
 import com.opsc.opsc7312.model.data.model.Category
 import com.opsc.opsc7312.model.data.model.Transaction
 import com.opsc.opsc7312.model.data.offline.dbhelpers.CategoryDatabaseHelper
+import com.opsc.opsc7312.model.data.offline.dbhelpers.DatabaseHelperProvider
 import com.opsc.opsc7312.model.data.offline.dbhelpers.TransactionDatabaseHelper
 import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
 import com.opsc.opsc7312.model.data.offline.preferences.UserManager
@@ -57,7 +59,8 @@ class TransactionsFragment : Fragment() {
     private lateinit var sortBottomSheet: SortBottomSheet
     private lateinit var filterBottomSheet: FilterBottomSheet
 
-    private lateinit var dbHelper: TransactionDatabaseHelper
+    private lateinit var dbHelperProvider: TransactionDatabaseHelper
+    private lateinit var categoryDatabaseHelper: CategoryDatabaseHelper
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -76,8 +79,8 @@ class TransactionsFragment : Fragment() {
         filterBottomSheet = FilterBottomSheet()
         sortBottomSheet = SortBottomSheet()
 
-        dbHelper = TransactionDatabaseHelper(requireContext())
-
+        dbHelperProvider = TransactionDatabaseHelper(requireContext())
+        categoryDatabaseHelper = CategoryDatabaseHelper(requireContext())
         // Get instances of user and token managers
         userManager = UserManager.getInstance(requireContext())
         tokenManager = TokenManager.getInstance(requireContext())
@@ -111,7 +114,9 @@ class TransactionsFragment : Fragment() {
         setUpRecyclerView()
 
         // Load user details and set up view model observers
-        setUpUserDetails()
+        //setUpUserDetails()
+
+        getTransactions()
 
         // Return the root view of the binding
         return binding.root
@@ -143,6 +148,54 @@ class TransactionsFragment : Fragment() {
         changeCurrentFragment(transactionDetailsFragment)
     }
 
+    private fun getTransactions(){
+
+        try {
+            val transactions = dbHelperProvider.getAllTransactions()
+
+            updateTransactionCategory(transactions = transactions)
+
+            updateBalance(transactions)
+
+            filterBottomSheet.updateTransactions(transactions)
+
+            transactionAdapter.updateTransactions(transactions)
+        } catch (e: Exception) {
+            Log.e("DatabaseError", "Error inserting transaction", e)
+        }
+    }
+
+    private fun updateTransactionCategory(transactions: List<Transaction>){
+        for (transaction in transactions){
+            val category = categoryDatabaseHelper.getCategoryById(transaction.categoryId)
+
+            if (category != null) {
+                transaction.category = category
+            }
+        }
+    }
+
+    private fun updateBalance(value: List<Transaction>) {
+        var totalIncome = 0.0  // Initialize total income
+        var totalExpense = 0.0  // Initialize total expense
+
+        // Iterate over each transaction to calculate total income and expenses
+        for (transaction in value) {
+            if (transaction.type == AppConstants.TRANSACTIONTYPE.INCOME.name) {
+                // Add to total income if the transaction type is income
+                totalIncome += transaction.amount
+            } else {
+                // Add to total expenses if the transaction type is expense
+                totalExpense += transaction.amount
+            }
+        }
+
+        // Calculate the total balance
+        val totalBalance = totalIncome - totalExpense
+
+        // Update the amount TextView to display the formatted balance
+        binding.amount.text = "${AppConstants.formatAmount(totalBalance)} ZAR"
+    }
     // Function to set up user details and observe the view model for transaction updates
     private fun setUpUserDetails() {
         val user = userManager.getUser() // Get the current user details

@@ -24,7 +24,7 @@
     <string name="dark">Dark</string>
     <string name="light">Light</string>
     <string name="tagline">Smart Budgeting Made Easy</string>
-    <string name="fingerprint_icon"/>
+    <string name="fingerprint_icon" />
 
     <string name="signup_redirect">
         <font>Don’t have an account? </font>
@@ -62,7 +62,6 @@
     <string name="delete_text">Delete</string>
     <string name="cancel_text">Cancel</string>
     <string name="notification">Notifications</string>
-
 
 
     <string name="home">Home</string>
@@ -117,7 +116,6 @@
     <string name="create_goal_successful">Goal created successfully!</string>
 
 
-
     <string name="update_category_fail">Category update failed!</string>
     <string name="update_category_successful">Category successfully updated!</string>
 
@@ -127,7 +125,6 @@
 
     <string name="update_goal_fail">Goal update failed!</string>
     <string name="update_goal_successful">Goal successfully updated!</string>
-
 
 
     <string name="category_retrieval_successful">Categories retrieved successfully!</string>
@@ -193,6 +190,18 @@
     <string name="registration_failed">Registration unsuccessful!</string>
     <string name="registration_successful">Registration successful!</string>
     <string name="user_exists">User already exists!</string>
+
+
+    <string name="search">Search for a stock</string>
+    <string name="buy_text">Buy</string>
+    <string name="sell_text">Sell</string>
+    <string name="stock">Stock</string>
+    <string name="market">Market</string>
+
+    <string name="quantity">Quantity</string>
+    <string name="enter_quantity">Enter quantity</string>
+    <string name="enter_a_quantity">• Enter a quantity</string>
+    <string name="int_quantity">• Quantity must be an integer</string>
 
 
 </resources>

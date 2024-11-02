@@ -30,6 +30,7 @@ import com.opsc.opsc7312.model.api.controllers.GoalController
 import com.opsc.opsc7312.model.data.model.Category
 import com.opsc.opsc7312.model.data.model.Color
 import com.opsc.opsc7312.model.data.offline.dbhelpers.CategoryDatabaseHelper
+import com.opsc.opsc7312.model.data.offline.dbhelpers.DatabaseHelperProvider
 import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
 import com.opsc.opsc7312.model.data.offline.preferences.UserManager
 import com.opsc.opsc7312.view.adapter.ColorAdapter
@@ -39,6 +40,7 @@ import com.opsc.opsc7312.view.custom.TimeOutDialog
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.UUID
 
 
 class CreateCategoryFragment : Fragment() {
@@ -89,9 +91,10 @@ class CreateCategoryFragment : Fragment() {
     private lateinit var timeOutDialog: TimeOutDialog
 
     private lateinit var notificationHandler: NotificationHandler
-    private lateinit var dbHelper: CategoryDatabaseHelper
 
-        // Inflates the layout and initializes the data required for the fragment
+    private lateinit var dbHelperProvider: CategoryDatabaseHelper
+
+    // Inflates the layout and initializes the data required for the fragment
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -116,7 +119,7 @@ class CreateCategoryFragment : Fragment() {
 
         notificationHandler = NotificationHandler(requireContext())
 
-        dbHelper = CategoryDatabaseHelper(requireContext())
+        dbHelperProvider = CategoryDatabaseHelper(requireContext())
 
         // Get contribution types from app constants
         contributionTypes = AppConstants.TRANSACTIONTYPE.entries.map { it.name }
@@ -240,6 +243,7 @@ class CreateCategoryFragment : Fragment() {
             addNewCategory(user.id)
         } else {
             // Handle case when token is null (optional)
+
         }
     }
 
@@ -260,8 +264,11 @@ class CreateCategoryFragment : Fragment() {
 
         // Prepare the new category data
         val transactionType = contributionTypes[binding.contributionType.selectedIndex]
+
+        val uniqueID = UUID.randomUUID().toString()
+
         val newCategory = Category(
-            id = "",
+            id = uniqueID,
             name = catName,
             transactiontype = transactionType,
             color = selectedColor!!.name,
@@ -270,19 +277,33 @@ class CreateCategoryFragment : Fragment() {
         )
 
 
-        dbHelper.insertCategory(newCategory)
+        val isInserted = dbHelperProvider.insertCategory(newCategory)
 
-        val notificationTitle = getString(R.string.category_created)
-        val notificationMessage = "Your category '${newCategory.name}' has been created successfully."
-        notificationHandler.createNotificationChannel()
-        notificationHandler.showNotification(notificationTitle, notificationMessage)
-        getAllCategories()
+        progressDialog.dismiss()
+
+        // Check if the category was inserted successfully
+        if (isInserted != -1L) {
+            val notificationTitle = getString(R.string.category_created)
+            val notificationMessage = "Your category '${newCategory.name}' has been created successfully."
+
+            // Create and show the notification
+            notificationHandler.createNotificationChannel()
+            notificationHandler.showNotification(notificationTitle, notificationMessage)
+
+            // Fetch all categories to update the UI
+            getAllCategories()
+            // Redirect to the categories list or another appropriate screen
+            redirectToCategories()
+        } else {
+            // Handle the case where the category was not inserted
+            timeOutDialog.showAlertDialog(requireContext(), "Failed to create category. Please try again.")
+        }
     }
 
-    fun getAllCategories(){
+    private fun getAllCategories(){
         //val pinData: MutableList<Triple<String, String, String>> = mutableListOf()
 
-        val categories = dbHelper.getAllCategories()
+        val categories = dbHelperProvider.getAllCategories()
 
         categories.forEach {
             // Log.d("DB TEST", "PIN: ${it.first}, Locker No: ${it.second}, timestamp: ${it.third}")

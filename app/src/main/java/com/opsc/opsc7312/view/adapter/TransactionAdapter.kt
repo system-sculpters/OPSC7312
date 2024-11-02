@@ -81,10 +81,6 @@ class TransactionAdapter(private val onItemClick: (Transaction) -> Unit) : Recyc
             categoryBackground(holder, categoryBackgroundColor)
         }
 
-        // Set the icon and category frame background
-        //holder.iconImage.setImageResource(iconImageResId)
-
-
         // Set transaction details
         holder.transactionName.text = transaction.name
         holder.isRecurring.text = if (transaction.isrecurring) "Recurring payment" else "One-time payment"

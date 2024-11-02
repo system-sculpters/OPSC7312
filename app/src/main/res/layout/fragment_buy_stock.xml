@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.fragment.BuyStockFragment"
+    android:orientation="vertical"
+    android:paddingVertical="10dp">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="8"
+        android:paddingBottom="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="25dp">
+
+                <TextView
+                    android:id="@+id/symbol"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Market name"
+                    android:textColor="@color/light_grey"
+                    android:textSize="24dp"
+                    android:fontFamily="@font/inter_medium"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+                <TextView
+                    android:id="@+id/current_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Market name"
+                    android:textColor="@color/light_grey"
+                    android:textSize="24dp"
+                    android:fontFamily="@font/inter_medium"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="25dp">
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Market name"
+                    android:textColor="@color/light_grey"
+                    android:textSize="16dp"
+                    android:fontFamily="@font/inter_medium"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+                <TextView
+                    android:id="@+id/current_value_percentage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Market name"
+                    android:textColor="@color/light_grey"
+                    android:textSize="16dp"
+                    android:fontFamily="@font/inter_medium"/>
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/stock_image"
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:src="@drawable/baseline_image_search_24"
+                android:layout_marginTop="20dp"
+                android:scaleType="fitXY"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/quantity"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/inter"
+                android:layout_marginStart="25dp"
+                android:layout_marginBottom="10dp"/>
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/quantity"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:inputType="number"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="4dp"
+                android:background="@drawable/edittext_background"
+                android:fontFamily="@font/inter_medium"
+                android:hint="@string/enter_quantity"
+                android:textSize="14sp"
+                android:layout_marginHorizontal="25dp"
+                />
+
+            <TextView
+                android:id="@+id/no_of_bedrooms_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/target_amount"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/inter"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="25dp"/>
+
+            <LinearLayout
+                android:id="@+id/upload_image_redirect"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edittext_background"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="10dp"
+                android:layout_marginHorizontal="25dp">
+                <TextView
+                    android:id="@+id/target_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/inter"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="25dp">
+        <Button
+            android:id="@+id/buy_button"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="@string/buy_text"
+            android:textSize="30sp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/inter_medium"
+            android:background="@drawable/button_background"
+            android:elevation="100dp"/>
+
+
+    </LinearLayout>
+</LinearLayout>

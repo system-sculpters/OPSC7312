@@ -63,7 +63,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-auth:21.2.0")
     implementation("androidx.core:core-splashscreen:1.0.1")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
-
+    implementation("com.github.bumptech.glide:glide:4.12.0")
     //new
     implementation(libs.androidx.biometric)
 

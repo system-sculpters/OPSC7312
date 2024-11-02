@@ -3,6 +3,7 @@ package com.opsc.opsc7312.view.fragment
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,9 @@ import com.opsc.opsc7312.R
 import com.opsc.opsc7312.databinding.FragmentGoalsBinding
 import com.opsc.opsc7312.model.api.controllers.GoalController
 import com.opsc.opsc7312.model.data.model.Goal
+import com.opsc.opsc7312.model.data.offline.dbhelpers.CategoryDatabaseHelper
+import com.opsc.opsc7312.model.data.offline.dbhelpers.DatabaseHelperProvider
+import com.opsc.opsc7312.model.data.offline.dbhelpers.GoalDatabaseHelper
 import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
 import com.opsc.opsc7312.model.data.offline.preferences.UserManager
 import com.opsc.opsc7312.view.adapter.GoalAdapter
@@ -45,6 +49,8 @@ class GoalsFragment : Fragment() {
     // Dialog for handling timeout scenarios
     private lateinit var timeOutDialog: TimeOutDialog
 
+    private lateinit var dbHelperProvider: GoalDatabaseHelper
+
     // Inflates the layout for this fragment and initializes views and variables.
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -69,12 +75,17 @@ class GoalsFragment : Fragment() {
         // Initialize the ViewModel for managing goal data
         goalViewModel = ViewModelProvider(this).get(GoalController::class.java)
 
+        dbHelperProvider = GoalDatabaseHelper(requireContext())
+
+
         // Initialize the timeout dialog
         timeOutDialog = TimeOutDialog()
 
         // Set up the RecyclerView and goals
         setUpRecyclerView()
-        setUpGoals()
+        //setUpGoals()
+
+        getGoals()
 
         return binding.root // Return the root view of the binding
     }
@@ -92,6 +103,15 @@ class GoalsFragment : Fragment() {
         binding.recycleView.layoutManager = LinearLayoutManager(requireContext()) // Set the layout manager
         binding.recycleView.setHasFixedSize(true) // Improve performance if the size is fixed
         binding.recycleView.adapter = goalAdapter // Set the adapter for the RecyclerView
+    }
+
+    private fun getGoals(){
+        try {
+            val categories = dbHelperProvider.getAllGoals()
+            goalAdapter.updateGoals(categories)
+        } catch (e: Exception) {
+            Log.e("DatabaseError", "Error inserting transaction", e)
+        }
     }
 
     //Redirects the user to the CreateGoalFragment to add a new goal.

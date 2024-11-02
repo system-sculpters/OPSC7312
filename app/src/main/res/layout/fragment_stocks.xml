@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.fragment.StocksFragment"
+    android:orientation="vertical"
+    android:paddingVertical="10dp"
+    android:paddingHorizontal="25dp">
+
+    <LinearLayout
+        android:id="@+id/location_redirect"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:orientation="horizontal"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/edittext_background"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="10dp"
+        >
+        <ImageView
+            android:id="@+id/property_type_icon"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/baseline_search_24"/>
+
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/search_stock"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:inputType="text"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="4dp"
+            android:fontFamily="@font/inter_medium"
+            android:hint="@string/search"
+            android:background="@drawable/search_background"
+            android:textSize="14sp"
+            />
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/search_results_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" />
+
+
+</LinearLayout>

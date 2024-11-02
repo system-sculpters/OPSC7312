@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".view.activity.LoginActivity"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingHorizontal="32dp">
+    android:fitsSystemWindows="true">
 
     <ImageView
         android:id="@+id/imageViewTop"
@@ -17,7 +17,8 @@
         android:layout_gravity="center_horizontal"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="32dp"/>
 
     <!-- Welcome Back Text -->
     <TextView
@@ -47,7 +48,8 @@
         android:layout_marginBottom="20dp"
         app:layout_constraintTop_toBottomOf="@id/tvWelcomeBack"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="32dp"/>
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/etPassword"
@@ -66,8 +68,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:drawableEnd="@drawable/baseline_remove_red_eye_24"
         android:drawableTint="?attr/whiteItemBorder"
-
-        />
+        android:layout_marginHorizontal="32dp"     />
 
     <!-- Password EditText -->
 
@@ -85,7 +86,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginBottom="30dp"
-        android:layout_marginTop="30dp">
+        android:layout_marginTop="30dp"
+        android:paddingHorizontal="32sp">
         <Button
             android:id="@+id/btnSignIn"
             android:layout_width="match_parent"

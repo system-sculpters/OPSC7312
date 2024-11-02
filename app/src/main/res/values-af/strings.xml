@@ -188,4 +188,11 @@
     <string name="registration_successful">Registrasie suksesvol!</string>
     <string name="user_exists">Gebruiker bestaan reeds!</string>
 
+
+    <string name="search">Soek vir ’n aandeel</string>
+    <string name="buy_text">Koop</string>
+    <string name="sell_text">Verkoop</string>
+    <string name="stock">Aandeel</string>
+    <string name="market">Mark</string>
+
 </resources>

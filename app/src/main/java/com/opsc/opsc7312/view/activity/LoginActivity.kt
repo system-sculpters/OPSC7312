@@ -133,7 +133,12 @@ class LoginActivity : AppCompatActivity() {
         // Initialize the timeout dialog for session management
         timeOutDialog = TimeOutDialog()
 
-
+        // Check if the user is logged in and set up navigation accordingly
+        // Check if user is logged in, then trigger biometric authentication if enabled
+        if (isValidTokenIn()) {
+            val biometricAuth = BiometricAuth()
+            biometricAuth.loadFingerprint(this)  // Trigger biometric authentication when app is resumed
+        }
     }
 
     // Function to handle user login process
@@ -195,6 +200,8 @@ class LoginActivity : AppCompatActivity() {
             // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
             // Kevin Robatel
             // https://stackoverflow.com/users/244702/kevin-robatel
+
+            Log.d("message", "message: ${message}")
 
             // Check for timeout or inability to connect
             if (message == "timeout" || message.contains("Unable to resolve host")) {
@@ -454,5 +461,12 @@ class LoginActivity : AppCompatActivity() {
 
         // Call the loginWithSSO method to initiate the login process
         auth.loginWithSSO(user)
+    }
+
+    // Checks if the user is currently logged in
+    private fun isValidTokenIn(): Boolean {
+        val token = tokenManager.getToken() // Retrieve the authentication token
+        val expirationTime = tokenManager.getTokenExpirationTime() // Get the token expiration time
+        return token != null && !AppConstants.isTokenExpired(expirationTime) // Check if the token is valid
     }
 }

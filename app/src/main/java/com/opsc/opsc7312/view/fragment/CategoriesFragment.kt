@@ -3,6 +3,7 @@ package com.opsc.opsc7312.view.fragment
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,7 @@ import com.opsc.opsc7312.databinding.FragmentCategoriesBinding
 import com.opsc.opsc7312.model.api.controllers.CategoryController
 import com.opsc.opsc7312.model.data.model.Category
 import com.opsc.opsc7312.model.data.offline.dbhelpers.CategoryDatabaseHelper
+import com.opsc.opsc7312.model.data.offline.dbhelpers.DatabaseHelperProvider
 import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
 import com.opsc.opsc7312.model.data.offline.preferences.UserManager
 import com.opsc.opsc7312.view.adapter.CategoryAdapter
@@ -48,7 +50,10 @@ class CategoriesFragment : Fragment() {
     // Custom dialog for handling timeout errors or showing progress during API calls.
     private lateinit var timeOutDialog: TimeOutDialog
 
-    private lateinit var dbHelper: CategoryDatabaseHelper
+    //private lateinit var dbHelper: CategoryDatabaseHelper
+
+    private lateinit var dbHelperProvider: CategoryDatabaseHelper
+
 
     // Inflates the fragment's view and sets up initial values and components.
     override fun onCreateView(
@@ -68,7 +73,7 @@ class CategoriesFragment : Fragment() {
         // Get the CategoryController ViewModel for interacting with category data.
         categoryViewModel = ViewModelProvider(this).get(CategoryController::class.java)
 
-        dbHelper = CategoryDatabaseHelper(requireContext())
+        dbHelperProvider = CategoryDatabaseHelper(requireContext())
 
         // Initialize a custom dialog for showing progress or handling timeouts.
         timeOutDialog = TimeOutDialog()
@@ -117,6 +122,23 @@ class CategoriesFragment : Fragment() {
         binding.categoryRecycleView.adapter = categoryAdapter
     }
 
+    private fun getCategories(){
+
+        try {
+            val categories = dbHelperProvider.getAllCategories()
+
+            // initialize first element as the create button
+            val cat0 = Category(isCreateButton = true)
+
+            // Create a new list with cat0 as the first element
+            val updatedCategories = listOf(cat0) + categories
+
+            categoryAdapter.updateCategories(updatedCategories)
+        } catch (e: Exception) {
+            Log.e("DatabaseError", "Error inserting transaction", e)
+        }
+    }
+
     // Fetches and observes category details using the ViewModel.
     private fun setUpCategoriesDetails() {
         // Retrieve the current user's details from the UserManager.
@@ -131,12 +153,6 @@ class CategoriesFragment : Fragment() {
         } else {
             // Handle the scenario where the token is null (e.g., log an error or show a message).
         }
-    }
-
-    private fun getCategories(){
-        val categories = dbHelper.getAllCategories()
-        categoryAdapter.updateCategories(categories)
-
     }
 
     // Observes the ViewModel for changes in category data and handles API responses.

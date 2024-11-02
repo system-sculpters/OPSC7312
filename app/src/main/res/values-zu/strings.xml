@@ -186,4 +186,13 @@
     <string name="registration_successful">Ukubhaliswa kuphumelele!</string>
     <string name="user_exists">Umsebenzisi usukhona!</string>
 
+
+    <string name="search">Sesha isitoko</string>
+    <string name="buy_text">Thenga</string>
+    <string name="sell_text">Thengisa</string>
+    <string name="stock">Isitoko</string>
+    <string name="market">Imakethe</string>
+
+
+
 </resources>

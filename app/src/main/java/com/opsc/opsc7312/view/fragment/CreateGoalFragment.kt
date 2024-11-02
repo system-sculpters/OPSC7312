@@ -5,34 +5,24 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.opsc.opsc7312.AppConstants
 import com.opsc.opsc7312.MainActivity
 import com.opsc.opsc7312.R
 import com.opsc.opsc7312.databinding.FragmentCreateGoalBinding
-import com.opsc.opsc7312.model.api.controllers.CategoryController
 import com.opsc.opsc7312.model.api.controllers.GoalController
-import com.opsc.opsc7312.model.api.retrofitclients.GoalRetrofitClient
-import com.opsc.opsc7312.model.data.model.Category
 import com.opsc.opsc7312.model.data.model.Goal
-import com.opsc.opsc7312.model.data.offline.dbhelpers.CategoryDatabaseHelper
+import com.opsc.opsc7312.model.data.offline.dbhelpers.DatabaseHelperProvider
 import com.opsc.opsc7312.model.data.offline.dbhelpers.GoalDatabaseHelper
 import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
 import com.opsc.opsc7312.model.data.offline.preferences.UserManager
 import com.opsc.opsc7312.view.custom.NotificationHandler
 import com.opsc.opsc7312.view.custom.TimeOutDialog
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
-import java.util.Locale
 import java.util.UUID
 
 
@@ -60,7 +50,8 @@ class CreateGoalFragment : Fragment() {
     private var errorMessage = ""
 
     private lateinit var notificationHandler: NotificationHandler
-    private lateinit var dbHelper: GoalDatabaseHelper
+
+    private lateinit var dbHelperProvider: GoalDatabaseHelper
 
     // Inflates the layout and initializes components when the view is created
     override fun onCreateView(
@@ -84,7 +75,7 @@ class CreateGoalFragment : Fragment() {
 
         notificationHandler = NotificationHandler(requireContext())
 
-        dbHelper = GoalDatabaseHelper(requireContext())
+        dbHelperProvider = GoalDatabaseHelper(requireContext())
 
         // Initialize the dialog for timeout handling
         timeOutDialog = TimeOutDialog()
@@ -212,7 +203,7 @@ class CreateGoalFragment : Fragment() {
             return
         }
 
-        progressDialog.dismiss()
+        //progressDialog.dismiss()
 
         val uniqueID = UUID.randomUUID().toString()
 
@@ -228,17 +219,26 @@ class CreateGoalFragment : Fragment() {
             contributiontype = contributionTypes[contributionType.selectedIndex]
         )
 
-        dbHelper.insertGoal(newGoal)
+        val isInserted = dbHelperProvider.insertGoal(newGoal)
 
-        val notificationTitle = getString(R.string.goal_created)
-        val notificationMessage = "Your Goal '${newGoal.name}' has been created successfully."
-        notificationHandler.createNotificationChannel()
-        notificationHandler.showNotification(notificationTitle, notificationMessage)
-        getAllGoals()
+        progressDialog.dismiss()
+
+        if(isInserted != -1L){
+            val notificationTitle = getString(R.string.goal_created)
+            val notificationMessage = "Your Goal '${newGoal.name}' has been created successfully."
+            notificationHandler.createNotificationChannel()
+            notificationHandler.showNotification(notificationTitle, notificationMessage)
+            getAllGoals()
+
+            redirectToGoals()
+        } else {
+            // Handle the case where the category was not inserted
+            timeOutDialog.showAlertDialog(requireContext(), "Failed to create goal. Please try again.")
+        }
     }
 
-    fun getAllGoals(){
-        val goals = dbHelper.getAllGoals()
+    private fun getAllGoals(){
+        val goals = dbHelperProvider.getAllGoals()
         Log.d("DB TEST", "categories: ${goals.size}")
 
         goals.forEach {

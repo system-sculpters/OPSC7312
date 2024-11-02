@@ -7,7 +7,7 @@ import android.net.NetworkRequest
 import android.os.Build
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
-import com.opsc.opsc7312.model.data.offline.syncworker.SyncWorker
+import com.opsc.opsc7312.model.data.offline.syncworker.CategorySyncWorker
 
 class NetworkChangeReceiver(private val context: Context) {
     private val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -32,7 +32,7 @@ class NetworkChangeReceiver(private val context: Context) {
 
 
     private fun startSyncWork() {
-        val syncWorkRequest = OneTimeWorkRequestBuilder<SyncWorker>()
+        val syncWorkRequest = OneTimeWorkRequestBuilder<CategorySyncWorker>()
             .build()
         WorkManager.getInstance(context).enqueue(syncWorkRequest)
     }

@@ -17,6 +17,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.work.Constraints
+import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
@@ -25,14 +26,15 @@ import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.opsc.opsc7312.databinding.ActivityMainBinding
 import com.opsc.opsc7312.model.api.controllers.AuthController
+import com.opsc.opsc7312.model.data.offline.dbhelpers.DatabaseHelperProvider
 import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
 import com.opsc.opsc7312.model.data.offline.preferences.UserManager
 import com.opsc.opsc7312.model.data.offline.syncworker.GoalSyncWorker
-import com.opsc.opsc7312.view.activity.WelcomeActivity
-import com.opsc.opsc7312.view.custom.BiometricAuth
 import com.opsc.opsc7312.view.custom.ConnectivityReceiver
-import com.opsc.opsc7312.view.custom.NetworkChangeReceiver
-import com.opsc.opsc7312.model.data.offline.syncworker.SyncWorker
+import com.opsc.opsc7312.model.data.offline.syncworker.CategorySyncWorker
+import com.opsc.opsc7312.model.data.offline.syncworker.TransactionSyncWorker
+import com.opsc.opsc7312.view.activity.InvestmentActivity
+import com.opsc.opsc7312.view.activity.LoginActivity
 import com.opsc.opsc7312.view.fragment.AnalyticsFragment
 import com.opsc.opsc7312.view.fragment.CategoriesFragment
 import com.opsc.opsc7312.view.fragment.CreateTransactionFragment
@@ -70,8 +72,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     // FirebaseAuth instance for Firebase authentication
     private val firebaseAuth = FirebaseAuth.getInstance()
 
-    private lateinit var networkChangeReceiver: NetworkChangeReceiver
-
+    private lateinit var dbHelperProvider: DatabaseHelperProvider
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // Load the selected theme before setting the content view
@@ -93,6 +94,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        dbHelperProvider = DatabaseHelperProvider(this)
+
         // Determine if the device is in dark mode to tint icons accordingly
         // https://medium.com/naukri-engineering/implement-dark-theme-support-for-android-application-using-kotlin-665060d269b6
         // Nitin Berwal
@@ -111,17 +114,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         userManager = UserManager.getInstance(this)
         auth = ViewModelProvider(this).get(AuthController::class.java)
 
-        // Check if the user is logged in and set up navigation accordingly
-        if (isLoggedIn()) {
-            setupBottomNavigation()  // Initialize bottom navigation
-            setupNavigationView()    // Initialize navigation drawer
-            val connectivityReceiver = ConnectivityReceiver {
-                enqueueGoalSyncWorker(this)
-            }
-            this.registerReceiver(connectivityReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
-        } else {
-            navigateToWelcome()      // Redirect to welcome screen
+        //////////////////////////////////////////////////////////////////////////////////////////////////
+        setupBottomNavigation()  // Initialize bottom navigation
+        setupNavigationView()    // Initialize navigation drawer
+
+
+        val connectivityReceiver = ConnectivityReceiver {
+            enqueueCategorySyncWorker(this)
+            enqueueGoalSyncWorker(this)
+            enqueueTransactionSyncWorker(this)
         }
+
+        this.registerReceiver(connectivityReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
+
 
         // Set click listener for the back button to navigate back
         findViewById<ImageButton>(R.id.back_button).setOnClickListener {
@@ -138,23 +143,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             // Handle FAB click, e.g., open GoalsFragment
             changeCurrentFragment(CreateTransactionFragment())
         }
-
-
     }
 
-//    private fun enqueueSyncRequest() {
-//        val syncRequest = OneTimeWorkRequestBuilder<SyncWorker>()
-//            .setConstraints(
-//                Constraints.Builder()
-//                    .setRequiredNetworkType(NetworkType.CONNECTED) // Ensure network connectivity
-//                    .build()
-//            )
-//            .build()
-//
-//        WorkManager.getInstance(applicationContext).enqueue(syncRequest)
-//    }
-
-    fun enqueueGoalSyncWorker(context: Context) {
+    private fun enqueueGoalSyncWorker(context: Context) {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
@@ -164,31 +155,47 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .build()
 
         WorkManager.getInstance(context).enqueue(syncRequest)
+
+//        WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+//            "GoalSyncWorker",
+//            ExistingPeriodicWorkPolicy.KEEP,  // Keeps the existing periodic work
+//            syncRequest
+//        )
     }
 
-    fun enqueueCategorySyncWorker(context: Context) {
+    private fun enqueueCategorySyncWorker(context: Context) {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
-        val syncRequest = OneTimeWorkRequestBuilder<SyncWorker>()
+        val syncRequest = PeriodicWorkRequestBuilder<CategorySyncWorker>(15, TimeUnit.MINUTES)
             .setConstraints(constraints)
             .build()
 
         WorkManager.getInstance(context).enqueue(syncRequest)
+//        WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+//            "CategorySyncWorker",
+//            ExistingPeriodicWorkPolicy.KEEP,  // Keeps the existing periodic work
+//            syncRequest
+//        )
     }
 
+    private fun enqueueTransactionSyncWorker(context: Context) {
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
 
-    override fun onResume() {
-        super.onResume()
+        val syncRequest = PeriodicWorkRequestBuilder<TransactionSyncWorker>(15, TimeUnit.MINUTES)
+            .setConstraints(constraints)
+            .build()
 
-        // Check if user is logged in, then trigger biometric authentication if enabled
-        if (isLoggedIn()) {
-            val biometricAuth = BiometricAuth()
-            biometricAuth.loadFingerprint(this)  // Trigger biometric authentication when app is resumed
-        }
+        WorkManager.getInstance(context).enqueue(syncRequest)
+//        WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+//            "TransactionSyncWorker",
+//            ExistingPeriodicWorkPolicy.KEEP,  // Keeps the existing periodic work
+//            syncRequest
+//        )
     }
-
 
     // Loads the theme preference from SharedPreferences and applies it
     private fun loadAndApplyTheme() {
@@ -255,7 +262,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     // Handles navigation item selections from the navigation drawer
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.nav_investment -> changeCurrentFragment(CategoriesFragment())
+            R.id.nav_investment -> {
+                startActivity(Intent(this, InvestmentActivity::class.java)) // Start WelcomeActivity
+                finish()
+            }
             R.id.nav_categories -> changeCurrentFragment(CategoriesFragment())
             R.id.nav_notification -> changeCurrentFragment(NotificationListFragment())
             R.id.nav_goal -> changeCurrentFragment(GoalsFragment())
@@ -278,26 +288,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         imageButton.setColorFilter(color) // Apply the color filter to the icon
     }
 
-    // Navigates to the authentication screens if the user is not logged in
-    private fun navigateToWelcome() {
-        startActivity(Intent(this, WelcomeActivity::class.java)) // Start WelcomeActivity
-        finish() // Finish the current activity
-    }
-
-    // Checks if the user is currently logged in
-    private fun isLoggedIn(): Boolean {
-        val token = tokenManager.getToken() // Retrieve the authentication token
-        val expirationTime = tokenManager.getTokenExpirationTime() // Get the token expiration time
-        return token != null && !AppConstants.isTokenExpired(expirationTime) // Check if the token is valid
-    }
-
     // Logs the user out by clearing tokens and signing out
     private fun logOut() {
         tokenManager.clearToken() // Clear the stored token
         userManager.clearUser() // Clear user details
         firebaseAuth.signOut() // Sign out from Firebase
         Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show() // Show logout message
-        startActivity(Intent(this, MainActivity::class.java)) // Restart the MainActivity
+        startActivity(Intent(this, LoginActivity::class.java)) // Restart the MainActivity
         finish() // Finish the current activity
     }
 
@@ -322,6 +319,4 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         resources.updateConfiguration(config, resources.displayMetrics)
     }
-
-
 }

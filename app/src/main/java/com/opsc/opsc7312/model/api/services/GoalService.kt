@@ -29,6 +29,7 @@ interface GoalService {
     @GET("goal/{id}")
     fun getGoals(@Header("Authorization") token: String, @Path("id") userId: String): Call<List<Goal>>
 
+
     // Creates a new goal based on the provided goal details.
     // This function sends a POST request to the "goal/create" endpoint.
     // An authorization token is required in the header.

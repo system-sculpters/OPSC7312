@@ -18,7 +18,7 @@ data class Transaction(
     var isrecurring: Boolean = false,   // Flag indicating if the transaction is recurring
     var type: String = "",              // Type of transaction, such as "Income" or "Expense"
     var categoryId: String = "",        // ID of the category associated with the transaction
-    val category: Category = Category() // Category object representing the category details of the transaction
+    var category: Category = Category() // Category object representing the category details of the transaction
 ) : Parcelable {
     // Implementing Parcelable for passing Transaction objects between components
 
