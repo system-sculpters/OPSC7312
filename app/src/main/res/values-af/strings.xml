@@ -195,4 +195,9 @@
     <string name="stock">Aandeel</string>
     <string name="market">Mark</string>
 
+    <string name="quantity">Hoeveelheid</string>
+    <string name="enter_quantity">Voer hoeveelheid in</string>
+    <string name="enter_a_quantity">• Voer n hoeveelheid in</string>
+    <string name="int_quantity">• Hoeveelheid moet n heelgetal wees</string>
+
 </resources>

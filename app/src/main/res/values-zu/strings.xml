@@ -193,6 +193,9 @@
     <string name="stock">Isitoko</string>
     <string name="market">Imakethe</string>
 
-
+    <string name="quantity">Inani</string>
+    <string name="enter_quantity">Faka inani</string>
+    <string name="enter_a_quantity">• Faka inani</string>
+    <string name="int_quantity">• Inani kumele libe yisibalo esiphelele</string>
 
 </resources>
