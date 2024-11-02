@@ -1,18 +1,22 @@
 package com.opsc.opsc7312.view.fragment
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.opsc.opsc7312.AppConstants
 import com.opsc.opsc7312.R
-import com.opsc.opsc7312.databinding.FragmentBuyStockBinding
+import com.opsc.opsc7312.databinding.FragmentSellStockBinding
 import com.opsc.opsc7312.model.api.controllers.InvestmentController
 import com.opsc.opsc7312.model.data.model.Stock
 import com.opsc.opsc7312.model.data.model.Trade
@@ -20,11 +24,11 @@ import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
 import com.opsc.opsc7312.model.data.offline.preferences.UserManager
 import com.opsc.opsc7312.view.custom.NotificationHandler
 import com.opsc.opsc7312.view.custom.TimeOutDialog
+import kotlinx.coroutines.launch
 
-
-class BuyStockFragment : Fragment() {
+class SellStockFragment : Fragment() {
     // View binding object for accessing views in the layout
-    private var _binding: FragmentBuyStockBinding? = null
+    private var _binding: FragmentSellStockBinding? = null
 
     // Non-nullable binding property
     private val binding get() = _binding!!
@@ -47,11 +51,13 @@ class BuyStockFragment : Fragment() {
 
     private lateinit var notificationHandler: NotificationHandler
 
+    private var ownedQuantity = 0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            stock = it.getParcelable(STOCK_ARG)
+            stock = it.getParcelable(BuyStockFragment.STOCK_ARG)
         }
     }
 
@@ -59,7 +65,7 @@ class BuyStockFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentBuyStockBinding.inflate(inflater, container, false)
+        _binding = FragmentSellStockBinding.inflate(inflater, container, false)
 
         investmentViewModel = ViewModelProvider(this).get(InvestmentController::class.java)
 
@@ -94,12 +100,19 @@ class BuyStockFragment : Fragment() {
             binding.currentValuePercentage.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
         }
 
-        binding.quantity.setText("1")
+
+        val token = tokenManager.getToken() // Retrieve the authentication token
+        val user = userManager.getUser()
+        if (token != null) {
+            getInvestment(token, user.id) // Observe the ViewModel for goal data
+        } else {
+            // Handle case when token is null (e.g., show an error message or prompt for login)
+        }
 
         binding.targetAmount.text = "${stock?.currentPrice?.let { AppConstants.formatAmount(it) }} ZAR"
 
         binding.buyButton.setOnClickListener {
-            buyStocks()
+            sellStocks()
         }
 
         quantityListener()
@@ -138,7 +151,7 @@ class BuyStockFragment : Fragment() {
         return ((currentPrice - previousClosePrice) / previousClosePrice) * 100;
     }
 
-    private fun buyStocks() {
+    private fun sellStocks() {
         val token = tokenManager.getToken() // Retrieve the authentication token
         val user = userManager.getUser()
         if (token != null) {
@@ -161,6 +174,8 @@ class BuyStockFragment : Fragment() {
             errorMessage += "${getString(R.string.int_quantity)}\n"
         } else if(quantity.toInt() < 0) {
             errorMessage += "${getString(R.string.more_or_equal_zero)}\n"
+        } else if(quantity.toInt() > ownedQuantity){
+            errorMessage += "${getString(R.string.more_than_owned)}\n"
         }
 
         if(errorMessage.isNotEmpty()){
@@ -181,14 +196,19 @@ class BuyStockFragment : Fragment() {
 
             // Handle changes in the status of goal retrieval (success or failure)
             if (status) {
+                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Goal creation successful!", hideProgressBar = true)
+
                 // If the status indicates success, dismiss the progress dialog
-                progressDialog.dismiss()
+
                 val notificationTitle = getString(R.string.goal_created)
-                val notificationMessage = "'${stock?.name}' stock bought successfully."
+                val notificationMessage = "${quantity} quantities of '${stock?.name}' stock sold successfully."
                 notificationHandler.createNotificationChannel()
                 notificationHandler.showNotification(notificationTitle, notificationMessage)
 
-                redirectToPortfolio()
+                Handler(Looper.getMainLooper()).postDelayed({
+                    progressDialog.dismiss()
+                    redirectToPortfolio()
+                }, 1000)
 
             } else {
                 // If the status indicates failure, also dismiss the progress dialog
@@ -215,14 +235,49 @@ class BuyStockFragment : Fragment() {
                     // Update the progress dialog with a message while connecting
                     timeOutDialog.updateProgressDialog(requireContext(), progressDialog, getString(R.string.connecting), hideProgressBar = false)
                     // Retry fetching all goals from the ViewModel
-                    investmentViewModel.buyInvestment(token, buyStock)
+                    investmentViewModel.sellInvestment(token, buyStock)
                 }
             }
         }
 
         // Make an initial API call to retrieve all goals for the user
-        investmentViewModel.buyInvestment(token, buyStock)
+        investmentViewModel.sellInvestment(token, buyStock)
     }
+
+    private fun getInvestment(token: String, userId: String) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            val symbol = stock?.symbol // Get the stock symbol safely
+            if (symbol != null) {
+                // Call the investment retrieval function and await the result
+                val investment = investmentViewModel.getUserInvestment(token, userId, symbol)
+
+                if (investment != null) {
+                    binding.quantity.setText(investment.quantity.toString())
+                    ownedQuantity = investment.quantity
+                } else {
+                    // Show a popup indicating the user doesn't own this stock
+                    showPopup()
+                }
+            } else {
+                // Handle the case where the stock symbol is null
+                showPopup() // You might want to specify a different message for this case
+            }
+        }
+    }
+
+
+    private fun showPopup(){
+        AlertDialog.Builder(requireContext())
+            .setTitle("Stock Not Owned")
+            .setMessage("You don't own this stock.")
+            .setPositiveButton("OK") { _, _ ->
+                // Redirect to Portfolio
+                redirectToPortfolio()
+            }
+            .setCancelable(false)
+            .show()
+    }
+
 
     private fun redirectToPortfolio(){
         // This method was adapted from stackoverflow
@@ -238,11 +293,14 @@ class BuyStockFragment : Fragment() {
             .commit()
     }
 
+
+
+
     companion object {
         const val STOCK_ARG = "stock"
         @JvmStatic
         fun newInstance(stock: Stock) =
-            BuyStockFragment().apply {
+            SellStockFragment().apply {
                 arguments = Bundle().apply {
                     putParcelable(STOCK_ARG, stock)
                 }

@@ -203,4 +203,8 @@
     <string name="enter_a_quantity">• Enter a quantity</string>
     <string name="int_quantity">• Quantity must be an integer</string>
 
+
+    <string name="more_or_equal_zero">• Quantity must be zero or more.</string>
+    <string name="more_than_owned">• Quantity exceeds the amount you own.</string>
+
 </resources>

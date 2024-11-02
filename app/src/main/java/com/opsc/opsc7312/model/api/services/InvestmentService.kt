@@ -9,6 +9,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface InvestmentService {
 
@@ -33,5 +34,13 @@ interface InvestmentService {
     // It takes a Transaction object as the request body and returns a Call object containing the created Transaction.
     @POST("investment/sell")
     fun sellInvestment(@Header("Authorization") token: String, @Body trade: Trade): Call<Void>
+
+
+    // Retrieves a list of categories associated with a specific user.
+    // This function sends a GET request to the "category/{id}" endpoint.
+    // It requires an authorization token in the header and the user ID in the path.
+    // The response will be a Call object containing a list of Category objects.
+    @GET("investment/user/stock")
+    fun getUserInvestment(@Header("Authorization") token: String, @Query("userid") userId: String, @Query("symbol") symbol: String): Call<Investment>
 
 }

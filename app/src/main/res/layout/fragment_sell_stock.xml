@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.fragment.BuyStockFragment"
+    tools:context=".view.fragment.SellStockFragment"
     android:orientation="vertical"
     android:paddingVertical="10dp">
 
@@ -157,11 +157,12 @@
             android:id="@+id/buy_button"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:text="@string/buy_text"
+            android:text="@string/sell_text"
             android:textSize="30sp"
             android:textColor="@color/white"
             android:fontFamily="@font/inter_medium"
             android:background="@drawable/button_background"
             android:elevation="100dp"/>
     </LinearLayout>
+
 </LinearLayout>

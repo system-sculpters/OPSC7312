@@ -86,7 +86,7 @@ class InvestmentAdapter(private val context: Context, private val onItemClick: (
 
     private fun calculateGainOrLoss(investment: Investment): Double {
         val currentTotalValue = investment.stockData?.currentPrice?.times(investment.quantity) ?: 0.0
-        return currentTotalValue - investment.totalInvested
+        return currentTotalValue - investment.currentValue
     }
 
     private fun currentValue(investment: Investment): Double {
@@ -94,8 +94,8 @@ class InvestmentAdapter(private val context: Context, private val onItemClick: (
     }
     private fun calculatePercentageGainOrLoss(investment: Investment): Double {
         val gainOrLoss = calculateGainOrLoss(investment)
-        return if (investment.totalInvested != 0.0) {
-            (gainOrLoss / investment.totalInvested) * 100
+        return if (investment.currentValue != 0.0) {
+            (gainOrLoss / investment.currentValue) * 100
         } else {
             0.0 // Avoid division by zero
         }

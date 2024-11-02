@@ -3,17 +3,21 @@ package com.opsc.opsc7312.model.api.controllers
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.gson.Gson
 import com.opsc.opsc7312.model.api.retrofitclients.RetrofitClient
 import com.opsc.opsc7312.model.api.services.InvestmentService
 import com.opsc.opsc7312.model.api.services.StockService
 import com.opsc.opsc7312.model.data.model.Investment
 import com.opsc.opsc7312.model.data.model.InvestmentResponse
 import com.opsc.opsc7312.model.data.model.Stock
+import com.opsc.opsc7312.model.data.model.SyncResponse
 import com.opsc.opsc7312.model.data.model.Trade
 import com.opsc.opsc7312.model.data.model.Transaction
+import kotlinx.coroutines.suspendCancellableCoroutine
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlin.coroutines.resume
 
 class InvestmentController:ViewModel() {
     // Retrofit API service instance for category-related network requests
@@ -140,5 +144,60 @@ class InvestmentController:ViewModel() {
                 message.postValue(t.message)  // Set the error message in LiveData
             }
         })
+    }
+
+    // This method was adapted from medium
+    // https://medium.com/quick-code/working-with-restful-apis-in-android-retrofit-volley-okhttp-eb8d3ec71e06
+    // Megha Verma
+    // https://medium.com/@meghaverma12
+    suspend fun getUserInvestment(userToken: String, userId: String, symbol: String): Investment? {
+        val token = "Bearer $userToken"  // Format the token for authorization
+        val call = api.getUserInvestment(token, userId, symbol)  // Make the API call to fetch goals
+
+        return suspendCancellableCoroutine { continuation ->
+            // Log the request URL for debugging
+            val url = call.request().url.toString()
+            Log.d("MainActivity", "Request URL: $url")
+
+            // Execute the API call asynchronously
+            call.enqueue(object : Callback<Investment> {
+                override fun onResponse(call: Call<Investment>, response: Response<Investment>) {
+                    if (response.isSuccessful) {
+                        // Resume coroutine with the response body
+                        continuation.resume(response.body())
+                        message.postValue("investment retrieved")
+                    } else {
+                        // Parse and log error, then resume with null
+                        val errorMessage = if (response.errorBody() != null) {
+                            try {
+                                val errorResponse = Gson().fromJson(response.errorBody()?.string(), SyncResponse::class.java)
+                                "Error syncing transactions: ${errorResponse.message}"
+                            } catch (e: Exception) {
+                                "Request failed with code: ${response.code()}, but failed to parse error response."
+                            }
+                        } else {
+                            "Request failed with code: ${response.code()}, message: ${response.message()}"
+                        }
+
+                        Log.e("get investment", errorMessage)
+                        message.postValue(errorMessage)
+                        continuation.resume(null)
+                    }
+                }
+
+                override fun onFailure(call: Call<Investment>, t: Throwable) {
+                    // Log the error and resume coroutine with null
+                    val errorMessage = "Sync failed: ${t.message ?: "Unknown error"}\nCall: $call"
+                    Log.e("TransactionSync", errorMessage)
+                    message.postValue(t.message)
+                    continuation.resume(null)
+                }
+            })
+
+            // Cancel call if the coroutine is cancelled
+            continuation.invokeOnCancellation {
+                call.cancel()
+            }
+        }
     }
 }

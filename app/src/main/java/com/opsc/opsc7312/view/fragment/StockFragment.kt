@@ -75,7 +75,10 @@ class StockFragment : Fragment() {
         }
 
         binding.sellButton.setOnClickListener {
-
+            if(selectedStock != null){
+                val sellStockFragment = SellStockFragment.newInstance(selectedStock!!)
+                changeCurrentFragment(sellStockFragment)
+            }
         }
 
 

@@ -42,6 +42,13 @@
         <item name="trackTint">@color/textPrimary</item>
     </style>
 
+    <style name="MyButtonStyle" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:backgroundTint">@color/textPrimary</item>
+        <item name="android:textColor">@color/itemPrimary</item>
+        <item name="android:drawable">@drawable/button_background</item>
+        <item name="colorPrimary">@color/textPrimary</item>
+    </style>
+
     <style name="splashScreenTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_image</item>
         <item name="android:statusBarColor">@color/light_grey</item>

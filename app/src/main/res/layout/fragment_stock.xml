@@ -167,6 +167,8 @@
             android:fontFamily="@font/inter_medium"
             android:background="@drawable/button_background"
             android:elevation="100dp"
-            android:layout_marginStart="5dp"/>
+            android:layout_marginStart="5dp"
+            android:theme="@style/MyButtonStyle"
+            android:textAllCaps="false"/>
     </LinearLayout>
 </LinearLayout>
