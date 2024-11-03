@@ -11,7 +11,7 @@
 - Rest Api Repo - https://github.com/system-sculpters/OPSC-API.git
 
 # DEMONSTRATION VIDEOS
-- https://youtu.be/pBUQPnlj7P8
+- https://youtu.be/pfvdVw22kkM
 - https://youtu.be/yBVMhzyZwGQ
 
 # Recommended System requirements
