@@ -223,5 +223,6 @@
     <string name="create_category_failed">Failed to create category. Please try again.</string>
     <string name="create_goal_failed">Failed to create goal. Please try again.</string>
     <string name="create_transaction_failed">Failed to create transaction. Please try again.</string>
+    <string name="portfolio">Portfolio</string>
 
 </resources>

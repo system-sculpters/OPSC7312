@@ -17,9 +17,11 @@ class TransactionSyncWorker (appContext: Context, workerParams: WorkerParameters
     override suspend fun doWork(): Result {
         val transactionDbHelper = TransactionDatabaseHelper(applicationContext)
         val tokenManager = TokenManager.getInstance(applicationContext)
+        val userManager = UserManager.getInstance(applicationContext)
 
+        val userId = userManager.getUser().id
         // Get the unsynced categories
-        val unSyncedTransactions = transactionDbHelper.getUnSyncedTransactions()
+        val unSyncedTransactions = transactionDbHelper.getUnSyncedTransactions(userId)
 
         if (unSyncedTransactions.isNotEmpty()) {
             // Get the token
@@ -32,7 +34,7 @@ class TransactionSyncWorker (appContext: Context, workerParams: WorkerParameters
                 Log.e("ids", "ids: $ids")
                 if (status) {
                     markAsSynced(unSyncedTransactions, transactionDbHelper)
-                    updateCategoryIds(ids, transactionDbHelper)
+                    updateCategoryIds(ids, transactionDbHelper, userId)
                 } else {
                     Log.e("SyncWorker", "Sync failed")
                     return Result.retry()
@@ -43,10 +45,10 @@ class TransactionSyncWorker (appContext: Context, workerParams: WorkerParameters
             }
         }
 
-        return syncRemoteToLocal(transactionDbHelper)
+        return syncRemoteToLocal(transactionDbHelper, userId)
     }
 
-    private suspend fun syncRemoteToLocal(transactionDbHelper: TransactionDatabaseHelper): Result {
+    private suspend fun syncRemoteToLocal(transactionDbHelper: TransactionDatabaseHelper, userId: String): Result {
         val token = TokenManager.getInstance(applicationContext).getToken()
         val user = UserManager.getInstance(applicationContext).getUser()
 
@@ -60,7 +62,7 @@ class TransactionSyncWorker (appContext: Context, workerParams: WorkerParameters
                     val localGoal = transactionDbHelper.getTransaction(remoteTransaction.id)
                     Log.d("localGoal", "localGoal ${localGoal}")
                     if (localGoal == null) {
-                        Log.d("dbHelper.getAllCategories()", "localGoal ${transactionDbHelper.getAllTransactions().find { id.toString() == remoteTransaction.id }}")
+                        Log.d("dbHelper.getAllCategories()", "localGoal ${transactionDbHelper.getAllTransactions(userId).find { id.toString() == remoteTransaction.id }}")
 
                         transactionDbHelper.addTransactionSync(remoteTransaction)
                     } else {
@@ -80,14 +82,14 @@ class TransactionSyncWorker (appContext: Context, workerParams: WorkerParameters
     }
 
 
-    private fun updateCategoryIds(ids: List<IdMapping>?, dbHelper: TransactionDatabaseHelper) {
+    private fun updateCategoryIds(ids: List<IdMapping>?, dbHelper: TransactionDatabaseHelper, userId: String) {
         if (ids != null) {
             for (id in ids){
                 dbHelper.updateTransactionId(id.localId, id.firebaseId)
             }
         }
 
-        Log.d("getAllTransactions", "categories ${dbHelper.getAllTransactions()}")
+        Log.d("getAllTransactions", "categories ${dbHelper.getAllTransactions(userId)}")
     }
 
     private fun markAsSynced(unSyncedTransactions: List<Transaction>, dbHelper: TransactionDatabaseHelper) {

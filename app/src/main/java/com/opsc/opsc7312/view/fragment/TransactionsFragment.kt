@@ -149,9 +149,11 @@ class TransactionsFragment : Fragment() {
     }
 
     private fun getTransactions(){
+        val user = userManager.getUser()
+
 
         try {
-            val transactions = dbHelperProvider.getAllTransactions()
+            val transactions = dbHelperProvider.getAllTransactions(user.id)
 
             updateTransactionCategory(transactions = transactions)
 

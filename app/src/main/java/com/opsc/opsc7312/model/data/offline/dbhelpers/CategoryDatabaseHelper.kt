@@ -68,11 +68,16 @@ class CategoryDatabaseHelper (context: Context) {
         return rowsAffected
     }
 
-    // Method to get all categories from the database
-    fun getAllCategories(): List<Category> {
+    // Method to get all categories for a specific user from the database
+    fun getAllCategories(userId: String): List<Category> {
         val categoryList = mutableListOf<Category>()
         val db = dbHelper.readableDatabase
-        val cursor: Cursor = db.rawQuery("SELECT * FROM ${CategorySchema.TABLE_NAME}", null)
+
+        // Update the query to include a WHERE clause to filter by userId
+        val cursor: Cursor = db.rawQuery(
+            "SELECT * FROM ${CategorySchema.TABLE_NAME} WHERE ${CategorySchema.COLUMN_USER_ID} = ?",
+            arrayOf(userId)
+        )
 
         if (cursor.moveToFirst()) {
             do {
@@ -87,10 +92,12 @@ class CategoryDatabaseHelper (context: Context) {
                 categoryList.add(category)
             } while (cursor.moveToNext())
         }
+
         cursor.close()
         db.close()
         return categoryList
     }
+
 
     fun getCategoryById(categoryId: String): Category? {
         val db = dbHelper.readableDatabase
@@ -128,11 +135,16 @@ class CategoryDatabaseHelper (context: Context) {
         return result > 0
     }
 
-    // Method to get unsynced categories
-    fun getUnSyncedCategories(): List<Category> {
+    // Method to get unsynced categories for a specific user
+    fun getUnSyncedCategories(userId: String): List<Category> {
         val unSyncedList = mutableListOf<Category>()
         val db = dbHelper.readableDatabase
-        val cursor: Cursor = db.rawQuery("SELECT * FROM ${CategorySchema.TABLE_NAME} WHERE ${CategorySchema.COLUMN_SYNC_STATUS} = 0", null)
+
+        // Update the query to include both SYNC_STATUS and userId in the WHERE clause
+        val cursor: Cursor = db.rawQuery(
+            "SELECT * FROM ${CategorySchema.TABLE_NAME} WHERE ${CategorySchema.COLUMN_SYNC_STATUS} = 0 AND ${CategorySchema.COLUMN_USER_ID} = ?",
+            arrayOf(userId)
+        )
 
         if (cursor.moveToFirst()) {
             do {
@@ -147,10 +159,12 @@ class CategoryDatabaseHelper (context: Context) {
                 unSyncedList.add(category)
             } while (cursor.moveToNext())
         }
+
         cursor.close()
         db.close()
         return unSyncedList
     }
+
 
     // Method to mark a category as synced
     fun markAsSynced(categoryId: String) {

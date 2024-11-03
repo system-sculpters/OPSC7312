@@ -110,9 +110,10 @@ class HomeFragment : Fragment() {
     }
 
     private fun getTransactions(){
+        val user = userManager.getUser()
 
         try {
-            val transactions = dbHelperProvider.getAllTransactions()
+            val transactions = dbHelperProvider.getAllTransactions(user.id)
             setUpData(transactions)
             val firstThree = transactions.take(3)
             updateTransactionCategory(transactions = firstThree)

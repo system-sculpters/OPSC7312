@@ -18,8 +18,11 @@ class GoalSyncWorker (appContext: Context, workerParams: WorkerParameters) : Cor
         val goalDbHelper = GoalDatabaseHelper(applicationContext)
         val tokenManager = TokenManager.getInstance(applicationContext)
 
+        val userManager = UserManager.getInstance(applicationContext)
+
+        val userId = userManager.getUser().id
         // Get the unsynced goals
-        val unSyncedGoals = goalDbHelper.getUnSyncedGoals()
+        val unSyncedGoals = goalDbHelper.getUnSyncedGoals(userId)
 
         if (unSyncedGoals.isNotEmpty()) {
             // Get the token

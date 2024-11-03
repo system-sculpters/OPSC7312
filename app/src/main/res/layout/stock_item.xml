@@ -36,14 +36,14 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="50dp"
             android:orientation="vertical"
-
             android:gravity="center_vertical"
-
             android:layout_marginStart="20dp"
+            android:layout_marginEnd="10dp"
             app:layout_constraintStart_toEndOf="@id/cat_img_container"
+            app:layout_constraintEnd_toStartOf="@+id/price_container"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
 
@@ -54,8 +54,9 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/stock_symbol"
                 android:text="title"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:textSize="20sp"
-                android:textStyle="bold"
                 android:fontFamily="@font/inter_medium"/>
 
 
@@ -73,7 +74,8 @@
                     android:textSize="14sp"
                     android:textAlignment="textEnd"
                     android:textColor="@color/light_grey"
-                    android:textStyle="bold"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:fontFamily="@font/inter_medium"
                     android:padding="0dp"/>
             </LinearLayout>
@@ -83,13 +85,13 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/price_container"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:orientation="vertical"
 
             android:gravity="center_vertical"
 
-            android:layout_marginStart="20dp"
 
             android:layout_marginEnd="10dp"
             app:layout_constraintEnd_toEndOf="parent"

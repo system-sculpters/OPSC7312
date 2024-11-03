@@ -84,7 +84,7 @@ class PortfolioFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Set the toolbar title for the fragment to "Categories".
-        (activity as? InvestmentActivity)?.setToolbarTitle(getString(R.string.market))
+        (activity as? InvestmentActivity)?.setToolbarTitle(getString(R.string.portfolio))
     }
 
     // method that sets up the RecyclerView for displaying the list of goals.

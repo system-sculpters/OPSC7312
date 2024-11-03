@@ -218,5 +218,6 @@
     <string name="create_category_failed">Yehlulekile ukudala isigaba. Sicela uzame futhi.</string>
     <string name="create_goal_failed">Yehlulekile ukudala inhloso. Sicela uzame futhi.</string>
     <string name="create_transaction_failed">Yehlulekile ukudala ukuthengiselana. Sicela uzame futhi.</string>
+    <string name="portfolio">Portfolio</string>
 
 </resources>

@@ -3,7 +3,6 @@ package com.opsc.opsc7312.model.data.offline.syncworker
 import android.content.Context
 import android.util.Log
 import androidx.work.CoroutineWorker
-import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.opsc.opsc7312.model.api.controllers.CategoryController
 import com.opsc.opsc7312.model.data.model.Category
@@ -13,7 +12,6 @@ import com.opsc.opsc7312.model.data.offline.dbhelpers.TransactionDatabaseHelper
 import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
 import com.opsc.opsc7312.model.data.offline.preferences.UserManager
 import com.opsc.opsc7312.view.custom.NotificationHandler
-import java.util.concurrent.CompletableFuture
 
 class CategorySyncWorker(appContext: Context, workerParams: WorkerParameters) : CoroutineWorker(appContext, workerParams) {
     private var notificationHandler: NotificationHandler = NotificationHandler(applicationContext)
@@ -22,8 +20,11 @@ class CategorySyncWorker(appContext: Context, workerParams: WorkerParameters) : 
         val categoryDbHelper = CategoryDatabaseHelper(applicationContext)
         val tokenManager = TokenManager.getInstance(applicationContext)
 
+        val userManager = UserManager.getInstance(applicationContext)
+
+        val userId = userManager.getUser().id
         // Get the unsynced categories
-        val unSyncedCategories = categoryDbHelper.getUnSyncedCategories()
+        val unSyncedCategories = categoryDbHelper.getUnSyncedCategories(userId)
 
         if (unSyncedCategories.isNotEmpty()) {
             // Get the token
@@ -36,7 +37,7 @@ class CategorySyncWorker(appContext: Context, workerParams: WorkerParameters) : 
                 Log.e("ids", "ids: $ids")
                 if (status) {
                     markAsSynced(unSyncedCategories, categoryDbHelper)
-                    updateCategoryIds(ids, categoryDbHelper)
+                    updateCategoryIds(ids, categoryDbHelper, userId)
                 } else {
                     Log.e("SyncWorker", "Sync failed")
                     return Result.retry()
@@ -47,10 +48,10 @@ class CategorySyncWorker(appContext: Context, workerParams: WorkerParameters) : 
             }
         }
 
-        return syncRemoteToLocal(categoryDbHelper)
+        return syncRemoteToLocal(categoryDbHelper, userId)
     }
 
-    private suspend fun syncRemoteToLocal(categoryDbHelper: CategoryDatabaseHelper): Result {
+    private suspend fun syncRemoteToLocal(categoryDbHelper: CategoryDatabaseHelper, userId: String): Result {
         val token = TokenManager.getInstance(applicationContext).getToken()
         val user = UserManager.getInstance(applicationContext).getUser()
 
@@ -64,7 +65,7 @@ class CategorySyncWorker(appContext: Context, workerParams: WorkerParameters) : 
                     val localGoal = categoryDbHelper.getCategoryById(remoteCategory.id)
                     Log.d("localGoal", "localGoal ${localGoal}")
                     if (localGoal == null) {
-                        Log.d("dbHelper.getAllCategories()", "localGoal ${categoryDbHelper.getAllCategories().find { id.toString() == remoteCategory.id }}")
+                        Log.d("dbHelper.getAllCategories()", "localGoal ${categoryDbHelper.getAllCategories(userId).find { id.toString() == remoteCategory.id }}")
 
                         categoryDbHelper.insertCategorySync(remoteCategory)
                     } else {
@@ -83,7 +84,11 @@ class CategorySyncWorker(appContext: Context, workerParams: WorkerParameters) : 
     }
 
 
-    private fun updateCategoryIds(ids: List<IdMapping>?, dbHelper: CategoryDatabaseHelper) {
+    private fun updateCategoryIds(
+        ids: List<IdMapping>?,
+        dbHelper: CategoryDatabaseHelper,
+        userId: String
+    ) {
         val transactionDatabaseHelper = TransactionDatabaseHelper(applicationContext)
         if (ids != null) {
             for (id in ids){
@@ -92,8 +97,8 @@ class CategorySyncWorker(appContext: Context, workerParams: WorkerParameters) : 
             }
         }
 
-        Log.d("dbHelper.getAllCategories()", "categories ${dbHelper.getAllCategories()}")
-        Log.d("getAllTransactions", "transactions ${transactionDatabaseHelper.getAllTransactions()}")
+        Log.d("dbHelper.getAllCategories()", "categories ${dbHelper.getAllCategories(userId)}")
+        Log.d("getAllTransactions", "transactions ${transactionDatabaseHelper.getAllTransactions(userId)}")
     }
 
     private fun markAsSynced(unSyncedCategories: List<Category>, dbHelper: CategoryDatabaseHelper) {

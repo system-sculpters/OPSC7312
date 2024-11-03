@@ -72,12 +72,13 @@ class GoalDatabaseHelper(context: Context){
         return db.update(GoalSchema.TABLE_NAME, contentValues, "${GoalSchema.COLUMN_ID} = ?", arrayOf(goal.id))
     }
 
-    // Method to get all goals from the database
-    fun getAllGoals(): List<Goal> {
+    // Method to get all goals from the database for a specific user
+    fun getAllGoals(userId: String): List<Goal> {
         val goalList = mutableListOf<Goal>()
         val db = dbHelper.readableDatabase
-        val selectQuery = "SELECT * FROM ${GoalSchema.TABLE_NAME}"
-        val cursor: Cursor = db.rawQuery(selectQuery, null)
+        // Include userId in the WHERE clause to filter goals by user
+        val selectQuery = "SELECT * FROM ${GoalSchema.TABLE_NAME} WHERE ${GoalSchema.COLUMN_USER_ID} = ?"
+        val cursor: Cursor = db.rawQuery(selectQuery, arrayOf(userId))
 
         if (cursor.moveToFirst()) {
             do {
@@ -99,12 +100,13 @@ class GoalDatabaseHelper(context: Context){
         return goalList
     }
 
-    // Method to get unsynced goals
-    fun getUnSyncedGoals(): List<Goal> {
+    // Method to get unsynced goals for a specific user
+    fun getUnSyncedGoals(userId: String): List<Goal> {
         val unSyncedList = mutableListOf<Goal>()
         val db = dbHelper.readableDatabase
-        val selectQuery = "SELECT * FROM ${GoalSchema.TABLE_NAME} WHERE ${GoalSchema.COLUMN_SYNC_STATUS} = 0"
-        val cursor: Cursor = db.rawQuery(selectQuery, null)
+        // Include userId in the WHERE clause to filter unsynced goals by user
+        val selectQuery = "SELECT * FROM ${GoalSchema.TABLE_NAME} WHERE ${GoalSchema.COLUMN_SYNC_STATUS} = 0 AND ${GoalSchema.COLUMN_USER_ID} = ?"
+        val cursor: Cursor = db.rawQuery(selectQuery, arrayOf(userId))
 
         if (cursor.moveToFirst()) {
             do {
@@ -125,6 +127,7 @@ class GoalDatabaseHelper(context: Context){
         db.close()
         return unSyncedList
     }
+
 
     // Method to mark a goal as synced
     fun markAsSynced(goalId: String) {

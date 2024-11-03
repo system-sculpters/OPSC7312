@@ -241,7 +241,9 @@ class CreateGoalFragment : Fragment() {
     }
 
     private fun getAllGoals(){
-        val goals = dbHelperProvider.getAllGoals()
+        val user = userManager.getUser()
+
+        val goals = dbHelperProvider.getAllGoals(user.id)
         Log.d("DB TEST", "categories: ${goals.size}")
 
         goals.forEach {

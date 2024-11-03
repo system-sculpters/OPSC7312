@@ -195,7 +195,9 @@ class CreateTransactionFragment : Fragment() {
     }
 
     private fun getCategories(){
-        val categories = dbHelperProvider.getAllCategories()
+        val user = userManager.getUser()
+
+        val categories = dbHelperProvider.getAllCategories(user.id)
 
         categories.forEach {
             // Log.d("DB TEST", "PIN: ${it.first}, Locker No: ${it.second}, timestamp: ${it.third}")

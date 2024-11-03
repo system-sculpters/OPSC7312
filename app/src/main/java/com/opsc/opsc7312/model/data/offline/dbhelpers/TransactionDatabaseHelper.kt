@@ -90,11 +90,12 @@ class TransactionDatabaseHelper(context: Context){
         }
     }
 
-    fun getAllTransactions(): List<Transaction> {
+    fun getAllTransactions(userId: String): List<Transaction> {
         val transactions = mutableListOf<Transaction>()
         val db = dbHelper.readableDatabase
-        val selectQuery = "SELECT * FROM ${TransactionSchema.TABLE_NAME}"
-        val cursor: Cursor = db.rawQuery(selectQuery, null)
+        // Include userId in the WHERE clause to filter transactions by user
+        val selectQuery = "SELECT * FROM ${TransactionSchema.TABLE_NAME} WHERE ${TransactionSchema.COLUMN_USER_ID} = ?"
+        val cursor: Cursor = db.rawQuery(selectQuery, arrayOf(userId))
 
         if (cursor.moveToFirst()) {
             do {
@@ -115,6 +116,7 @@ class TransactionDatabaseHelper(context: Context){
         db.close()
         return transactions
     }
+
 
     fun updateTransaction(transaction: Transaction): Boolean {
         val db = dbHelper.writableDatabase
@@ -149,12 +151,12 @@ class TransactionDatabaseHelper(context: Context){
         return result > 0
     }
 
-    // Sync Management
-    fun getUnSyncedTransactions(): List<Transaction> {
+    fun getUnSyncedTransactions(userId: String): List<Transaction> {
         val unSyncedList = mutableListOf<Transaction>()
         val db = dbHelper.readableDatabase
-        val selectQuery = "SELECT * FROM ${TransactionSchema.TABLE_NAME} WHERE ${TransactionSchema.COLUMN_SYNC_STATUS} = 0"
-        val cursor: Cursor = db.rawQuery(selectQuery, null)
+        // Update query to filter by both userId and sync status
+        val selectQuery = "SELECT * FROM ${TransactionSchema.TABLE_NAME} WHERE ${TransactionSchema.COLUMN_SYNC_STATUS} = 0 AND ${TransactionSchema.COLUMN_USER_ID} = ?"
+        val cursor: Cursor = db.rawQuery(selectQuery, arrayOf(userId))
 
         if (cursor.moveToFirst()) {
             do {
@@ -175,6 +177,7 @@ class TransactionDatabaseHelper(context: Context){
         db.close()
         return unSyncedList
     }
+
 
     fun updateCategoryId(localId: String, firebaseId: String): Boolean {
         val db = dbHelper.writableDatabase

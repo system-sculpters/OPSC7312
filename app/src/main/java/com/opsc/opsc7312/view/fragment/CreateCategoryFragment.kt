@@ -303,8 +303,9 @@ class CreateCategoryFragment : Fragment() {
 
     private fun getAllCategories(){
         //val pinData: MutableList<Triple<String, String, String>> = mutableListOf()
+        val user = userManager.getUser()
 
-        val categories = dbHelperProvider.getAllCategories()
+        val categories = dbHelperProvider.getAllCategories(user.id)
 
         categories.forEach {
             // Log.d("DB TEST", "PIN: ${it.first}, Locker No: ${it.second}, timestamp: ${it.third}")

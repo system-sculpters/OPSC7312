@@ -102,17 +102,23 @@ class StockFragment : Fragment() {
             )
         }} ZAR"
 
-        if(percentage!! >= 0){
-            binding.valueChange.text = "+${AppConstants.formatAmount(percentage!!)}%"
+        val percentageVal = percentageChange(selectedStock?.currentPrice!!, selectedStock?.previousClosePrice!!)
+
+        if(percentageVal!! >= 0){
+            binding.valueChange.text = "+${AppConstants.formatAmount(percentageVal!!)}%"
             binding.valueChange.setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
         } else{
-            binding.valueChange.text = "${AppConstants.formatAmount(percentage!!)}%"
+            binding.valueChange.text = "${AppConstants.formatAmount(percentageVal!!)}%"
             binding.valueChange.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
         }
 
         binding.fullName.text = selectedStock?.name
 
         binding.marketName.text = selectedStock?.symbol
+    }
+
+    private fun percentageChange(currentPrice: Double, previousClosePrice: Double): Double {
+        return ((currentPrice - previousClosePrice) / previousClosePrice) * 100;
     }
 
     private fun setupStocks() {

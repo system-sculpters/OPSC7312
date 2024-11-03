@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.opsc.opsc7312.AppConstants
 import com.opsc.opsc7312.MainActivity
 import com.opsc.opsc7312.R
 import com.opsc.opsc7312.databinding.FragmentGoalsBinding
@@ -106,12 +107,30 @@ class GoalsFragment : Fragment() {
     }
 
     private fun getGoals(){
+        val user = userManager.getUser()
+
         try {
-            val categories = dbHelperProvider.getAllGoals()
-            goalAdapter.updateGoals(categories)
+            val goals = dbHelperProvider.getAllGoals(user.id)
+            goalAdapter.updateGoals(goals)
+            updateGoalProgress(goals)
         } catch (e: Exception) {
             Log.e("DatabaseError", "Error inserting transaction", e)
         }
+    }
+
+    private fun updateGoalProgress(goals: List<Goal>) {
+        var totalCurrentAmount = 0.0  // Initialize total for current amounts.
+        var totalTargetAmount = 0.0    // Initialize total for target amounts.
+
+        // Iterate through each goal to accumulate the current and target amounts.
+        for (goal in goals) {
+            totalCurrentAmount += goal.currentamount
+            totalTargetAmount += goal.targetamount
+        }
+
+        // Update the TextView with the formatted amounts reflecting progress.
+        binding.amount.text = "${AppConstants.formatAmount(totalCurrentAmount)}/" +
+                "${AppConstants.formatAmount(totalTargetAmount)} ZAR"
     }
 
     //Redirects the user to the CreateGoalFragment to add a new goal.

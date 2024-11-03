@@ -123,9 +123,11 @@ class CategoriesFragment : Fragment() {
     }
 
     private fun getCategories(){
+        val user = userManager.getUser()
+
 
         try {
-            val categories = dbHelperProvider.getAllCategories()
+            val categories = dbHelperProvider.getAllCategories(user.id)
 
             // initialize first element as the create button
             val cat0 = Category(isCreateButton = true)
