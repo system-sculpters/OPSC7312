@@ -16,6 +16,7 @@ import com.opsc.opsc7312.R
 import com.opsc.opsc7312.databinding.FragmentCreateGoalBinding
 import com.opsc.opsc7312.model.api.controllers.GoalController
 import com.opsc.opsc7312.model.data.model.Goal
+import com.opsc.opsc7312.model.data.offline.DatabaseChangeListener
 import com.opsc.opsc7312.model.data.offline.dbhelpers.DatabaseHelperProvider
 import com.opsc.opsc7312.model.data.offline.dbhelpers.GoalDatabaseHelper
 import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
@@ -76,6 +77,8 @@ class CreateGoalFragment : Fragment() {
         notificationHandler = NotificationHandler(requireContext())
 
         dbHelperProvider = GoalDatabaseHelper(requireContext())
+
+        dbHelperProvider.setDatabaseChangeListener(activity as? DatabaseChangeListener)
 
         // Initialize the dialog for timeout handling
         timeOutDialog = TimeOutDialog()
@@ -233,7 +236,7 @@ class CreateGoalFragment : Fragment() {
             redirectToGoals()
         } else {
             // Handle the case where the category was not inserted
-            timeOutDialog.showAlertDialog(requireContext(), "Failed to create goal. Please try again.")
+            timeOutDialog.showAlertDialog(requireContext(), getString(R.string.create_goal_failed))
         }
     }
 

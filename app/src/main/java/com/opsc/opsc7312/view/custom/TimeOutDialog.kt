@@ -29,22 +29,22 @@ class TimeOutDialog {
         val dialogBuilder = AlertDialog.Builder(context)
 
         // Set the message and configure the buttons for the dialog.
-        dialogBuilder.setMessage("Connection timed out. Please check your connection and try again.")
+        dialogBuilder.setMessage(context.getString(R.string.connection_timeout))
             .setCancelable(false) // Prevent dialog from being canceled by tapping outside.
-            .setPositiveButton("Retry") { dialog, id ->
+            .setPositiveButton(context.getString(R.string.retry)) { dialog, id ->
                 // When "Retry" is clicked, invoke the onRetry callback and dismiss the dialog.
                 dialog.dismiss()
                 onRetry()
 
             }
-            .setNegativeButton("Cancel") { dialog, id ->
+            .setNegativeButton(context.getString(R.string.cancel_text)) { dialog, id ->
                 // When "Cancel" is clicked, simply dismiss the dialog without any action.
                 dialog.dismiss()
             }
 
         // Create the alert dialog instance and set its title.
         val alert = dialogBuilder.create()
-        alert.setTitle("Connection Timeout")
+        alert.setTitle(context.getString(R.string.connection_timeout_lbl))
         // Show the dialog to the user.
         alert.show()
     }

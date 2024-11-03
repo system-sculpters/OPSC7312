@@ -196,7 +196,7 @@ class SellStockFragment : Fragment() {
 
             // Handle changes in the status of goal retrieval (success or failure)
             if (status) {
-                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, "Goal creation successful!", hideProgressBar = true)
+                timeOutDialog.updateProgressDialog(requireContext(), progressDialog, getString(R.string.stock_sold), hideProgressBar = true)
 
                 // If the status indicates success, dismiss the progress dialog
 
@@ -268,9 +268,9 @@ class SellStockFragment : Fragment() {
 
     private fun showPopup(){
         AlertDialog.Builder(requireContext())
-            .setTitle("Stock Not Owned")
-            .setMessage("You don't own this stock.")
-            .setPositiveButton("OK") { _, _ ->
+            .setTitle(getString(R.string.stock_not_owned))
+            .setMessage(getString(R.string.dont_own))
+            .setPositiveButton(getString(R.string.ok)) { _, _ ->
                 // Redirect to Portfolio
                 redirectToPortfolio()
             }

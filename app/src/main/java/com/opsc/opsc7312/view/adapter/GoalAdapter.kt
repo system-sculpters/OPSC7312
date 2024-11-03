@@ -50,7 +50,7 @@ class GoalAdapter(private val onItemClick: (Goal) -> Unit) :
 
         // Check the deadline and update the TextView accordingly
         if (goal.deadline == 0L) {
-            holder.deadline.text = "No deadline" // Display "No deadline" if the deadline is 0
+            holder.deadline.text = holder.itemView.context.getString(R.string.no_deadline) // Display "No deadline" if the deadline is 0
         } else {
             holder.deadline.text = AppConstants.convertLongToString(goal.deadline) // Convert and display the deadline
         }

@@ -83,7 +83,7 @@ class TransactionAdapter(private val onItemClick: (Transaction) -> Unit) : Recyc
 
         // Set transaction details
         holder.transactionName.text = transaction.name
-        holder.isRecurring.text = if (transaction.isrecurring) "Recurring payment" else "One-time payment"
+        holder.isRecurring.text = if (transaction.isrecurring) holder.itemView.context.getString(R.string.recurring_payment) else holder.itemView.context.getString(R.string.one_time_payment)
         holder.amount.text = "${AppConstants.formatAmount(transaction.amount)} ZAR"
 
         // Set color of amount based on transaction type (Income or Expense)

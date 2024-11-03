@@ -206,5 +206,22 @@
 
     <string name="more_or_equal_zero">• Quantity must be zero or more.</string>
     <string name="more_than_owned">• Quantity exceeds the amount you own.</string>
+    <string name="recurring_payment">Recurring payment</string>
+    <string name="one_time_payment">One-time payment</string>
+    <string name="stock_price">Stock Price</string>
+    <string name="no_deadline">No deadline</string>
+    <string name="connection_timeout">Connection timed out. Please check your connection and try again.</string>
+    <string name="retry">Retry</string>
+    <string name="connection_timeout_lbl">Connection Timeout</string>
+    <string name="one_year">1 Year</string>
+    <string name="three_months">3 Months</string>
+    <string name="six_months">6 Months</string>
+    <string name="stock_not_owned">Stock Not Owned</string>
+    <string name="ok">OK</string>
+    <string name="dont_own">You don\'t own this stock.</string>
+    <string name="stock_sold">Stock sold successfully</string>
+    <string name="create_category_failed">Failed to create category. Please try again.</string>
+    <string name="create_goal_failed">Failed to create goal. Please try again.</string>
+    <string name="create_transaction_failed">Failed to create transaction. Please try again.</string>
 
 </resources>

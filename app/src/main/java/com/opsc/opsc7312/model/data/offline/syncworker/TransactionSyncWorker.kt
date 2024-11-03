@@ -10,8 +10,10 @@ import com.opsc.opsc7312.model.data.model.Transaction
 import com.opsc.opsc7312.model.data.offline.dbhelpers.TransactionDatabaseHelper
 import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
 import com.opsc.opsc7312.model.data.offline.preferences.UserManager
+import com.opsc.opsc7312.view.custom.NotificationHandler
 
 class TransactionSyncWorker (appContext: Context, workerParams: WorkerParameters) : CoroutineWorker(appContext, workerParams) {
+    private var notificationHandler: NotificationHandler = NotificationHandler(applicationContext)
     override suspend fun doWork(): Result {
         val transactionDbHelper = TransactionDatabaseHelper(applicationContext)
         val tokenManager = TokenManager.getInstance(applicationContext)
@@ -65,8 +67,11 @@ class TransactionSyncWorker (appContext: Context, workerParams: WorkerParameters
                         // Optionally update the local goal if needed
                     }
                 }
+                notificationHandler.showNotification("Sync Successful", "Goals synced successfully!")
+
                 Result.success()
             } else {
+                notificationHandler.showNotification("Sync Failed", "Failed to sync categories. Please check your internet connection.")
                 Result.failure()
             }
         } else {

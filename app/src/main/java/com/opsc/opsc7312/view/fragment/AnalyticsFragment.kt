@@ -154,7 +154,7 @@ class AnalyticsFragment : Fragment() {
 
     // Sets up the spinner for selecting time periods like "1 Year", "6 Months", etc.
     private fun setupPowerSpinner() {
-        val months = listOf("1 Year", "6 Months", "3 Months")
+        val months = listOf(getString(R.string.one_year), getString(R.string.six_months), getString(R.string.three_months))
 
         binding.months.setItems(months)
 

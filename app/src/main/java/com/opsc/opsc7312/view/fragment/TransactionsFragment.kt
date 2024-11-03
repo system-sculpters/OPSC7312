@@ -62,7 +62,7 @@ class TransactionsFragment : Fragment() {
     private lateinit var dbHelperProvider: TransactionDatabaseHelper
     private lateinit var categoryDatabaseHelper: CategoryDatabaseHelper
 
-    override fun onCreateView(
+     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {

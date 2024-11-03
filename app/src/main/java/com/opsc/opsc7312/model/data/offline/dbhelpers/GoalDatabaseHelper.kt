@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
 import com.opsc.opsc7312.model.data.model.Category
 import com.opsc.opsc7312.model.data.model.Goal
+import com.opsc.opsc7312.model.data.offline.DatabaseChangeListener
 import com.opsc.opsc7312.model.data.offline.schema.CategorySchema
 import com.opsc.opsc7312.model.data.offline.schema.GoalSchema
 import java.sql.SQLException
@@ -15,6 +16,11 @@ import java.sql.SQLException
 class GoalDatabaseHelper(context: Context){
     private val dbHelper = DatabaseHelperProvider(context)
 
+    private var changeListener: DatabaseChangeListener? = null
+
+    fun setDatabaseChangeListener(listener: DatabaseChangeListener?) {
+        this.changeListener = listener
+    }
     // Method to insert a new goal into the database
     fun insertGoal(goal: Goal): Long {
         val db = dbHelper.writableDatabase
@@ -29,6 +35,8 @@ class GoalDatabaseHelper(context: Context){
             put(GoalSchema.COLUMN_CONTRIBUTION_AMOUNT, goal.contributionamount)
             put(GoalSchema.COLUMN_SYNC_STATUS, 0)  // Mark as unsynced
         }
+        changeListener?.onGoalsChanged()
+
         return db.insert(GoalSchema.TABLE_NAME, null, contentValues)
     }
 

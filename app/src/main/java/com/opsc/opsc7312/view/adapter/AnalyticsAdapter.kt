@@ -195,14 +195,14 @@ class AnalyticsAdapter(
         }
 
         // Creating datasets for income and expenses
-        val incomeDataSet = BarDataSet(incomeEntries, "Income")
+        val incomeDataSet = BarDataSet(incomeEntries, context.getString(R.string.income))
 
         val greenResId = getColor("Green") ?: R.color.black // Default to black if color not found
         val colorGreen = ContextCompat.getColor(context, greenResId)
         incomeDataSet.color = colorGreen  // Set color for income bars
         incomeDataSet.valueTextColor = textColor
 
-        val expenseDataSet = BarDataSet(expenseEntries, "Expense")
+        val expenseDataSet = BarDataSet(expenseEntries, context.getString(R.string.expense))
 
         val redResId = getColor("Red") ?: R.color.black // Default to black if color not found
         val colorRed = ContextCompat.getColor(context, redResId)
@@ -280,7 +280,7 @@ class AnalyticsAdapter(
         }
 
         // Creating the dataset for income
-        val incomeDataSet = BarDataSet(incomeEntries, "Income")
+        val incomeDataSet = BarDataSet(incomeEntries, context.getString(R.string.income))
 
         // Setting color for income bars
         val colorBlue = ContextCompat.getColor(context, R.color.blue)  // Replace with your desired color

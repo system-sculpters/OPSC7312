@@ -40,7 +40,7 @@ class StockHistoryAdapter(private val context: Context, private val lineChart: L
     }
 
     private fun setupGraph(entries: List<Entry>) {
-        val lineDataSet = LineDataSet(entries, "Stock Price")
+        val lineDataSet = LineDataSet(entries, context.getString(R.string.stock_price))
         lineDataSet.color = ContextCompat.getColor(context, R.color.blue)
         lineDataSet.valueTextColor = ContextCompat.getColor(context, R.color.black)
         lineDataSet.valueTextSize = 12f

@@ -4,12 +4,18 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import com.opsc.opsc7312.model.data.model.Category
+import com.opsc.opsc7312.model.data.offline.DatabaseChangeListener
 import com.opsc.opsc7312.model.data.offline.schema.CategorySchema
 import com.opsc.opsc7312.model.data.offline.schema.GoalSchema
 
 class CategoryDatabaseHelper (context: Context) {
     private val dbHelper = DatabaseHelperProvider(context)
 
+    private var changeListener: DatabaseChangeListener? = null
+
+    fun setDatabaseChangeListener(listener: DatabaseChangeListener?) {
+        this.changeListener = listener
+    }
     // Method to insert a new category into the database
     fun insertCategory(category: Category): Long {
         val db = dbHelper.writableDatabase
@@ -24,6 +30,9 @@ class CategoryDatabaseHelper (context: Context) {
         }
         val id = db.insert(CategorySchema.TABLE_NAME, null, contentValues)
         db.close()
+
+        changeListener?.onDatabaseChanged()
+
         return id
     }
 

@@ -26,6 +26,7 @@ import com.opsc.opsc7312.model.api.controllers.CategoryController
 import com.opsc.opsc7312.model.api.controllers.TransactionController
 import com.opsc.opsc7312.model.data.model.Category
 import com.opsc.opsc7312.model.data.model.Transaction
+import com.opsc.opsc7312.model.data.offline.DatabaseChangeListener
 import com.opsc.opsc7312.model.data.offline.dbhelpers.CategoryDatabaseHelper
 import com.opsc.opsc7312.model.data.offline.dbhelpers.DatabaseHelperProvider
 import com.opsc.opsc7312.model.data.offline.dbhelpers.GoalDatabaseHelper
@@ -106,14 +107,16 @@ class CreateTransactionFragment : Fragment() {
 
         // Initialize ViewModels for transaction and category management
         transactionViewModel = ViewModelProvider(this).get(TransactionController::class.java)
-        categoryViewModel = ViewModelProvider(this).get(CategoryController::class.java)
 
+        categoryViewModel = ViewModelProvider(this).get(CategoryController::class.java)
 
         notificationHandler = NotificationHandler(requireContext())
 
         dbHelperProvider = CategoryDatabaseHelper(requireContext())
 
+
         transactionDatabaseHelper = TransactionDatabaseHelper(requireContext())
+        transactionDatabaseHelper.setDatabaseChangeListener(activity as? DatabaseChangeListener)
 
         // Initialize the TimeOutDialog instance
         timeOutDialog = TimeOutDialog()
@@ -248,7 +251,7 @@ class CreateTransactionFragment : Fragment() {
             redirectToTransactions()
         } else {
             // Handle the case where the category was not inserted
-            timeOutDialog.showAlertDialog(requireContext(), "Failed to create transaction. Please try again.")
+            timeOutDialog.showAlertDialog(requireContext(), getString(R.string.create_transaction_failed))
         }
     }
 

@@ -18,6 +18,8 @@ import com.opsc.opsc7312.model.api.controllers.AuthController
 import com.opsc.opsc7312.model.api.controllers.TransactionController
 import com.opsc.opsc7312.model.data.model.Transaction
 import com.opsc.opsc7312.model.data.model.User
+import com.opsc.opsc7312.model.data.offline.dbhelpers.CategoryDatabaseHelper
+import com.opsc.opsc7312.model.data.offline.dbhelpers.TransactionDatabaseHelper
 import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
 import com.opsc.opsc7312.model.data.offline.preferences.UserManager
 import com.opsc.opsc7312.view.adapter.TransactionAdapter
@@ -48,6 +50,10 @@ class HomeFragment : Fragment() {
     // Dialog for handling timeout scenarios
     private lateinit var timeOutDialog: TimeOutDialog
 
+    private lateinit var dbHelperProvider: TransactionDatabaseHelper
+    private lateinit var categoryDatabaseHelper: CategoryDatabaseHelper
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -62,6 +68,9 @@ class HomeFragment : Fragment() {
         // Initialize ViewModels for transactions and authentication
         transactionViewModel = ViewModelProvider(this).get(TransactionController::class.java)
         authController = ViewModelProvider(this).get(AuthController::class.java)
+
+        dbHelperProvider = TransactionDatabaseHelper(requireContext())
+        categoryDatabaseHelper = CategoryDatabaseHelper(requireContext())
 
         // Initialize the timeout dialog for connection issues
         timeOutDialog = TimeOutDialog()
@@ -82,7 +91,8 @@ class HomeFragment : Fragment() {
         }
 
         // Set up user details in the UI
-        setUpUserDetails()
+        //setUpUserDetails()
+        getTransactions()
 
         // Set up the RecyclerView to display transactions
         setUpRecyclerView()
@@ -99,6 +109,57 @@ class HomeFragment : Fragment() {
         (activity as? MainActivity)?.setToolbarTitle(getString(R.string.home))
     }
 
+    private fun getTransactions(){
+
+        try {
+            val transactions = dbHelperProvider.getAllTransactions()
+            setUpData(transactions)
+            val firstThree = transactions.take(3)
+            updateTransactionCategory(transactions = firstThree)
+            transactionAdapter.updateTransactions(firstThree)
+        } catch (e: Exception) {
+            Log.e("DatabaseError", "Error inserting transaction", e)
+        }
+    }
+
+    private fun updateTransactionCategory(transactions: List<Transaction>){
+        for (transaction in transactions){
+            val category = categoryDatabaseHelper.getCategoryById(transaction.categoryId)
+
+            if (category != null) {
+                transaction.category = category
+            }
+        }
+    }
+
+    // Calculates and updates the income, expense, and balance amounts based on the provided list of transactions.
+    private fun setUpData(transactionList: List<Transaction>) {
+        var totalIncome = 0.0  // Initialize total for income amounts.
+        var totalExpense = 0.0  // Initialize total for expense amounts.
+
+        // Create separate lists to hold income and expense transactions.
+        val income: ArrayList<Transaction> = arrayListOf()
+        val expenses: ArrayList<Transaction> = arrayListOf()
+
+        // Iterate through each transaction to categorize them as income or expense.
+        for (transaction in transactionList) {
+            if (transaction.type == "INCOME") {
+                income.add(transaction)           // Add to income list.
+                totalIncome += transaction.amount  // Accumulate total income.
+            } else {
+                expenses.add(transaction)         // Add to expenses list.
+                totalExpense += transaction.amount  // Accumulate total expenses.
+            }
+        }
+
+        // Calculate the overall balance by subtracting total expenses from total income.
+        val totalBalance: Double = totalIncome - totalExpense
+
+        // Update the TextViews with the formatted amounts reflecting balance, income, and expenses.
+        "${AppConstants.formatAmount(totalBalance)} ZAR".also { binding.amount.text = it }
+        "${AppConstants.formatAmount(totalIncome)} ZAR".also { binding.incomeAmount.text = it }
+        "${AppConstants.formatAmount(totalExpense)} ZAR".also { binding.expenseAmount.text = it }
+    }
     // Sets up user details in the UI, including username and email.
     // Observes the ViewModel for transactions if a valid token is present.
     private fun setUpUserDetails() {

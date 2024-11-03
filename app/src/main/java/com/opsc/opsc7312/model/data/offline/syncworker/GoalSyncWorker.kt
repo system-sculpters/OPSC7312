@@ -10,8 +10,10 @@ import com.opsc.opsc7312.model.data.model.IdMapping
 import com.opsc.opsc7312.model.data.offline.dbhelpers.GoalDatabaseHelper
 import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
 import com.opsc.opsc7312.model.data.offline.preferences.UserManager
+import com.opsc.opsc7312.view.custom.NotificationHandler
 
 class GoalSyncWorker (appContext: Context, workerParams: WorkerParameters) : CoroutineWorker(appContext, workerParams) {
+    private var notificationHandler: NotificationHandler = NotificationHandler(applicationContext)
     override suspend fun doWork(): Result {
         val goalDbHelper = GoalDatabaseHelper(applicationContext)
         val tokenManager = TokenManager.getInstance(applicationContext)
@@ -63,8 +65,11 @@ class GoalSyncWorker (appContext: Context, workerParams: WorkerParameters) : Cor
                         // Optionally update the local goal if needed
                     }
                 }
+                notificationHandler.showNotification("Sync Successful", "Goals synced successfully!")
                 Result.success()
             } else {
+                notificationHandler.showNotification("Sync Failed", "Failed to sync categories. Please check your internet connection.")
+
                 Result.failure()
             }
         } else {

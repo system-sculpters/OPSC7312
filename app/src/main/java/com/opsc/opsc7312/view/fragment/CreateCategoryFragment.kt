@@ -29,6 +29,7 @@ import com.opsc.opsc7312.model.api.controllers.CategoryController
 import com.opsc.opsc7312.model.api.controllers.GoalController
 import com.opsc.opsc7312.model.data.model.Category
 import com.opsc.opsc7312.model.data.model.Color
+import com.opsc.opsc7312.model.data.offline.DatabaseChangeListener
 import com.opsc.opsc7312.model.data.offline.dbhelpers.CategoryDatabaseHelper
 import com.opsc.opsc7312.model.data.offline.dbhelpers.DatabaseHelperProvider
 import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
@@ -120,7 +121,7 @@ class CreateCategoryFragment : Fragment() {
         notificationHandler = NotificationHandler(requireContext())
 
         dbHelperProvider = CategoryDatabaseHelper(requireContext())
-
+        dbHelperProvider.setDatabaseChangeListener(activity as? DatabaseChangeListener)
         // Get contribution types from app constants
         contributionTypes = AppConstants.TRANSACTIONTYPE.entries.map { it.name }
 
@@ -296,7 +297,7 @@ class CreateCategoryFragment : Fragment() {
             redirectToCategories()
         } else {
             // Handle the case where the category was not inserted
-            timeOutDialog.showAlertDialog(requireContext(), "Failed to create category. Please try again.")
+            timeOutDialog.showAlertDialog(requireContext(), getString(R.string.create_category_failed))
         }
     }
 

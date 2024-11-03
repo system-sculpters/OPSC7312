@@ -7,12 +7,18 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
 import com.opsc.opsc7312.model.data.model.Transaction
+import com.opsc.opsc7312.model.data.offline.DatabaseChangeListener
 import com.opsc.opsc7312.model.data.offline.schema.CategorySchema
 import com.opsc.opsc7312.model.data.offline.schema.TransactionSchema
 
 class TransactionDatabaseHelper(context: Context){
     private val dbHelper = DatabaseHelperProvider(context)
 
+    private var changeListener: DatabaseChangeListener? = null
+
+    fun setDatabaseChangeListener(listener: DatabaseChangeListener?) {
+        this.changeListener = listener
+    }
     // Transaction Management
     fun addTransaction(transaction: Transaction): Boolean {
         val db = dbHelper.writableDatabase
@@ -29,6 +35,8 @@ class TransactionDatabaseHelper(context: Context){
         }
         val result = db.insert(TransactionSchema.TABLE_NAME, null, values)
         db.close()
+        changeListener?.onTransactionsChanged()
+
         return result != -1L
     }
 
@@ -207,7 +215,7 @@ class TransactionDatabaseHelper(context: Context){
         db.close()
     }
 
-    fun markCategoryForDeletion(goalId: String): Int {
+    fun markTransactionForDeletion(goalId: String): Int {
         val db = dbHelper.writableDatabase
         val contentValues = ContentValues().apply {
             put(TransactionSchema.COLUMN_SYNC_STATUS, -1)  // Mark for deletion

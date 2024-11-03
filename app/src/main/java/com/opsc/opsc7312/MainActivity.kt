@@ -17,15 +17,19 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.work.Constraints
+import androidx.work.CoroutineWorker
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import androidx.work.Worker
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.opsc.opsc7312.databinding.ActivityMainBinding
 import com.opsc.opsc7312.model.api.controllers.AuthController
+import com.opsc.opsc7312.model.data.model.Goal
+import com.opsc.opsc7312.model.data.offline.DatabaseChangeListener
 import com.opsc.opsc7312.model.data.offline.dbhelpers.DatabaseHelperProvider
 import com.opsc.opsc7312.model.data.offline.preferences.TokenManager
 import com.opsc.opsc7312.model.data.offline.preferences.UserManager
@@ -35,6 +39,7 @@ import com.opsc.opsc7312.model.data.offline.syncworker.CategorySyncWorker
 import com.opsc.opsc7312.model.data.offline.syncworker.TransactionSyncWorker
 import com.opsc.opsc7312.view.activity.InvestmentActivity
 import com.opsc.opsc7312.view.activity.LoginActivity
+import com.opsc.opsc7312.view.custom.NotificationHandler
 import com.opsc.opsc7312.view.fragment.AnalyticsFragment
 import com.opsc.opsc7312.view.fragment.CategoriesFragment
 import com.opsc.opsc7312.view.fragment.CreateTransactionFragment
@@ -46,7 +51,7 @@ import com.opsc.opsc7312.view.fragment.TransactionsFragment
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, DatabaseChangeListener {
 
     // Binding object for activity_main layout to access UI elements
     private lateinit var binding: ActivityMainBinding
@@ -73,6 +78,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private val firebaseAuth = FirebaseAuth.getInstance()
 
     private lateinit var dbHelperProvider: DatabaseHelperProvider
+
+    private lateinit var notificationHandler: NotificationHandler
+
+    private var isInitialized = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // Load the selected theme before setting the content view
@@ -114,15 +123,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         userManager = UserManager.getInstance(this)
         auth = ViewModelProvider(this).get(AuthController::class.java)
 
+        notificationHandler = NotificationHandler(this)
+
         //////////////////////////////////////////////////////////////////////////////////////////////////
         setupBottomNavigation()  // Initialize bottom navigation
         setupNavigationView()    // Initialize navigation drawer
 
+        isInitialized = true
 
         val connectivityReceiver = ConnectivityReceiver {
-            enqueueCategorySyncWorker(this)
-            enqueueGoalSyncWorker(this)
-            enqueueTransactionSyncWorker(this)
+            enqueueImmediateSyncWorker<CategorySyncWorker>(this)
+            enqueueImmediateSyncWorker<GoalSyncWorker>(this)
+            enqueueImmediateSyncWorker<TransactionSyncWorker>(this)
         }
 
         this.registerReceiver(connectivityReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
@@ -145,57 +157,44 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    private fun enqueueGoalSyncWorker(context: Context) {
+    override fun onDatabaseChanged() {
+        // Call sync worker to upload local changes
+        if (isInitialized) {
+            // Call sync worker to upload local changes
+            enqueueImmediateSyncWorker<CategorySyncWorker>(this)
+        }
+    }
+
+    override fun onGoalsChanged() {
+        // Call sync worker to upload local changes
+        if (isInitialized) {
+            // Call sync worker to upload local changes
+            enqueueImmediateSyncWorker<GoalSyncWorker>(this)
+        }
+    }
+
+     override fun onTransactionsChanged() {
+         // Call sync worker to upload local changes
+         if (isInitialized) {
+             // Call sync worker to upload local changes
+             enqueueImmediateSyncWorker<TransactionSyncWorker>(this)
+         }
+     }
+
+
+
+    private inline fun <reified T : CoroutineWorker> enqueueImmediateSyncWorker(context: Context) {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
-        val syncRequest = PeriodicWorkRequestBuilder<GoalSyncWorker>(15, TimeUnit.MINUTES)
+        val syncRequest = OneTimeWorkRequestBuilder<T>()
             .setConstraints(constraints)
             .build()
 
         WorkManager.getInstance(context).enqueue(syncRequest)
-
-//        WorkManager.getInstance(context).enqueueUniquePeriodicWork(
-//            "GoalSyncWorker",
-//            ExistingPeriodicWorkPolicy.KEEP,  // Keeps the existing periodic work
-//            syncRequest
-//        )
     }
 
-    private fun enqueueCategorySyncWorker(context: Context) {
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
-
-        val syncRequest = PeriodicWorkRequestBuilder<CategorySyncWorker>(15, TimeUnit.MINUTES)
-            .setConstraints(constraints)
-            .build()
-
-        WorkManager.getInstance(context).enqueue(syncRequest)
-//        WorkManager.getInstance(context).enqueueUniquePeriodicWork(
-//            "CategorySyncWorker",
-//            ExistingPeriodicWorkPolicy.KEEP,  // Keeps the existing periodic work
-//            syncRequest
-//        )
-    }
-
-    private fun enqueueTransactionSyncWorker(context: Context) {
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
-
-        val syncRequest = PeriodicWorkRequestBuilder<TransactionSyncWorker>(15, TimeUnit.MINUTES)
-            .setConstraints(constraints)
-            .build()
-
-        WorkManager.getInstance(context).enqueue(syncRequest)
-//        WorkManager.getInstance(context).enqueueUniquePeriodicWork(
-//            "TransactionSyncWorker",
-//            ExistingPeriodicWorkPolicy.KEEP,  // Keeps the existing periodic work
-//            syncRequest
-//        )
-    }
 
     // Loads the theme preference from SharedPreferences and applies it
     private fun loadAndApplyTheme() {
@@ -318,5 +317,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         config.setLocale(locale) // Set the locale in the configuration
 
         resources.updateConfiguration(config, resources.displayMetrics)
+    }
+
+    private fun syncNotification(title: String, message: String){
+        notificationHandler.createNotificationChannel()
+        notificationHandler.showNotification(title, message)
+
     }
 }
