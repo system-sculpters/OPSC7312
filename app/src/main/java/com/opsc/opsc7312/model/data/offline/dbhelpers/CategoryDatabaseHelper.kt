@@ -31,7 +31,7 @@ class CategoryDatabaseHelper (context: Context) {
         val id = db.insert(CategorySchema.TABLE_NAME, null, contentValues)
         db.close()
 
-        changeListener?.onDatabaseChanged()
+        //changeListener?.onDatabaseChanged()
 
         return id
     }

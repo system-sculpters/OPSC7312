@@ -35,7 +35,7 @@ class TransactionDatabaseHelper(context: Context){
         }
         val result = db.insert(TransactionSchema.TABLE_NAME, null, values)
         db.close()
-        changeListener?.onTransactionsChanged()
+        //changeListener?.onTransactionsChanged()
 
         return result != -1L
     }

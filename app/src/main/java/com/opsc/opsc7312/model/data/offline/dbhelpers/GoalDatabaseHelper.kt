@@ -35,7 +35,7 @@ class GoalDatabaseHelper(context: Context){
             put(GoalSchema.COLUMN_CONTRIBUTION_AMOUNT, goal.contributionamount)
             put(GoalSchema.COLUMN_SYNC_STATUS, 0)  // Mark as unsynced
         }
-        changeListener?.onGoalsChanged()
+        //changeListener?.onGoalsChanged()
 
         return db.insert(GoalSchema.TABLE_NAME, null, contentValues)
     }

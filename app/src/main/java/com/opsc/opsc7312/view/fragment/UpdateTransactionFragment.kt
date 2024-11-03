@@ -62,7 +62,7 @@ class UpdateTransactionFragment : Fragment() {
     private var isRecurring = true
 
     // Variables to hold selected category information
-    private var selectedIconName: String = getString(R.string.icon_selection)
+    private var selectedIconName: String = ""
     private var selectedCategoryId: String = ""
 
     // Dialog for timeout handling
@@ -105,6 +105,8 @@ class UpdateTransactionFragment : Fragment() {
             setUpCategory(selectedCategory)
             iconPickerDialog.dismiss()
         }
+
+        selectedIconName = getString(R.string.icon_selection)
 
         // Set up toggle buttons and input fields
         toggleButton()
