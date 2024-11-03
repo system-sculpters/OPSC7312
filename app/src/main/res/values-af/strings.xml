@@ -200,4 +200,25 @@
     <string name="enter_a_quantity">• Voer n hoeveelheid in</string>
     <string name="int_quantity">• Hoeveelheid moet n heelgetal wees</string>
 
+
+    <string name="more_or_equal_zero">• Hoeveelheid moet nul of meer wees.</string>
+    <string name="more_than_owned">• Hoeveelheid oorskry wat jy besit.</string>
+    <string name="recurring_payment">Herhalende betaling</string>
+    <string name="one_time_payment">Eenmalige betaling</string>
+    <string name="stock_price">Aandeleprys</string>
+    <string name="no_deadline">Geen sperdatum</string>
+    <string name="connection_timeout">Verbinding het uitgeput. Kontroleer asseblief jou verbinding en probeer weer.</string>
+    <string name="retry">Probeer weer</string>
+    <string name="connection_timeout_lbl">Verbindings Timeout</string>
+    <string name="one_year">1 Jaar</string>
+    <string name="three_months">3 Maande</string>
+    <string name="six_months">6 Maande</string>
+    <string name="stock_not_owned">Aandeel Nie Besit</string>
+    <string name="ok">OK</string>
+    <string name="dont_own">Jy besit nie hierdie aandeel nie.</string>
+    <string name="stock_sold">Aandeel suksesvol verkoop</string>
+    <string name="create_category_failed">Kon nie kategorie skep nie. Probeer asseblief weer.</string>
+    <string name="create_goal_failed">Kon nie doelwit skep nie. Probeer asseblief weer.</string>
+    <string name="create_transaction_failed">Kon nie transaksie skep nie. Probeer asseblief weer.</string>
+
 </resources>

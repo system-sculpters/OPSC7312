@@ -198,4 +198,25 @@
     <string name="enter_a_quantity">• Faka inani</string>
     <string name="int_quantity">• Inani kumele libe yisibalo esiphelele</string>
 
+
+    <string name="more_or_equal_zero">• Inani kumele libe ngu-zero noma ngaphezulu.</string>
+    <string name="more_than_owned">• Inani lidlula lokho onakho.</string>
+    <string name="recurring_payment">Inkokhelo ephindaphindwayo</string>
+    <string name="one_time_payment">Inkokhelo eyodwa kuphela</string>
+    <string name="stock_price">Intengo yesitoko</string>
+    <string name="no_deadline">Awekho usuku lokugcina</string>
+    <string name="connection_timeout">Uxhumano luphelile isikhathi. Sicela uhlole uxhumano bese uzama futhi.</string>
+    <string name="retry">Zama futhi</string>
+    <string name="connection_timeout_lbl">Ukuphela kwesikhathi soxhumano</string>
+    <string name="one_year">1 Unyaka</string>
+    <string name="three_months">3 Izinyanga</string>
+    <string name="six_months">6 Izinyanga</string>
+    <string name="stock_not_owned">Isitoko Asingekho</string>
+    <string name="ok">OK</string>
+    <string name="dont_own">Awunaso lesi sitoko.</string>
+    <string name="stock_sold">Isitoko sidayiswe ngempumelelo</string>
+    <string name="create_category_failed">Yehlulekile ukudala isigaba. Sicela uzame futhi.</string>
+    <string name="create_goal_failed">Yehlulekile ukudala inhloso. Sicela uzame futhi.</string>
+    <string name="create_transaction_failed">Yehlulekile ukudala ukuthengiselana. Sicela uzame futhi.</string>
+
 </resources>
