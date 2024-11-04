@@ -22,7 +22,8 @@ class NotificationHandler (private val context: Context){
     fun createNotificationChannel(){
         // This method was taken from YouTube
         // https://youtu.be/urn355_ymNA?si=ST8_Uds_m2zauUd7
-        //
+        // Philipp Lackner
+        // https://www.youtube.com/@PhilippLackner
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val importance = NotificationManager.IMPORTANCE_DEFAULT
             val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, importance).apply {
@@ -39,6 +40,11 @@ class NotificationHandler (private val context: Context){
     }
 
     fun showNotification(title: String, message: String) {
+        // This method was taken from YouTube
+        // https://youtu.be/urn355_ymNA?si=ST8_Uds_m2zauUd7
+        // Philipp Lackner
+        // https://www.youtube.com/@PhilippLackner
+
         // Check for notification permission (required for Android 13 and above)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS)

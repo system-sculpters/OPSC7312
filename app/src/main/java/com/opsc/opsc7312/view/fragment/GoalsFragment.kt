@@ -107,6 +107,10 @@ class GoalsFragment : Fragment() {
     }
 
     private fun getGoals(){
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/android-sqlite-database-in-kotlin/
+        // scoder13
+        // https://www.geeksforgeeks.org/user/scoder13/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         val user = userManager.getUser()
 
         try {

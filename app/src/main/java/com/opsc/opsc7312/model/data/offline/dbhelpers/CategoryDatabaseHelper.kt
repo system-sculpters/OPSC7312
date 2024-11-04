@@ -9,6 +9,10 @@ import com.opsc.opsc7312.model.data.offline.schema.CategorySchema
 import com.opsc.opsc7312.model.data.offline.schema.GoalSchema
 
 class CategoryDatabaseHelper (context: Context) {
+    // This class was adapted from geeksforgeeks
+    // https://www.geeksforgeeks.org/android-sqlite-database-in-kotlin/
+    // scoder13
+    // https://www.geeksforgeeks.org/user/scoder13/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
     private val dbHelper = DatabaseHelperProvider(context)
 
     private var changeListener: DatabaseChangeListener? = null
@@ -18,6 +22,10 @@ class CategoryDatabaseHelper (context: Context) {
     }
     // Method to insert a new category into the database
     fun insertCategory(category: Category): Long {
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/android-sqlite-database-in-kotlin/
+        // scoder13
+        // https://www.geeksforgeeks.org/user/scoder13/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         val db = dbHelper.writableDatabase
         val contentValues = ContentValues().apply {
             put(CategorySchema.COLUMN_ID, category.id)
@@ -37,6 +45,10 @@ class CategoryDatabaseHelper (context: Context) {
     }
 
     fun insertCategorySync(category: Category): Long {
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/android-sqlite-database-in-kotlin/
+        // scoder13
+        // https://www.geeksforgeeks.org/user/scoder13/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         val db = dbHelper.writableDatabase
         val contentValues = ContentValues().apply {
             put(CategorySchema.COLUMN_ID, category.id)
@@ -54,6 +66,10 @@ class CategoryDatabaseHelper (context: Context) {
 
     // Method to update an existing category
     fun updateCategory(category: Category): Int {
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/android-sqlite-database-in-kotlin/
+        // scoder13
+        // https://www.geeksforgeeks.org/user/scoder13/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         val db = dbHelper.writableDatabase
         val contentValues = ContentValues().apply {
             put(CategorySchema.COLUMN_NAME, category.name)
@@ -70,6 +86,10 @@ class CategoryDatabaseHelper (context: Context) {
 
     // Method to get all categories for a specific user from the database
     fun getAllCategories(userId: String): List<Category> {
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/android-sqlite-database-in-kotlin/
+        // scoder13
+        // https://www.geeksforgeeks.org/user/scoder13/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         val categoryList = mutableListOf<Category>()
         val db = dbHelper.readableDatabase
 
@@ -98,8 +118,12 @@ class CategoryDatabaseHelper (context: Context) {
         return categoryList
     }
 
-
+    // method to get category by id
     fun getCategoryById(categoryId: String): Category? {
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/android-sqlite-database-in-kotlin/
+        // scoder13
+        // https://www.geeksforgeeks.org/user/scoder13/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         val db = dbHelper.readableDatabase
         var category: Category? = null
         val cursor = db.rawQuery("SELECT * FROM ${CategorySchema.TABLE_NAME} WHERE ${CategorySchema.COLUMN_ID} = ?", arrayOf(categoryId))
@@ -121,6 +145,10 @@ class CategoryDatabaseHelper (context: Context) {
     }
 
     fun updateCategoryId(localId: String, firebaseId: String): Boolean {
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/android-sqlite-database-in-kotlin/
+        // scoder13
+        // https://www.geeksforgeeks.org/user/scoder13/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
             put(CategorySchema.COLUMN_ID, firebaseId) // Update local ID with Firebase ID
@@ -137,6 +165,10 @@ class CategoryDatabaseHelper (context: Context) {
 
     // Method to get unsynced categories for a specific user
     fun getUnSyncedCategories(userId: String): List<Category> {
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/android-sqlite-database-in-kotlin/
+        // scoder13
+        // https://www.geeksforgeeks.org/user/scoder13/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         val unSyncedList = mutableListOf<Category>()
         val db = dbHelper.readableDatabase
 
@@ -168,6 +200,10 @@ class CategoryDatabaseHelper (context: Context) {
 
     // Method to mark a category as synced
     fun markAsSynced(categoryId: String) {
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/android-sqlite-database-in-kotlin/
+        // scoder13
+        // https://www.geeksforgeeks.org/user/scoder13/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         val db = dbHelper.writableDatabase
         val contentValues = ContentValues().apply {
             put(CategorySchema.COLUMN_SYNC_STATUS, 1) // Mark as synced
@@ -178,6 +214,10 @@ class CategoryDatabaseHelper (context: Context) {
 
     // Method to mark a category for deletion
     fun markCategoryForDeletion(categoryId: String): Int {
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/android-sqlite-database-in-kotlin/
+        // scoder13
+        // https://www.geeksforgeeks.org/user/scoder13/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         val db = dbHelper.writableDatabase
         val contentValues = ContentValues().apply {
             put(CategorySchema.COLUMN_SYNC_STATUS, -1) // Mark for deletion
@@ -189,6 +229,10 @@ class CategoryDatabaseHelper (context: Context) {
 
     // Method to delete a category by its ID
     fun deleteCategory(categoryId: String): Int {
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/android-sqlite-database-in-kotlin/
+        // scoder13
+        // https://www.geeksforgeeks.org/user/scoder13/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         val db = dbHelper.writableDatabase
         val result = db.delete(CategorySchema.TABLE_NAME, "${CategorySchema.COLUMN_ID} = ?", arrayOf(categoryId))
         db.close()

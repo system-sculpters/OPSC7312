@@ -23,6 +23,10 @@ class GoalDatabaseHelper(context: Context){
     }
     // Method to insert a new goal into the database
     fun insertGoal(goal: Goal): Long {
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/android-sqlite-database-in-kotlin/
+        // scoder13
+        // https://www.geeksforgeeks.org/user/scoder13/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         val db = dbHelper.writableDatabase
         val contentValues = ContentValues().apply {
             put(GoalSchema.COLUMN_ID, goal.id)
@@ -42,6 +46,10 @@ class GoalDatabaseHelper(context: Context){
 
     // Method to insert a new goal into the database
     fun insertGoalSync(goal: Goal): Long {
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/android-sqlite-database-in-kotlin/
+        // scoder13
+        // https://www.geeksforgeeks.org/user/scoder13/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         val db = dbHelper.writableDatabase
         val contentValues = ContentValues().apply {
             put(GoalSchema.COLUMN_ID, goal.id)
@@ -59,6 +67,10 @@ class GoalDatabaseHelper(context: Context){
 
     // Method to update an existing goal
     fun updateGoal(goal: Goal): Int {
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/android-sqlite-database-in-kotlin/
+        // scoder13
+        // https://www.geeksforgeeks.org/user/scoder13/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         val db = dbHelper.writableDatabase
         val contentValues = ContentValues().apply {
             put(GoalSchema.COLUMN_NAME, goal.name)
@@ -74,6 +86,10 @@ class GoalDatabaseHelper(context: Context){
 
     // Method to get all goals from the database for a specific user
     fun getAllGoals(userId: String): List<Goal> {
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/android-sqlite-database-in-kotlin/
+        // scoder13
+        // https://www.geeksforgeeks.org/user/scoder13/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         val goalList = mutableListOf<Goal>()
         val db = dbHelper.readableDatabase
         // Include userId in the WHERE clause to filter goals by user
@@ -102,6 +118,10 @@ class GoalDatabaseHelper(context: Context){
 
     // Method to get unsynced goals for a specific user
     fun getUnSyncedGoals(userId: String): List<Goal> {
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/android-sqlite-database-in-kotlin/
+        // scoder13
+        // https://www.geeksforgeeks.org/user/scoder13/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         val unSyncedList = mutableListOf<Goal>()
         val db = dbHelper.readableDatabase
         // Include userId in the WHERE clause to filter unsynced goals by user
@@ -131,6 +151,10 @@ class GoalDatabaseHelper(context: Context){
 
     // Method to mark a goal as synced
     fun markAsSynced(goalId: String) {
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/android-sqlite-database-in-kotlin/
+        // scoder13
+        // https://www.geeksforgeeks.org/user/scoder13/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         val db = dbHelper.writableDatabase
         val contentValues = ContentValues().apply {
             put(GoalSchema.COLUMN_SYNC_STATUS, 1)  // Mark as synced
@@ -139,7 +163,12 @@ class GoalDatabaseHelper(context: Context){
         db.close()
     }
 
+    // method to update a goal
     fun updateGoalId(localId: String, firebaseId: String): Boolean {
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/android-sqlite-database-in-kotlin/
+        // scoder13
+        // https://www.geeksforgeeks.org/user/scoder13/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
             put(GoalSchema.COLUMN_ID, firebaseId) // Update local ID with Firebase ID
@@ -154,7 +183,12 @@ class GoalDatabaseHelper(context: Context){
         return result > 0
     }
 
+    // method to get a goal by id
     fun getGoalById(goalId: String): Goal? {
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/android-sqlite-database-in-kotlin/
+        // scoder13
+        // https://www.geeksforgeeks.org/user/scoder13/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         val db = dbHelper.readableDatabase
         var goal: Goal? = null
         val cursor = db.rawQuery("SELECT * FROM ${GoalSchema.TABLE_NAME} WHERE ${CategorySchema.COLUMN_ID} = ?", arrayOf(goalId))
@@ -178,6 +212,10 @@ class GoalDatabaseHelper(context: Context){
     }
     // Method to mark a goal for deletion
     fun markGoalForDeletion(goalId: String): Int {
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/android-sqlite-database-in-kotlin/
+        // scoder13
+        // https://www.geeksforgeeks.org/user/scoder13/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         val db = dbHelper.writableDatabase
         val contentValues = ContentValues().apply {
             put(GoalSchema.COLUMN_SYNC_STATUS, -1)  // Mark for deletion
@@ -189,6 +227,10 @@ class GoalDatabaseHelper(context: Context){
 
     // Method to delete a goal by its ID
     fun deleteGoal(goalId: String): Int {
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/android-sqlite-database-in-kotlin/
+        // scoder13
+        // https://www.geeksforgeeks.org/user/scoder13/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         val db = dbHelper.writableDatabase
         val result = db.delete(GoalSchema.TABLE_NAME, "${GoalSchema.COLUMN_ID} = ?", arrayOf(goalId))
         db.close()

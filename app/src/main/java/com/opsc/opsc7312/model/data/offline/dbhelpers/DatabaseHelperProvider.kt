@@ -11,7 +11,7 @@ class DatabaseHelperProvider(context: Context) : SQLiteOpenHelper(context, DATAB
 
     companion object {
         private const val DATABASE_NAME = "pennywise.db"
-        private const val DATABASE_VERSION = 2 // Increment this number for updates
+        private const val DATABASE_VERSION = 2
     }
 
     override fun onCreate(db: SQLiteDatabase) {

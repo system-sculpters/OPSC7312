@@ -14,8 +14,15 @@ import com.opsc.opsc7312.model.data.offline.preferences.UserManager
 import com.opsc.opsc7312.view.custom.NotificationHandler
 
 class CategorySyncWorker(appContext: Context, workerParams: WorkerParameters) : CoroutineWorker(appContext, workerParams) {
+    // This class was adapted from medium
+    // https://medium.com/@sedakundakitchen/exploring-coroutineworkers-an-introductory-guide-and-testing-approach-8b8987d9c2ac
+    // Seda K
+    // https://medium.com/@sedakundakitchen
+
+    // Initialize the NotificationHandler to manage notifications for sync status
     private var notificationHandler: NotificationHandler = NotificationHandler(applicationContext)
 
+    // method to sync data from the local database to the remote database
     override suspend fun doWork(): Result {
         val categoryDbHelper = CategoryDatabaseHelper(applicationContext)
         val tokenManager = TokenManager.getInstance(applicationContext)
@@ -50,7 +57,7 @@ class CategorySyncWorker(appContext: Context, workerParams: WorkerParameters) : 
 
         return syncRemoteToLocal(categoryDbHelper, userId)
     }
-
+    // method to sync data from the database to the local database
     private suspend fun syncRemoteToLocal(categoryDbHelper: CategoryDatabaseHelper, userId: String): Result {
         val token = TokenManager.getInstance(applicationContext).getToken()
         val user = UserManager.getInstance(applicationContext).getUser()
@@ -84,6 +91,7 @@ class CategorySyncWorker(appContext: Context, workerParams: WorkerParameters) : 
     }
 
 
+    // Updates local category IDs to match those on the server after sync
     private fun updateCategoryIds(
         ids: List<IdMapping>?,
         dbHelper: CategoryDatabaseHelper,
@@ -91,19 +99,21 @@ class CategorySyncWorker(appContext: Context, workerParams: WorkerParameters) : 
     ) {
         val transactionDatabaseHelper = TransactionDatabaseHelper(applicationContext)
         if (ids != null) {
-            for (id in ids){
+            for (id in ids) {
+                // Update category ID in both category and transaction databases
                 dbHelper.updateCategoryId(id.localId, id.firebaseId)
                 transactionDatabaseHelper.updateCategoryId(id.localId, id.firebaseId)
             }
         }
-
+        // Log updated categories and transactions for debugging
         Log.d("dbHelper.getAllCategories()", "categories ${dbHelper.getAllCategories(userId)}")
         Log.d("getAllTransactions", "transactions ${transactionDatabaseHelper.getAllTransactions(userId)}")
     }
 
+    // Marks a list of categories as synced in the local database
     private fun markAsSynced(unSyncedCategories: List<Category>, dbHelper: CategoryDatabaseHelper) {
         unSyncedCategories.forEach { category ->
-            dbHelper.markAsSynced(category.id) // Assuming Goal has a method to get its ID
+            dbHelper.markAsSynced(category.id)  // Assuming Category has a method to get its ID
         }
     }
 }

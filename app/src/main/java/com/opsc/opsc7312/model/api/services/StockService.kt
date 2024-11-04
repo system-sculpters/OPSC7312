@@ -10,18 +10,16 @@ import retrofit2.http.Query
 
 interface StockService {
 
-    // Retrieves a list of goals for a specific user.
-    // This function sends a GET request to the "goal/{id}" endpoint.
-    // It requires an authorization token in the header and the user ID in the path.
-    // The response will be a Call object containing a list of Goal objects associated with the specified user.
+
+    // API endpoint to fetch a list of top stocks in a batch request
+    // Requires an "Authorization" header with a token for authentication
     @GET("stocks/top/batch-stocks")
     fun getStocks(@Header("Authorization") token: String): Call<List<Stock>>
 
-
-    // Retrieves a list of goals for a specific user.
-    // This function sends a GET request to the "goal/{id}" endpoint.
-    // It requires an authorization token in the header and the user ID in the path.
-    // The response will be a Call object containing a list of Goal objects associated with the specified user.
+    // API endpoint to retrieve the historical data for a specific stock
+    // Requires an "Authorization" header with a token for authentication
+    // Also takes a "symbol" parameter as a query to specify the stock symbol
     @GET("stocks/history")
-    fun getStockHistory(@Header("Authorization") token: String,@Query("symbol") symbol: String): Call<List<StockHistory>>
+    fun getStockHistory(@Header("Authorization") token: String, @Query("symbol") symbol: String): Call<List<StockHistory>>
+
 }

@@ -195,6 +195,10 @@ class CreateTransactionFragment : Fragment() {
     }
 
     private fun getCategories(){
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/android-sqlite-database-in-kotlin/
+        // scoder13
+        // https://www.geeksforgeeks.org/user/scoder13/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         val user = userManager.getUser()
 
         val categories = dbHelperProvider.getAllCategories(user.id)
@@ -208,6 +212,11 @@ class CreateTransactionFragment : Fragment() {
     }
 
     private fun createTransaction(id: String){
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/android-sqlite-database-in-kotlin/
+        // scoder13
+        // https://www.geeksforgeeks.org/user/scoder13/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
+
         // Show a progress dialog while the transaction is being created
         val progressDialog = timeOutDialog.showProgressDialog(requireContext())
 

@@ -149,20 +149,30 @@ class TransactionsFragment : Fragment() {
     }
 
     private fun getTransactions(){
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/android-sqlite-database-in-kotlin/
+        // scoder13
+        // https://www.geeksforgeeks.org/user/scoder13/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
+        // Retrieve the current user from UserManager
         val user = userManager.getUser()
 
-
         try {
+            // Fetch all transactions for the current user from the database
             val transactions = dbHelperProvider.getAllTransactions(user.id)
 
+            // Update each transaction with the correct category information
             updateTransactionCategory(transactions = transactions)
 
+            // Update the user's balance based on the retrieved transactions
             updateBalance(transactions)
 
+            // Pass the transactions data to a filter UI component to update the display
             filterBottomSheet.updateTransactions(transactions)
 
+            // Update the transaction adapter with the new transactions for UI display
             transactionAdapter.updateTransactions(transactions)
         } catch (e: Exception) {
+            // Log any exceptions encountered during database operations
             Log.e("DatabaseError", "Error inserting transaction", e)
         }
     }

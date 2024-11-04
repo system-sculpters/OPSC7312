@@ -51,7 +51,7 @@ import com.opsc.opsc7312.view.fragment.TransactionsFragment
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, DatabaseChangeListener {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     // Binding object for activity_main layout to access UI elements
     private lateinit var binding: ActivityMainBinding
@@ -132,6 +132,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         isInitialized = true
 
         val connectivityReceiver = ConnectivityReceiver {
+            // This implementation was adapted from medium
+            // https://medium.com/@dilipsuthar97/listen-to-internet-connection-using-broadcastreceiver-in-android-kotlin-6b527426a6f2
+            // Dilip Suthar
+            // https://medium.com/@dilipsuthar97
             enqueueImmediateSyncWorker<CategorySyncWorker>(this)
             enqueueImmediateSyncWorker<GoalSyncWorker>(this)
             enqueueImmediateSyncWorker<TransactionSyncWorker>(this)
@@ -157,29 +161,29 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    override fun onDatabaseChanged() {
-        // Call sync worker to upload local changes
-        if (isInitialized) {
-            // Call sync worker to upload local changes
-            enqueueImmediateSyncWorker<CategorySyncWorker>(this)
-        }
-    }
-
-    override fun onGoalsChanged() {
-        // Call sync worker to upload local changes
-        if (isInitialized) {
-            // Call sync worker to upload local changes
-            enqueueImmediateSyncWorker<GoalSyncWorker>(this)
-        }
-    }
-
-     override fun onTransactionsChanged() {
-         // Call sync worker to upload local changes
-         if (isInitialized) {
-             // Call sync worker to upload local changes
-             enqueueImmediateSyncWorker<TransactionSyncWorker>(this)
-         }
-     }
+//    override fun onDatabaseChanged() {
+//        // Call sync worker to upload local changes
+//        if (isInitialized) {
+//            // Call sync worker to upload local changes
+//            enqueueImmediateSyncWorker<CategorySyncWorker>(this)
+//        }
+//    }
+//
+//    override fun onGoalsChanged() {
+//        // Call sync worker to upload local changes
+//        if (isInitialized) {
+//            // Call sync worker to upload local changes
+//            enqueueImmediateSyncWorker<GoalSyncWorker>(this)
+//        }
+//    }
+//
+//     override fun onTransactionsChanged() {
+//         // Call sync worker to upload local changes
+//         if (isInitialized) {
+//             // Call sync worker to upload local changes
+//             enqueueImmediateSyncWorker<TransactionSyncWorker>(this)
+//         }
+//     }
 
 
 
@@ -266,7 +270,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 finish()
             }
             R.id.nav_categories -> changeCurrentFragment(CategoriesFragment())
-            R.id.nav_notification -> changeCurrentFragment(NotificationListFragment())
+            //R.id.nav_notification -> changeCurrentFragment(NotificationListFragment())
             R.id.nav_goal -> changeCurrentFragment(GoalsFragment())
             R.id.nav_logout -> {
                 logOut() // Handle logout action

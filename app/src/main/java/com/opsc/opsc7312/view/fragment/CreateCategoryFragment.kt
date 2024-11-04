@@ -249,6 +249,10 @@ class CreateCategoryFragment : Fragment() {
     }
 
     private fun addNewCategory(id: String){
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/android-sqlite-database-in-kotlin/
+        // scoder13
+        // https://www.geeksforgeeks.org/user/scoder13/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         val progressDialog = timeOutDialog.showProgressDialog(requireContext())
 
         val catName = binding.categoryNameEdittext.text.toString()

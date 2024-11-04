@@ -19,8 +19,12 @@ class TransactionDatabaseHelper(context: Context){
     fun setDatabaseChangeListener(listener: DatabaseChangeListener?) {
         this.changeListener = listener
     }
-    // Transaction Management
+    // method to add a new transaction
     fun addTransaction(transaction: Transaction): Boolean {
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/android-sqlite-database-in-kotlin/
+        // scoder13
+        // https://www.geeksforgeeks.org/user/scoder13/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
             put(TransactionSchema.COLUMN_ID, transaction.id)
@@ -40,8 +44,12 @@ class TransactionDatabaseHelper(context: Context){
         return result != -1L
     }
 
-    // Transaction Management
+    // method to add a transaction from the database
     fun addTransactionSync(transaction: Transaction): Boolean {
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/android-sqlite-database-in-kotlin/
+        // scoder13
+        // https://www.geeksforgeeks.org/user/scoder13/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
             put(TransactionSchema.COLUMN_ID, transaction.id)
@@ -59,7 +67,12 @@ class TransactionDatabaseHelper(context: Context){
         return result != -1L
     }
 
+    //method to retrieve a transaction by id
     fun getTransaction(id: String): Transaction? {
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/android-sqlite-database-in-kotlin/
+        // scoder13
+        // https://www.geeksforgeeks.org/user/scoder13/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         val db = dbHelper.readableDatabase
         val cursor = db.query(
             TransactionSchema.TABLE_NAME,
@@ -90,7 +103,12 @@ class TransactionDatabaseHelper(context: Context){
         }
     }
 
+    // method to retrieve all transactions
     fun getAllTransactions(userId: String): List<Transaction> {
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/android-sqlite-database-in-kotlin/
+        // scoder13
+        // https://www.geeksforgeeks.org/user/scoder13/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         val transactions = mutableListOf<Transaction>()
         val db = dbHelper.readableDatabase
         // Include userId in the WHERE clause to filter transactions by user
@@ -119,6 +137,10 @@ class TransactionDatabaseHelper(context: Context){
 
 
     fun updateTransaction(transaction: Transaction): Boolean {
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/android-sqlite-database-in-kotlin/
+        // scoder13
+        // https://www.geeksforgeeks.org/user/scoder13/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
             put(TransactionSchema.COLUMN_NAME, transaction.name)
@@ -152,6 +174,10 @@ class TransactionDatabaseHelper(context: Context){
     }
 
     fun getUnSyncedTransactions(userId: String): List<Transaction> {
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/android-sqlite-database-in-kotlin/
+        // scoder13
+        // https://www.geeksforgeeks.org/user/scoder13/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         val unSyncedList = mutableListOf<Transaction>()
         val db = dbHelper.readableDatabase
         // Update query to filter by both userId and sync status
@@ -180,6 +206,10 @@ class TransactionDatabaseHelper(context: Context){
 
 
     fun updateCategoryId(localId: String, firebaseId: String): Boolean {
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/android-sqlite-database-in-kotlin/
+        // scoder13
+        // https://www.geeksforgeeks.org/user/scoder13/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
             put(TransactionSchema.COLUMN_CATEGORY_ID, firebaseId) // Update local ID with Firebase ID
@@ -194,7 +224,12 @@ class TransactionDatabaseHelper(context: Context){
         return result > 0
     }
 
+    //method to update a transaction
     fun updateTransactionId(localId: String, firebaseId: String): Boolean {
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/android-sqlite-database-in-kotlin/
+        // scoder13
+        // https://www.geeksforgeeks.org/user/scoder13/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
             put(TransactionSchema.COLUMN_ID, firebaseId) // Update local ID with Firebase ID
@@ -209,7 +244,12 @@ class TransactionDatabaseHelper(context: Context){
         return result > 0
     }
 
+    // method to mark transaction as synced
     fun markAsSynced(goalId: String) {
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/android-sqlite-database-in-kotlin/
+        // scoder13
+        // https://www.geeksforgeeks.org/user/scoder13/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         val db = dbHelper.writableDatabase
         val contentValues = ContentValues().apply {
             put(TransactionSchema.COLUMN_SYNC_STATUS, 1)  // Mark as synced
@@ -218,7 +258,12 @@ class TransactionDatabaseHelper(context: Context){
         db.close()
     }
 
+    // method to mark transaction for deleting
     fun markTransactionForDeletion(goalId: String): Int {
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/android-sqlite-database-in-kotlin/
+        // scoder13
+        // https://www.geeksforgeeks.org/user/scoder13/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
         val db = dbHelper.writableDatabase
         val contentValues = ContentValues().apply {
             put(TransactionSchema.COLUMN_SYNC_STATUS, -1)  // Mark for deletion

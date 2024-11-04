@@ -176,6 +176,11 @@ class CreateGoalFragment : Fragment() {
     }
 
     private fun addNewGoal(id: String){
+        // This method was adapted from geeksforgeeks
+        // https://www.geeksforgeeks.org/android-sqlite-database-in-kotlin/
+        // scoder13
+        // https://www.geeksforgeeks.org/user/scoder13/contributions/?itm_source=geeksforgeeks&itm_medium=article_author&itm_campaign=auth_user
+
         // Show a progress dialog while the goal is being created
         val progressDialog = timeOutDialog.showProgressDialog(requireContext())
 

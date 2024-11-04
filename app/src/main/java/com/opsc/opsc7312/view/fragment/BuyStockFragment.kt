@@ -149,6 +149,10 @@ class BuyStockFragment : Fragment() {
     }
 
     private fun observeViewModel(token: String, userId: String) {
+        // This meth implementation was adapted from stackoverflow
+        // https://stackoverflow.com/questions/47025233/android-lifecycle-library-cannot-add-the-same-observer-with-different-lifecycle
+        // Kevin Robatel
+        // https://stackoverflow.com/users/244702/kevin-robatel
 
         // Show a progress dialog while waiting for data
         val progressDialog = timeOutDialog.showProgressDialog(requireContext())

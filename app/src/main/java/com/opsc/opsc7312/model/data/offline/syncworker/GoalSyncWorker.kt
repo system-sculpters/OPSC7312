@@ -13,7 +13,13 @@ import com.opsc.opsc7312.model.data.offline.preferences.UserManager
 import com.opsc.opsc7312.view.custom.NotificationHandler
 
 class GoalSyncWorker (appContext: Context, workerParams: WorkerParameters) : CoroutineWorker(appContext, workerParams) {
+    // This class was adapted from medium
+    // https://medium.com/@sedakundakitchen/exploring-coroutineworkers-an-introductory-guide-and-testing-approach-8b8987d9c2ac
+    // Seda K
+    // https://medium.com/@sedakundakitchen
     private var notificationHandler: NotificationHandler = NotificationHandler(applicationContext)
+
+    // method to sync data from the local database to the remote database
     override suspend fun doWork(): Result {
         val goalDbHelper = GoalDatabaseHelper(applicationContext)
         val tokenManager = TokenManager.getInstance(applicationContext)
@@ -48,7 +54,7 @@ class GoalSyncWorker (appContext: Context, workerParams: WorkerParameters) : Cor
 
         return syncRemoteToLocal(goalDbHelper)
     }
-
+    // method to sync data from the database to the local database
     private suspend fun syncRemoteToLocal(goalDbHelper: GoalDatabaseHelper): Result {
         val token = TokenManager.getInstance(applicationContext).getToken()
         val user = UserManager.getInstance(applicationContext).getUser()
