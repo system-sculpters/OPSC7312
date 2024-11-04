@@ -299,10 +299,9 @@ PennyWise’s development will be version-controlled and managed through GitHub,
 
 ![image](https://github.com/user-attachments/assets/b0731d01-93b0-4da6-bb17-d521c32a5fcf)
 
-![image](https://github.com/user-attachments/assets/63b34ac0-818c-4c84-9123-db3eb832e853)
+![Screenshot 2024-11-04 015714](https://github.com/user-attachments/assets/3f4ca603-6136-4f87-b65c-2f86ea19bc23)
 
-![image](https://github.com/user-attachments/assets/73a00b7d-be1e-4283-ae74-2d14acd9d776)
-
+![Screenshot 2024-11-04 015751](https://github.com/user-attachments/assets/ab3c2b00-aa8d-45c3-82e9-d98680efafe8)
 
 - GitHub Actions is a powerful feature integrated into GitHub that automates workflows within the development proces. By using GitHub Actions, developers we created workflows that respond to various events in our repository, such as pushes and pull requests. Here are some key functionalities of GitHub Actions utilized in this project:
 
@@ -314,4 +313,42 @@ Continuous Integration (CI) is a practice that encourages developers to integrat
 - Code Quality Checks: During the build process, automated checks are run to analyze the code quality. These checks help maintain coding standards across the project.
 
 - Unit Testing Execution: Whenever code is pushed or a pull request is created, GitHub Actions automatically triggers the execution of unit tests. These tests validate the functionality of individual components of the application, ensuring that each part behaves as expected.
+
+
+## 6. PennyWise Release Notes 
+Release Notes for v2.1.0 
+Date: November 4, 2024 
+
+#### Summary 
+We’re thrilled to introduce new features in this release, including language support, real-time stock updates, biometric authentication and offline functionality. These additions make the app more accessible, powerful, and user
+friendly.
+
+#### New Features: 
+- Language Options: Users can now choose between Zulu and Afrikaans, enhancing accessibility 
+and user experience for a wider audience.
+- Push Notifications: Stay informed with real-time notifications about your portfolio, stock prices, and more. 
+- Biometric Authentication: Secure your account with fingerprint authenticaion for a faster, more secure login experience. 
+- Offline Mode with Sync: Access your data even without an internet connection. Any changes 
+made offline will automatically sync when you reconnect. 
+
+#### Innovative Features 
+- Real-Time Stock Exchange View: Get live stock prices and monitor market trends in real time for informed decision-making. 
+- Portfolio Trading (Demo): Try out stock trading in a simulated environment, allowing you to buy and sell stocks and track your portfolio without real financial risk.
+
+#### Bug fixes: 
+- Fixed: When clicked on the transaction details the app would crash the bug was fixed and users can now view transaction details
+
+
+## 7. Evidence of preparation for publication
+
+Screenshot of the app uploaded on the Google Play Console
+
+![image](https://github.com/user-attachments/assets/0c6a0509-4d2d-4efa-92b8-961b691b8913)
+
+
+![image](https://github.com/user-attachments/assets/4702a17b-ac1c-4b97-8e0e-78965a05754c)
+
+ 
+![image](https://github.com/user-attachments/assets/ed54f4bc-6124-4f9f-85a7-0e0384a2fcce)
+
 
