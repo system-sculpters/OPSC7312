@@ -341,6 +341,8 @@ made offline will automatically sync when you reconnect.
 
 ## 7. Evidence of preparation for publication
 
+privacy policy: https://system-sculpters.github.io/pennywise-privacy-policy/
+
 Screenshot of the app uploaded on the Google Play Console
 
 ![image](https://github.com/user-attachments/assets/0c6a0509-4d2d-4efa-92b8-961b691b8913)
