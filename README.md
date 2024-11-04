@@ -6,13 +6,13 @@
 ### Samendra Morgan - ST10092045
 
 
-## Main project repository
+## Main project repositories
 - App Code repo - https://github.com/system-sculpters/OPSC7312
 - Rest Api Repo - https://github.com/system-sculpters/OPSC7312-POE-API.git
 
 # DEMONSTRATION VIDEOS
 - https://youtu.be/pfvdVw22kkM
-- 
+- https://youtu.be/_0A5oazaZ6Y
 
 # Recommended System requirements
 - windows 8-11
@@ -315,7 +315,7 @@ Continuous Integration (CI) is a practice that encourages developers to integrat
 - Unit Testing Execution: Whenever code is pushed or a pull request is created, GitHub Actions automatically triggers the execution of unit tests. These tests validate the functionality of individual components of the application, ensuring that each part behaves as expected.
 
 
-## 6. PennyWise Release Notes 
+## 6. PennyWise Release Notes (file found in repo)
 Release Notes for v2.1.0 
 Date: November 4, 2024 
 
@@ -340,6 +340,7 @@ made offline will automatically sync when you reconnect.
 
 
 ## 7. Evidence of preparation for publication
+All files found in the 'Evidence of preparation for publication' folder and contains (signed APK, screenshots and screenshots of the app uploaded to google play console)
 
 privacy policy: https://system-sculpters.github.io/pennywise-privacy-policy/
 
