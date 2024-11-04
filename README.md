@@ -8,11 +8,11 @@
 
 ## Main project repository
 - App Code repo - https://github.com/system-sculpters/OPSC7312
-- Rest Api Repo - https://github.com/system-sculpters/OPSC-API.git
+- Rest Api Repo - https://github.com/system-sculpters/OPSC7312-POE-API.git
 
 # DEMONSTRATION VIDEOS
 - https://youtu.be/pfvdVw22kkM
-- https://youtu.be/yBVMhzyZwGQ
+- 
 
 # Recommended System requirements
 - windows 8-11
